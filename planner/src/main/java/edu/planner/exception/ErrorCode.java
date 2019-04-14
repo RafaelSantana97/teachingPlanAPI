@@ -37,6 +37,7 @@ public enum ErrorCode {
 	TURMA_DELETE_VIOLATION(1083, "Não é possível remover uma turma em uso"),
 	TURMA_SEARCH(1084, "Erro ao consultar turma"),
 	TURMA_NOT_FOUND(1085, "Turma não encontrada"),
+	TURMA_NEED_A_PROFESSOR(1086, "O usuário informado não é um professor"),
 
 	USUARIO_SAVE(1100, "Erro ao salvar usuário"),
 	USUARIO_UPDATE(1101, "Erro ao alterar usuário"),

@@ -1,6 +1,7 @@
 package edu.planner.controllers;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,7 +31,7 @@ public class TurmaController implements IController<Turma> {
 	@PreAuthorize("hasAnyRole('COORDENADOR')")
 	@Transactional
 	@PostMapping
-	public ResponseEntity<Turma> insert(@RequestBody Turma turma) {
+	public ResponseEntity<Turma> insert(@Valid @RequestBody Turma turma) {
 		turma = turmaService.insert(turma);
 		return turma != null ? ResponseEntity.ok(turma) : ResponseEntity.noContent().build();
 	}
@@ -38,7 +39,7 @@ public class TurmaController implements IController<Turma> {
 	@PreAuthorize("hasAnyRole('COORDENADOR')")
 	@Transactional
 	@PutMapping
-	public ResponseEntity<Turma> update(@RequestBody Turma turma) {
+	public ResponseEntity<Turma> update(@Valid @RequestBody Turma turma) {
 		turma = turmaService.update(turma);
 		return turma != null ? ResponseEntity.ok(turma) : ResponseEntity.noContent().build();
 	}

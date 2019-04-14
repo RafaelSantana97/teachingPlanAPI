@@ -26,9 +26,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.planner.enums.Perfil;
 import edu.planner.enums.Titulacao;
+import edu.planner.interfaces.IModel;
 
 @Entity
-public class Usuario implements Serializable {
+public class Usuario implements Serializable, IModel {
 
 	/**
 	 * 

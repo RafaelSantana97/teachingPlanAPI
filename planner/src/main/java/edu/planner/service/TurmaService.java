@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
+import edu.planner.exception.ObjectNotFoundException;
 import edu.planner.interfaces.IService;
 import edu.planner.models.Turma;
 import edu.planner.repositories.ITurmaRepo;
@@ -20,26 +21,50 @@ public class TurmaService implements IService<Turma> {
 	@Autowired
 	ITurmaRepo iTurmaRepo;
 
+	@Autowired
+	DisciplinaService disciplinaService;
+
+	@Autowired
+	UsuarioService usuarioService;
+
 	@Override
 	public Turma insert(Turma turma) {
-		Turma turmaIncluido = null;
+		Turma turmaIncluida = null;
 		try {
-			turmaIncluido = iTurmaRepo.save(turma);
+			turma.setProfessor(usuarioService.findOne(turma.getProfessor().getId()));
+
+			if (!turma.getProfessor().getIsProfessor()) {
+				throw new BusinessException(ErrorCode.TURMA_NEED_A_PROFESSOR);
+			}
+
+			turma.setDisciplina(disciplinaService.findOne(turma.getDisciplina().getId()));
+
+			turmaIncluida = iTurmaRepo.save(turma);
+		} catch (BusinessException e) {
+			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.TURMA_SAVE, e);
 		}
-		return turmaIncluido;
+		return turmaIncluida;
 	}
 
 	@Override
 	public Turma update(Turma turma) {
-		Turma turmaAlterado = null;
+		Turma turmaAlterada = null;
 		try {
-			turmaAlterado = iTurmaRepo.save(turma);
+			turma.setProfessor(usuarioService.findOne(turma.getProfessor().getId()));
+
+			if (!turma.getProfessor().getIsProfessor()) {
+				throw new BusinessException(ErrorCode.TURMA_NEED_A_PROFESSOR);
+			}
+
+			turmaAlterada = iTurmaRepo.save(turma);
+		} catch (BusinessException e) {
+			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.TURMA_UPDATE, e);
 		}
-		return turmaAlterado;
+		return turmaAlterada;
 	}
 
 	@Override
@@ -98,6 +123,6 @@ public class TurmaService implements IService<Turma> {
 			throw new BusinessException(ErrorCode.TURMA_SEARCH, e);
 		}
 
-		return turma.orElseThrow(() -> new BusinessException(ErrorCode.TURMA_NOT_FOUND));
+		return turma.orElseThrow(() -> new ObjectNotFoundException(ErrorCode.TURMA_NOT_FOUND));
 	}
 }

@@ -14,13 +14,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.planner.enums.TipoDisciplina;
+import edu.planner.interfaces.IModel;
+import edu.planner.models.validation.ModelConstraint;
 
 @Entity
-public class Disciplina implements Serializable {
+public class Disciplina implements Serializable, IModel {
 
 	/**
 	 * 
@@ -40,14 +44,16 @@ public class Disciplina implements Serializable {
 	private String tipo;
 
 	@ManyToOne
-	@JoinColumn(name = "responsavel")
-	@NotNull(message = "Preenchimento obrigatório")
+	@JoinColumn(name = "responsavel", nullable = false)
+	@ModelConstraint
 	private Usuario responsavel;
 
 	@OneToMany(mappedBy = "disciplina")
+	@JsonBackReference
 	private List<Turma> turmas = new ArrayList<Turma>();
 
 	@ManyToMany(mappedBy = "disciplinas")
+	@JsonIgnore
 	private List<Curso> cursos = new ArrayList<Curso>();
 
 	public Integer getId() {
@@ -67,7 +73,7 @@ public class Disciplina implements Serializable {
 	}
 
 	public String getTipo() {
-		return TipoDisciplina.toEnum(tipo).getDescricao();
+		return TipoDisciplina.toEnum(tipo).getId();
 	}
 
 	public void setTipo(TipoDisciplina tipo) {
@@ -75,7 +81,8 @@ public class Disciplina implements Serializable {
 	}
 
 	public void setTipo(String tipo) {
-		if(tipo == null || tipo.isEmpty()) return;
+		if (tipo == null || tipo.isEmpty())
+			return;
 		this.tipo = TipoDisciplina.toEnum(tipo).getId();
 	}
 
