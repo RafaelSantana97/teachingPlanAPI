@@ -1,4 +1,4 @@
-package edu.planner.service;
+package edu.planner.interfaces;
 
 public interface IService<T> {
 

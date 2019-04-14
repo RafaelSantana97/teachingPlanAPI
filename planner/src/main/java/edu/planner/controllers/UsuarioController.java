@@ -1,5 +1,7 @@
 package edu.planner.controllers;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.planner.interfaces.IController;
 import edu.planner.models.Usuario;
 import edu.planner.service.UsuarioService;
 
@@ -24,24 +27,24 @@ public class UsuarioController implements IController<Usuario> {
 	@Autowired
 	UsuarioService usuarioService;
 
-	@Override
 	@PreAuthorize("hasAnyRole('ADMIN')")
+	@Transactional
 	@PostMapping
 	public ResponseEntity<Usuario> insert(@RequestBody Usuario usuario) {
 		usuario = usuarioService.insert(usuario);
 		return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.noContent().build();
 	}
 
-	@Override
 	@PreAuthorize("hasAnyRole('ADMIN')")
+	@Transactional
 	@PutMapping
 	public ResponseEntity<Usuario> update(@RequestBody Usuario usuario) {
 		usuario = usuarioService.update(usuario);
 		return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.noContent().build();
 	}
 
-	@Override
 	@PreAuthorize("hasAnyRole('ADMIN')")
+	@Transactional
 	@DeleteMapping("{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable int id) {
 		Boolean retorno = usuarioService.delete(id);
@@ -50,9 +53,9 @@ public class UsuarioController implements IController<Usuario> {
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/intervalo/{page}/{count}/{descricao}")
-	public ResponseEntity<Page<Usuario>> findPageable(@PathVariable("page") int page, @PathVariable("count") int count,
+	public ResponseEntity<Page<Usuario>> findPageableAndFiltered(@PathVariable("page") int page, @PathVariable("count") int count,
 			@PathVariable("descricao") String descricao) {
-		Page<Usuario> usuario = usuarioService.findPageable(page, count, descricao);
+		Page<Usuario> usuario = usuarioService.findPageableAndFiltered(page, count, descricao);
 		return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.noContent().build();
 	}
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
+import edu.planner.interfaces.IService;
 import edu.planner.models.Turma;
 import edu.planner.repositories.ITurmaRepo;
 
@@ -56,7 +57,7 @@ public class TurmaService implements IService<Turma> {
 		return retorno;
 	}
 
-	public Page<Turma> findPageable(int page, int count, String descricao) {
+	public Page<Turma> findPageableAndFiltered(int page, int count, String descricao) {
 		Page<Turma> turma = null;
 		try {
 			turma = iTurmaRepo.findByDisciplinaNomeContaining(PageRequest.of(page, count), descricao);

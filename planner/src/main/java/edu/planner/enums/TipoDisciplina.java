@@ -2,8 +2,8 @@ package edu.planner.enums;
 
 public enum TipoDisciplina {
 
-	TEORIA("T", "Teoria"),
-	LABORATORIO("L", "Laboratório");
+	TEORIA("T", "Teórica"),
+	LABORATORIO("L", "Prática");
 
 	private String id;
 	private String descricao;

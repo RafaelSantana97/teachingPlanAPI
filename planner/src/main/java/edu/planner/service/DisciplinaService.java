@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
+import edu.planner.interfaces.IService;
 import edu.planner.models.Disciplina;
 import edu.planner.repositories.IDisciplinaRepo;
 
@@ -56,7 +57,7 @@ public class DisciplinaService implements IService<Disciplina> {
 		return retorno;
 	}
 
-	public Page<Disciplina> findPageable(int page, int count, String descricao) {
+	public Page<Disciplina> findPageableAndFiltered(int page, int count, String descricao) {
 		Page<Disciplina> disciplina = null;
 		try {
 			disciplina = iDisciplinaRepo.findByNomeContaining(PageRequest.of(page, count), descricao);

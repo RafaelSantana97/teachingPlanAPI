@@ -1,4 +1,4 @@
-package edu.planner.controllers;
+package edu.planner.interfaces;
 
 import org.springframework.http.ResponseEntity;
 

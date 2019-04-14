@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
+import edu.planner.interfaces.IService;
 import edu.planner.models.Privilegio;
 import edu.planner.repositories.IPrivilegioRepo;
 
@@ -56,7 +57,7 @@ public class PrivilegioService implements IService<Privilegio> {
 		return retorno;
 	}
 
-	public Page<Privilegio> findPageable(int page, int count, String descricao) {
+	public Page<Privilegio> findPageableAndFiltered(int page, int count, String descricao) {
 		Page<Privilegio> privilegio = null;
 		try {
 			privilegio = iPrivilegioRepo.findByNomeContaining(PageRequest.of(page, count), descricao);

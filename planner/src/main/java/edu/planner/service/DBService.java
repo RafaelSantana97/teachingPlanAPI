@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import edu.planner.enums.Perfil;
 import edu.planner.enums.Titulacao;
-import edu.planner.models.Privilegio;
+import edu.planner.models.Dominio;
 import edu.planner.models.Usuario;
-import edu.planner.repositories.IPrivilegioRepo;
+import edu.planner.repositories.IDominioRepo;
 import edu.planner.repositories.IUsuarioRepo;
 
 @Service
@@ -21,35 +21,25 @@ public class DBService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	private IPrivilegioRepo iPrivilegioRepo;
+	private IDominioRepo iDominioRepo;
 
 	@Autowired
 	private IUsuarioRepo iUsuarioRepo;
 
 	public void instantiateTestDatabase() throws ParseException {
-		Privilegio priv1 = new Privilegio();
-		priv1.setNome("Cadastrar coordenador");
 
-		Privilegio priv2 = new Privilegio();
-		priv2.setNome("Cadastrar professor");
-
-		Privilegio priv3 = new Privilegio();
-		priv3.setNome("Cadastrar administrador");
-
-		Privilegio priv4 = new Privilegio();
-		priv4.setNome("Remover permissões de administrador");
-
-		Privilegio priv5 = new Privilegio();
-		priv5.setNome("Remover permissões de coordenador");
-
-		Privilegio priv6 = new Privilegio();
-		priv6.setNome("Remover permissões de professor");
-
-		Privilegio priv7 = new Privilegio();
-		priv7.setNome("Remover usuário");
-
-		iPrivilegioRepo.saveAll(Arrays.asList(priv1, priv2, priv3, priv4, priv5, priv6, priv7));
-
+		Dominio dom1 = new Dominio();
+		dom1.setDominio("Tipo Disciplina");
+		dom1.setAbreviacao("T");
+		dom1.setValor1("Teórica");
+		
+		Dominio dom2 = new Dominio();
+		dom2.setDominio("Tipo Disciplina");
+		dom2.setAbreviacao("L");
+		dom2.setValor1("Prática");
+		
+		iDominioRepo.saveAll(Arrays.asList(dom1, dom2));
+		
 		Usuario user1 = new Usuario();
 		user1.setNome("Jair Rodrigo");
 		user1.setEmail("rodrigoes@outlook.com");

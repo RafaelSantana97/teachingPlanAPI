@@ -43,6 +43,13 @@ public enum ErrorCode {
 	USUARIO_DELETE_VIOLATION(1103, "Não é possível remover um usuário em uso"),
 	USUARIO_SEARCH(1104, "Erro ao consultar usuário"),
 	USUARIO_NOT_FOUND(1105, "Usuário não encontrado"),
+	
+	DOMINIO_SAVE(1120, "Erro ao salvar domínio"),
+	DOMINIO_UPDATE(1121, "Erro ao alterar domínio"),
+	DOMINIO_DELETE(1122, "Erro ao remover domínio"),
+	DOMINIO_DELETE_VIOLATION(1123, "Não é possível remover um domínio em uso"),
+	DOMINIO_SEARCH(1124, "Erro ao consultar domínio"),
+	DOMINIO_NOT_FOUND(1125, "Domínio não encontrado"),
 
 	ULTIMO_ERRO(9999, "");
 	
