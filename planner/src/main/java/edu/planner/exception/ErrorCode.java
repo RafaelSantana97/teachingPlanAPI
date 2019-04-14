@@ -15,6 +15,7 @@ public enum ErrorCode {
 	DISCIPLINA_DELETE_VIOLATION(1023, "Não é possível remover uma disciplina em uso"),
 	DISCIPLINA_SEARCH(1024, "Erro ao consultar disciplina"),
 	DISCIPLINA_NOT_FOUND(1025, "Disciplina não encontrada"),
+	DISCIPLINA_NEED_A_PROFESSOR(1026, "Somente um professor pode ser responsável por uma disciplina"),
 
 	PRIVILEGIO_SAVE(1040, "Erro ao salvar privilégio"),
 	PRIVILEGIO_UPDATE(1041, "Erro ao alterar privilégio"),

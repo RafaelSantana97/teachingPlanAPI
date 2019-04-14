@@ -1,6 +1,7 @@
 package edu.planner.controllers;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,7 +31,7 @@ public class DisciplinaController implements IController<Disciplina> {
 	@PreAuthorize("hasAnyRole('COORDENADOR')")
 	@Transactional
 	@PostMapping
-	public ResponseEntity<Disciplina> insert(@RequestBody Disciplina disciplina) {
+	public ResponseEntity<Disciplina> insert(@Valid @RequestBody Disciplina disciplina) {
 		disciplina = disciplinaService.insert(disciplina);
 		return disciplina != null ? ResponseEntity.ok(disciplina) : ResponseEntity.noContent().build();
 	}
@@ -38,7 +39,7 @@ public class DisciplinaController implements IController<Disciplina> {
 	@PreAuthorize("hasAnyRole('COORDENADOR')")
 	@Transactional
 	@PutMapping
-	public ResponseEntity<Disciplina> update(@RequestBody Disciplina disciplina) {
+	public ResponseEntity<Disciplina> update(@Valid @RequestBody Disciplina disciplina) {
 		disciplina = disciplinaService.update(disciplina);
 		return disciplina != null ? ResponseEntity.ok(disciplina) : ResponseEntity.noContent().build();
 	}
@@ -59,7 +60,8 @@ public class DisciplinaController implements IController<Disciplina> {
 	}
 
 	@GetMapping("/intervalo/{page}/{count}")
-	public ResponseEntity<Page<Disciplina>> findPageable(@PathVariable("page") int page, @PathVariable("count") int count) {
+	public ResponseEntity<Page<Disciplina>> findPageable(@PathVariable("page") int page,
+			@PathVariable("count") int count) {
 		Page<Disciplina> disciplina = disciplinaService.findPageable(page, count);
 		return disciplina != null ? ResponseEntity.ok(disciplina) : ResponseEntity.noContent().build();
 	}

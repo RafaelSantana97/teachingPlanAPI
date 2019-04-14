@@ -8,9 +8,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.planner.enums.Perfil;
+import edu.planner.enums.TipoDisciplina;
 import edu.planner.enums.Titulacao;
+import edu.planner.models.Disciplina;
 import edu.planner.models.Dominio;
 import edu.planner.models.Usuario;
+import edu.planner.repositories.IDisciplinaRepo;
 import edu.planner.repositories.IDominioRepo;
 import edu.planner.repositories.IUsuarioRepo;
 
@@ -22,6 +25,9 @@ public class DBService {
 
 	@Autowired
 	private IDominioRepo iDominioRepo;
+	
+	@Autowired
+	private IDisciplinaRepo iDisciplinaRepo;
 
 	@Autowired
 	private IUsuarioRepo iUsuarioRepo;
@@ -56,5 +62,17 @@ public class DBService {
 		user2.addPerfil(Perfil.PROFESSOR);
 
 		iUsuarioRepo.saveAll(Arrays.asList(user1, user2));
+		
+		Disciplina disp1 = new Disciplina();
+		disp1.setNome("Processamento de Sinais");
+		disp1.setResponsavel(user2);
+		disp1.setTipo(TipoDisciplina.TEORIA);
+		
+		Disciplina disp2 = new Disciplina();
+		disp2.setNome("Processamento de Sinais");
+		disp2.setResponsavel(user2);
+		disp2.setTipo(TipoDisciplina.LABORATORIO);
+		
+		iDisciplinaRepo.saveAll(Arrays.asList(disp1, disp2));
 	}
 }

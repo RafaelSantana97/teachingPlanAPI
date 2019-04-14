@@ -24,7 +24,6 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import edu.planner.enums.EnumTipoUsuario;
 import edu.planner.enums.Perfil;
 import edu.planner.enums.Titulacao;
 
@@ -51,16 +50,13 @@ public class Usuario implements Serializable {
 	@JsonIgnore
 	@NotEmpty
 	private String hashKey;
-	
-	@ElementCollection(fetch=FetchType.EAGER)
-	@CollectionTable(name="PERFIS")
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "PERFIS")
 	private Set<Integer> perfis = new HashSet<>();
 
 	@ManyToMany
-	@JoinTable(name = "USUARIO_TIPO_USUARIO",
-		joinColumns = @JoinColumn(name = "tipoUsuario"),
-		inverseJoinColumns = @JoinColumn(name = "id")
-	)
+	@JoinTable(name = "USUARIO_TIPO_USUARIO", joinColumns = @JoinColumn(name = "tipoUsuario"), inverseJoinColumns = @JoinColumn(name = "id"))
 	private List<TipoUsuario> tiposUsuarios = new ArrayList<TipoUsuario>();
 
 	@Transient
@@ -114,13 +110,13 @@ public class Usuario implements Serializable {
 	public void setHashKey(String hashKey) {
 		this.hashKey = hashKey;
 	}
-	
+
 	public Set<Perfil> getPerfis() {
 		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
 	}
 
 	public void addPerfil(Perfil perfil) {
-		perfis.add(perfil.getCod());
+		perfis.add(perfil.getId());
 	}
 
 	public List<TipoUsuario> getTiposUsuarios() {
@@ -133,7 +129,7 @@ public class Usuario implements Serializable {
 
 	public Boolean getIsAdmin() {
 		if (isAdmin == null) {
-			isAdmin = tiposUsuarios.stream().anyMatch(tipo -> tipo.getId() == EnumTipoUsuario.ADMIN.getId());
+			isAdmin = perfis.stream().anyMatch(perfil -> perfil == Perfil.ADMIN.getId());
 		}
 
 		return isAdmin;
@@ -141,8 +137,7 @@ public class Usuario implements Serializable {
 
 	public Boolean getIsCoordenador() {
 		if (isCoordenador == null) {
-			isCoordenador = tiposUsuarios.stream()
-					.anyMatch(tipo -> tipo.getId() == EnumTipoUsuario.COORDENADOR.getId());
+			isCoordenador = perfis.stream().anyMatch(perfil -> perfil == Perfil.COORDENADOR.getId());
 		}
 
 		return isCoordenador;
@@ -150,7 +145,7 @@ public class Usuario implements Serializable {
 
 	public Boolean getIsProfessor() {
 		if (isProfessor == null) {
-			isProfessor = tiposUsuarios.stream().anyMatch(tipo -> tipo.getId() == EnumTipoUsuario.PROFESSOR.getId());
+			isProfessor = perfis.stream().anyMatch(perfil -> perfil == Perfil.PROFESSOR.getId());
 		}
 
 		return isProfessor;
