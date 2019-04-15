@@ -2,18 +2,18 @@ package edu.planner.enums;
 
 public enum Semestre {
 
-	SEMESTRE_1(1, "1º Semestre"),
-	SEMESTRE_2(2, "2º Semestre");
+	SEMESTRE_1("S1", "1º Semestre"),
+	SEMESTRE_2("S2", "2º Semestre");
 	
-	private int id;
+	private String id;
 	private String descricao;
 
-	private Semestre(int id, String descricao) {
+	private Semestre(String id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -21,7 +21,7 @@ public enum Semestre {
 		return descricao;
 	}
 
-	public static Semestre toEnum(Integer id) {
+	public static Semestre toEnum(String id) {
 		if (id == null) {
 			return null;
 		}

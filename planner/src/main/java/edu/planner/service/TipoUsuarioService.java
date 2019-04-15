@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
+import edu.planner.interfaces.IService;
 import edu.planner.models.TipoUsuario;
 import edu.planner.repositories.ITipoUsuarioRepo;
 
@@ -54,7 +55,7 @@ public class TipoUsuarioService implements IService<TipoUsuario> {
 		return retorno;
 	}
 
-	public Page<TipoUsuario> findPageable(int page, int count, String descricao) {
+	public Page<TipoUsuario> findPageableAndFiltered(int page, int count, String descricao) {
 		Page<TipoUsuario> tipoUsuario = null;
 		try {
 			tipoUsuario = iTipoUsuarioRepo.findByNomeContaining(PageRequest.of(page, count), descricao);

@@ -13,11 +13,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.planner.enums.TipoDisciplina;
+import edu.planner.interfaces.IModel;
+import edu.planner.models.validation.ModelConstraint;
 
 @Entity
-public class Disciplina implements Serializable {
+public class Disciplina implements Serializable, IModel {
 
 	/**
 	 * 
@@ -28,23 +35,27 @@ public class Disciplina implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Size(min = 5, max = 80, message = "Necessário ter entre 5 e 80 caracteres")
 	private String nome;
 
 	@Column
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String tipo;
 
 	@ManyToOne
-	@JoinColumn(name = "responsavel")
+	@JoinColumn(name = "responsavel", nullable = false)
+	@ModelConstraint
 	private Usuario responsavel;
 
 	@OneToMany(mappedBy = "disciplina")
+	@JsonBackReference
 	private List<Turma> turmas = new ArrayList<Turma>();
 
 	@ManyToMany(mappedBy = "disciplinas")
+	@JsonIgnore
 	private List<Curso> cursos = new ArrayList<Curso>();
 
-	
 	public Integer getId() {
 		return id;
 	}
@@ -61,12 +72,18 @@ public class Disciplina implements Serializable {
 		this.nome = nome;
 	}
 
-	public TipoDisciplina getTipo() {
-		return TipoDisciplina.toEnum(tipo);
+	public String getTipo() {
+		return TipoDisciplina.toEnum(tipo).getId();
 	}
 
 	public void setTipo(TipoDisciplina tipo) {
 		this.tipo = tipo.getId();
+	}
+
+	public void setTipo(String tipo) {
+		if (tipo == null || tipo.isEmpty())
+			return;
+		this.tipo = TipoDisciplina.toEnum(tipo).getId();
 	}
 
 	public Usuario getResponsavel() {
@@ -74,10 +91,6 @@ public class Disciplina implements Serializable {
 	}
 
 	public void setResponsavel(Usuario responsavel) {
-		if (!responsavel.getIsProfessor()) {
-			throw new IllegalArgumentException("O usuário " + responsavel.getNome() + " não é um Professor");
-		}
-
 		this.responsavel = responsavel;
 	}
 

@@ -13,8 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import edu.planner.interfaces.IModel;
+
 @Entity
-public class Curso implements Serializable {
+public class Curso implements Serializable, IModel {
 
 	/**
 	 * 
@@ -28,7 +30,6 @@ public class Curso implements Serializable {
 	@Column
 	private String nome;
 	
-	// TODO Mapear item que não possue referencia dos dois lados
 	@ManyToMany
 	@JoinTable(name = "COORD_CURSO",
 		joinColumns = @JoinColumn(name = "coordenador"),

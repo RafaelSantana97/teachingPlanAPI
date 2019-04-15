@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
+import edu.planner.interfaces.IService;
 import edu.planner.models.Curso;
 import edu.planner.repositories.ICursoRepo;
 
@@ -56,7 +57,7 @@ public class CursoService implements IService<Curso> {
 		return retorno;
 	}
 
-	public Page<Curso> findPageable(int page, int count, String descricao) {
+	public Page<Curso> findPageableAndFiltered(int page, int count, String descricao) {
 		Page<Curso> curso = null;
 		try {
 			curso = iCursoRepo.findByNomeContaining(PageRequest.of(page, count), descricao);
