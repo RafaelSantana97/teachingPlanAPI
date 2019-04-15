@@ -1,11 +1,7 @@
 package edu.planner.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,9 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
@@ -40,25 +33,23 @@ public class Usuario implements Serializable, IModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotEmpty
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String nome;
 
-	private Integer titulacao;
+	@NotEmpty(message = "Preenchimento obrigatório")
+	private String titulacao;
 
-	@NotEmpty
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String email;
 
 	@JsonIgnore
-	@NotEmpty
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String hashKey;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIS")
+	@JsonIgnore
 	private Set<Integer> perfis = new HashSet<>();
-
-	@ManyToMany
-	@JoinTable(name = "USUARIO_TIPO_USUARIO", joinColumns = @JoinColumn(name = "tipoUsuario"), inverseJoinColumns = @JoinColumn(name = "id"))
-	private List<TipoUsuario> tiposUsuarios = new ArrayList<TipoUsuario>();
 
 	@Transient
 	private Boolean isAdmin;
@@ -68,9 +59,6 @@ public class Usuario implements Serializable, IModel {
 
 	@Transient
 	private Boolean isProfessor;
-
-	@Transient
-	private Map<String, Integer> privilegios = new HashMap<String, Integer>();
 
 	public Integer getId() {
 		return id;
@@ -88,12 +76,12 @@ public class Usuario implements Serializable, IModel {
 		this.nome = nome;
 	}
 
-	public Titulacao getTitulacao() {
-		return Titulacao.toEnum(titulacao);
+	public String getTitulacao() {
+		return Titulacao.toEnum(titulacao).getId();
 	}
 
-	public void setTitulacao(Titulacao titulacao) {
-		this.titulacao = titulacao.getId();
+	public void setTitulacao(String titulacao) {
+		this.titulacao = Titulacao.toEnum(titulacao).getId();
 	}
 
 	public String getEmail() {
@@ -120,14 +108,6 @@ public class Usuario implements Serializable, IModel {
 		perfis.add(perfil.getId());
 	}
 
-	public List<TipoUsuario> getTiposUsuarios() {
-		return tiposUsuarios;
-	}
-
-	public void setTiposUsuarios(List<TipoUsuario> tiposUsuarios) {
-		this.tiposUsuarios = tiposUsuarios;
-	}
-
 	public Boolean getIsAdmin() {
 		if (isAdmin == null) {
 			isAdmin = perfis.stream().anyMatch(perfil -> perfil == Perfil.ADMIN.getId());
@@ -150,14 +130,5 @@ public class Usuario implements Serializable, IModel {
 		}
 
 		return isProfessor;
-	}
-
-	public Map<String, Integer> getPrivilegios() {
-		for (TipoUsuario tipo : this.tiposUsuarios) {
-
-			tipo.getPrivilegios().stream().forEach(priv -> this.privilegios.put(priv.getNome(), priv.getId()));
-		}
-
-		return this.privilegios;
 	}
 }

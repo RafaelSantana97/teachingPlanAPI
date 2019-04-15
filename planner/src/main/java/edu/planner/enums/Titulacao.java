@@ -2,20 +2,20 @@ package edu.planner.enums;
 
 public enum Titulacao {
 
-	NENHUM(1, "Nenhum"),
-	ESPECIALISTA(2, "Especialista"),
-	MESTRE(3, "Mestre"),
-	DOUTOR(4, "Doutor");
+	NENHUM("", "Nenhum"),
+	ESPECIALISTA("Esp.", "Especialista"),
+	MESTRE("Me.", "Mestre"),
+	DOUTOR("Dr.", "Doutor");
 
-	private Integer id;
+	private String id;
 	private String descricao;
 
-	private Titulacao(Integer id, String descricao) {
+	private Titulacao(String id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -23,7 +23,7 @@ public enum Titulacao {
 		return descricao;
 	}
 
-	public static Titulacao toEnum(Integer id) {
+	public static Titulacao toEnum(String id) {
 		if (id == null) {
 			return null;
 		}

@@ -76,12 +76,32 @@ public class DBService {
 		dom7.setAbreviacao("3");
 		dom7.setValor1("Noturno");
 
-		iDominioRepo.saveAll(Arrays.asList(dom1, dom2, dom3, dom4, dom5, dom6, dom7));
+		Dominio dom8 = new Dominio();
+		dom8.setDominio("TITULACAO");
+		dom8.setAbreviacao("");
+		dom8.setValor1("Nenhum");
+
+		Dominio dom9 = new Dominio();
+		dom9.setDominio("TITULACAO");
+		dom9.setAbreviacao("Esp.");
+		dom9.setValor1("Especialista");
+
+		Dominio dom10 = new Dominio();
+		dom10.setDominio("TITULACAO");
+		dom10.setAbreviacao("Me.");
+		dom10.setValor1("Mestre");
+
+		Dominio dom11 = new Dominio();
+		dom11.setDominio("TITULACAO");
+		dom11.setAbreviacao("Dr.");
+		dom11.setValor1("Doutor");
+
+		iDominioRepo.saveAll(Arrays.asList(dom1, dom2, dom3, dom4, dom5, dom6, dom7, dom8, dom9, dom10, dom11));
 
 		Usuario user1 = new Usuario();
 		user1.setNome("Jair Rodrigo");
 		user1.setEmail("rodrigoes@outlook.com");
-		user1.setTitulacao(Titulacao.MESTRE);
+		user1.setTitulacao(Titulacao.MESTRE.getId());
 		user1.setHashKey(bCryptPasswordEncoder.encode("1234"));
 		user1.addPerfil(Perfil.ADMIN);
 		user1.addPerfil(Perfil.COORDENADOR);
@@ -89,7 +109,7 @@ public class DBService {
 		Usuario user2 = new Usuario();
 		user2.setNome("Vitor Silva");
 		user2.setEmail("vitao@outlook.com");
-		user2.setTitulacao(Titulacao.DOUTOR);
+		user2.setTitulacao(Titulacao.DOUTOR.getId());
 		user2.setHashKey(bCryptPasswordEncoder.encode("hueBR"));
 		user2.addPerfil(Perfil.PROFESSOR);
 
