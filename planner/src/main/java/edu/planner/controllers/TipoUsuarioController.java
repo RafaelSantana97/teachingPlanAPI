@@ -1,5 +1,7 @@
 package edu.planner.controllers;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.planner.interfaces.IController;
 import edu.planner.models.TipoUsuario;
 import edu.planner.service.TipoUsuarioService;
 
@@ -23,21 +26,21 @@ public class TipoUsuarioController implements IController<TipoUsuario> {
 	@Autowired
 	TipoUsuarioService tipoUsuarioService;
 
-	@Override
+	@Transactional
 	@PostMapping
 	public ResponseEntity<TipoUsuario> insert(@RequestBody TipoUsuario tipoUsuario) {
 		tipoUsuario = tipoUsuarioService.insert(tipoUsuario);
 		return tipoUsuario != null ? ResponseEntity.ok(tipoUsuario) : ResponseEntity.noContent().build();
 	}
 
-	@Override
+	@Transactional
 	@PutMapping
 	public ResponseEntity<TipoUsuario> update(@RequestBody TipoUsuario tipoUsuario) {
 		tipoUsuario = tipoUsuarioService.update(tipoUsuario);
 		return tipoUsuario != null ? ResponseEntity.ok(tipoUsuario) : ResponseEntity.noContent().build();
 	}
 
-	@Override
+	@Transactional
 	@DeleteMapping("{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable int id) {
 		Boolean retorno = tipoUsuarioService.delete(id);
@@ -45,9 +48,9 @@ public class TipoUsuarioController implements IController<TipoUsuario> {
 	}
 
 	@GetMapping("/intervalo/{page}/{count}/{descricao}")
-	public ResponseEntity<Page<TipoUsuario>> findPageable(@PathVariable("page") int page, @PathVariable("count") int count,
+	public ResponseEntity<Page<TipoUsuario>> findPageableAndFiltered(@PathVariable("page") int page, @PathVariable("count") int count,
 			@PathVariable("descricao") String descricao) {
-		Page<TipoUsuario> tipoUsuario = tipoUsuarioService.findPageable(page, count, descricao);
+		Page<TipoUsuario> tipoUsuario = tipoUsuarioService.findPageableAndFiltered(page, count, descricao);
 		return tipoUsuario != null ? ResponseEntity.ok(tipoUsuario) : ResponseEntity.noContent().build();
 	}
 }

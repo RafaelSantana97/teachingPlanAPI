@@ -1,5 +1,7 @@
 package edu.planner.controllers;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.planner.interfaces.IController;
 import edu.planner.models.Privilegio;
 import edu.planner.service.PrivilegioService;
 
@@ -23,21 +26,21 @@ public class PrivilegioController implements IController<Privilegio> {
 	@Autowired
 	PrivilegioService privilegioService;
 
-	@Override
+	@Transactional
 	@PostMapping
 	public ResponseEntity<Privilegio> insert(@RequestBody Privilegio privilegio) {
 		privilegio = privilegioService.insert(privilegio);
 		return privilegio != null ? ResponseEntity.ok(privilegio) : ResponseEntity.noContent().build();
 	}
 
-	@Override
+	@Transactional
 	@PutMapping
 	public ResponseEntity<Privilegio> update(@RequestBody Privilegio privilegio) {
 		privilegio = privilegioService.update(privilegio);
 		return privilegio != null ? ResponseEntity.ok(privilegio) : ResponseEntity.noContent().build();
 	}
 
-	@Override
+	@Transactional
 	@DeleteMapping("{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable int id) {
 		Boolean retorno = privilegioService.delete(id);
@@ -45,9 +48,9 @@ public class PrivilegioController implements IController<Privilegio> {
 	}
 
 	@GetMapping("/intervalo/{page}/{count}/{descricao}")
-	public ResponseEntity<Page<Privilegio>> findPageable(@PathVariable("page") int page,
+	public ResponseEntity<Page<Privilegio>> findPageableAndFiltered(@PathVariable("page") int page,
 			@PathVariable("count") int count, @PathVariable("descricao") String descricao) {
-		Page<Privilegio> privilegio = privilegioService.findPageable(page, count, descricao);
+		Page<Privilegio> privilegio = privilegioService.findPageableAndFiltered(page, count, descricao);
 		return privilegio != null ? ResponseEntity.ok(privilegio) : ResponseEntity.noContent().build();
 	}
 

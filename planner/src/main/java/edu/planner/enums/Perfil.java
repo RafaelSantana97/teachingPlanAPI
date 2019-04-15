@@ -6,35 +6,35 @@ public enum Perfil {
 	COORDENADOR(2, "ROLE_COORDENADOR"),
 	PROFESSOR(3, "ROLE_PROFESSOR");
 
-	private int cod;
+	private int id;
 	private String descricao;
 
-	private Perfil(int cod, String descricao) {
-		this.cod = cod;
+	private Perfil(int id, String descricao) {
+		this.id = id;
 		this.descricao = descricao;
 	}
 
-	public int getCod() {
-		return cod;
+	public int getId() {
+		return id;
 	}
 
 	public String getDescricao () {
 		return descricao;
 	}
 
-	public static Perfil toEnum(Integer cod) {
+	public static Perfil toEnum(Integer id) {
 
-		if (cod == null) {
+		if (id == null) {
 			return null;
 		}
 
 		for (Perfil x : Perfil.values()) {
-			if (cod.equals(x.getCod())) {
+			if (id.equals(x.getId())) {
 				return x;
 			}
 		}
 
-		throw new IllegalArgumentException("Id inválido: " + cod);
+		throw new IllegalArgumentException("Id inválido: " + id);
 	}
 
 }

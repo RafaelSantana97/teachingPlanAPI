@@ -1,11 +1,7 @@
 package edu.planner.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,20 +12,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import edu.planner.enums.EnumTipoUsuario;
 import edu.planner.enums.Perfil;
 import edu.planner.enums.Titulacao;
+import edu.planner.interfaces.IModel;
 
 @Entity
-public class Usuario implements Serializable {
+public class Usuario implements Serializable, IModel {
 
 	/**
 	 * 
@@ -40,28 +33,23 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotEmpty
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String nome;
 
-	private Integer titulacao;
+	@NotEmpty(message = "Preenchimento obrigatório")
+	private String titulacao;
 
-	@NotEmpty
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String email;
 
 	@JsonIgnore
-	@NotEmpty
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String hashKey;
-	
-	@ElementCollection(fetch=FetchType.EAGER)
-	@CollectionTable(name="PERFIS")
-	private Set<Integer> perfis = new HashSet<>();
 
-	@ManyToMany
-	@JoinTable(name = "USUARIO_TIPO_USUARIO",
-		joinColumns = @JoinColumn(name = "tipoUsuario"),
-		inverseJoinColumns = @JoinColumn(name = "id")
-	)
-	private List<TipoUsuario> tiposUsuarios = new ArrayList<TipoUsuario>();
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "PERFIS")
+	@JsonIgnore
+	private Set<Integer> perfis = new HashSet<>();
 
 	@Transient
 	private Boolean isAdmin;
@@ -71,9 +59,6 @@ public class Usuario implements Serializable {
 
 	@Transient
 	private Boolean isProfessor;
-
-	@Transient
-	private Map<String, Integer> privilegios = new HashMap<String, Integer>();
 
 	public Integer getId() {
 		return id;
@@ -91,12 +76,12 @@ public class Usuario implements Serializable {
 		this.nome = nome;
 	}
 
-	public Titulacao getTitulacao() {
-		return Titulacao.toEnum(titulacao);
+	public String getTitulacao() {
+		return Titulacao.toEnum(titulacao).getId();
 	}
 
-	public void setTitulacao(Titulacao titulacao) {
-		this.titulacao = titulacao.getId();
+	public void setTitulacao(String titulacao) {
+		this.titulacao = Titulacao.toEnum(titulacao).getId();
 	}
 
 	public String getEmail() {
@@ -114,26 +99,18 @@ public class Usuario implements Serializable {
 	public void setHashKey(String hashKey) {
 		this.hashKey = hashKey;
 	}
-	
+
 	public Set<Perfil> getPerfis() {
 		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
 	}
 
 	public void addPerfil(Perfil perfil) {
-		perfis.add(perfil.getCod());
-	}
-
-	public List<TipoUsuario> getTiposUsuarios() {
-		return tiposUsuarios;
-	}
-
-	public void setTiposUsuarios(List<TipoUsuario> tiposUsuarios) {
-		this.tiposUsuarios = tiposUsuarios;
+		perfis.add(perfil.getId());
 	}
 
 	public Boolean getIsAdmin() {
 		if (isAdmin == null) {
-			isAdmin = tiposUsuarios.stream().anyMatch(tipo -> tipo.getId() == EnumTipoUsuario.ADMIN.getId());
+			isAdmin = perfis.stream().anyMatch(perfil -> perfil == Perfil.ADMIN.getId());
 		}
 
 		return isAdmin;
@@ -141,8 +118,7 @@ public class Usuario implements Serializable {
 
 	public Boolean getIsCoordenador() {
 		if (isCoordenador == null) {
-			isCoordenador = tiposUsuarios.stream()
-					.anyMatch(tipo -> tipo.getId() == EnumTipoUsuario.COORDENADOR.getId());
+			isCoordenador = perfis.stream().anyMatch(perfil -> perfil == Perfil.COORDENADOR.getId());
 		}
 
 		return isCoordenador;
@@ -150,18 +126,9 @@ public class Usuario implements Serializable {
 
 	public Boolean getIsProfessor() {
 		if (isProfessor == null) {
-			isProfessor = tiposUsuarios.stream().anyMatch(tipo -> tipo.getId() == EnumTipoUsuario.PROFESSOR.getId());
+			isProfessor = perfis.stream().anyMatch(perfil -> perfil == Perfil.PROFESSOR.getId());
 		}
 
 		return isProfessor;
-	}
-
-	public Map<String, Integer> getPrivilegios() {
-		for (TipoUsuario tipo : this.tiposUsuarios) {
-
-			tipo.getPrivilegios().stream().forEach(priv -> this.privilegios.put(priv.getNome(), priv.getId()));
-		}
-
-		return this.privilegios;
 	}
 }

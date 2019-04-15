@@ -12,9 +12,11 @@ import javax.validation.constraints.Digits;
 
 import edu.planner.enums.Periodo;
 import edu.planner.enums.Semestre;
+import edu.planner.interfaces.IModel;
+import edu.planner.models.validation.ModelConstraint;
 
 @Entity
-public class Turma implements Serializable {
+public class Turma implements Serializable, IModel {
 
 	/**
 	 * 
@@ -25,22 +27,25 @@ public class Turma implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	private String codigo;
+
 	private Integer periodo;
 
 	@ManyToOne
-	@JoinColumn(name = "disciplina")
+	@JoinColumn(name = "disciplina", nullable = false)
+	@ModelConstraint
 	private Disciplina disciplina;
 
-	private Integer semestre;
+	private String semestre;
 
-	@Digits(fraction=0, integer=4, message="Valor inválido")
+	@Digits(fraction = 0, integer = 4, message = "Valor inválido")
 	private Integer ano;
 
 	@ManyToOne
-	@JoinColumn(name = "professor")
+	@JoinColumn(name = "professor", nullable = false)
+	@ModelConstraint
 	private Usuario professor;
 
-	
 	public Integer getId() {
 		return id;
 	}
@@ -49,12 +54,22 @@ public class Turma implements Serializable {
 		this.id = id;
 	}
 
-	public Periodo getPeriodo() {
-		return Periodo.toEnum(periodo);
+	public String getCodigo() {
+		return codigo;
 	}
 
-	public void setPeriodo(Periodo periodo) {
-		this.periodo = periodo.getId();
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public Integer getPeriodo() {
+		return this.periodo;
+	}
+
+	public void setPeriodo(Integer periodo) {
+		if (periodo == null)
+			return;
+		this.periodo = Periodo.toEnum(periodo).getId();
 	}
 
 	public Disciplina getDisciplina() {
@@ -65,12 +80,14 @@ public class Turma implements Serializable {
 		this.disciplina = disciplina;
 	}
 
-	public Semestre getSemestre() {
-		return Semestre.toEnum(semestre);
+	public String getSemestre() {
+		return this.semestre;
 	}
 
-	public void setSemestre(Semestre semestre) {
-		this.semestre = semestre.getId();
+	public void setSemestre(String semestre) {
+		if (semestre == null)
+			return;
+		this.semestre = Semestre.toEnum(semestre).getId();
 	}
 
 	public Integer getAno() {
@@ -86,10 +103,6 @@ public class Turma implements Serializable {
 	}
 
 	public void setProfessor(Usuario professor) {
-		if (!professor.getIsProfessor()) {
-			throw new IllegalArgumentException("O usuário " + professor.getNome() + " não é um Professor");
-		}
-
 		this.professor = professor;
 	}
 }
