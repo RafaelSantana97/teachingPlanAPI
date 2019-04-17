@@ -5,12 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.planner.models.Usuario;
+import edu.planner.models.User;
 
-public interface IUsuarioRepo extends PagingAndSortingRepository<Usuario, Integer> {
+public interface IUserRepo extends PagingAndSortingRepository<User, Integer> {
 
-	public Page<Usuario> findByNomeContaining(Pageable page, String descricao);
+	public Page<User> findByNameContaining(Pageable page, String description);
 	
 	@Transactional(readOnly=true)
-	public Usuario findByEmail(String email);
+	public User findByEmail(String email);
 }

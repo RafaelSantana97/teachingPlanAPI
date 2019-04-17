@@ -4,9 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import edu.planner.models.Curso;
+import edu.planner.models.UserType;
 
-public interface ICursoRepo extends PagingAndSortingRepository<Curso, Integer> {
+public interface IUserTypeRepo extends PagingAndSortingRepository<UserType, Integer> {
 
-	public Page<Curso> findByNomeContaining(Pageable page, String descricao);
+	public Page<UserType> findByNameContaining(Pageable page, String description);
 }

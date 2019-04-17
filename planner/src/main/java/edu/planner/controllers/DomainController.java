@@ -8,26 +8,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
-import edu.planner.models.Dominio;
-import edu.planner.repositories.IDominioRepo;
+import edu.planner.models.Domain;
+import edu.planner.repositories.IDomainRepo;
 
 @RestController
-@RequestMapping("/api/dominio")
-public class DominioController {
+@RequestMapping("/api/domain")
+public class DomainController {
 
 	@Autowired
-	IDominioRepo iDominioRepo;
+	IDomainRepo iDomainRepo;
 
 	@GetMapping
-	public ResponseEntity<Iterable<Dominio>> findAll() {
-		Iterable<Dominio> dominio = null;
+	public ResponseEntity<Iterable<Domain>> findAll() {
+		Iterable<Domain> domain = null;
 		try {
-			dominio = iDominioRepo.findAll();
+			domain = iDomainRepo.findAll();
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.DOMINIO_SEARCH, e);
 		}
 
 
-		return dominio != null ? ResponseEntity.ok(dominio) : ResponseEntity.noContent().build();
+		return domain != null ? ResponseEntity.ok(domain) : ResponseEntity.noContent().build();
 	}
 }

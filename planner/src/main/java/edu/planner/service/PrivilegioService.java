@@ -57,10 +57,10 @@ public class PrivilegioService implements IService<Privilegio> {
 		return retorno;
 	}
 
-	public Page<Privilegio> findPageableAndFiltered(int page, int count, String descricao) {
+	public Page<Privilegio> findPageableAndFiltered(int page, int count, String description) {
 		Page<Privilegio> privilegio = null;
 		try {
-			privilegio = iPrivilegioRepo.findByNomeContaining(PageRequest.of(page, count), descricao);
+			privilegio = iPrivilegioRepo.findByNameContaining(PageRequest.of(page, count), description);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.PRIVILEGIO_SEARCH, e);
 		}

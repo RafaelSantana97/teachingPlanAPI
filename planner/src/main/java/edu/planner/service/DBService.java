@@ -8,18 +8,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.planner.enums.Perfil;
-import edu.planner.enums.Periodo;
-import edu.planner.enums.Semestre;
-import edu.planner.enums.TipoDisciplina;
-import edu.planner.enums.Titulacao;
-import edu.planner.models.Disciplina;
-import edu.planner.models.Dominio;
-import edu.planner.models.Turma;
-import edu.planner.models.Usuario;
-import edu.planner.repositories.IDisciplinaRepo;
-import edu.planner.repositories.IDominioRepo;
-import edu.planner.repositories.ITurmaRepo;
-import edu.planner.repositories.IUsuarioRepo;
+import edu.planner.enums.Period;
+import edu.planner.enums.Semester;
+import edu.planner.enums.SubjectType;
+import edu.planner.enums.Title;
+import edu.planner.models.Subject;
+import edu.planner.models.Domain;
+import edu.planner.models.Class;
+import edu.planner.models.User;
+import edu.planner.repositories.ISubjectRepo;
+import edu.planner.repositories.IDomainRepo;
+import edu.planner.repositories.IClassRepo;
+import edu.planner.repositories.IUserRepo;
 
 @Service
 public class DBService {
@@ -28,121 +28,121 @@ public class DBService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	private IDominioRepo iDominioRepo;
+	private IDomainRepo iDomainRepo;
 
 	@Autowired
-	private IDisciplinaRepo iDisciplinaRepo;
+	private ISubjectRepo iSubjectRepo;
 
 	@Autowired
-	ITurmaRepo iTurmaRepo;
+	IClassRepo iClasseRepo;
 
 	@Autowired
-	private IUsuarioRepo iUsuarioRepo;
+	private IUserRepo iUserRepo;
 
 	public void instantiateTestDatabase() throws ParseException {
 
-		Dominio dom1 = new Dominio();
-		dom1.setDominio("TIPO_DISCIPLINA");
-		dom1.setAbreviacao("T");
-		dom1.setValor1("Teórica");
+		Domain dom1 = new Domain();
+		dom1.setDomain("TIPO_SUBJECT");
+		dom1.setAbbreviation("T");
+		dom1.setValue1("Teórica");
 
-		Dominio dom2 = new Dominio();
-		dom2.setDominio("TIPO_DISCIPLINA");
-		dom2.setAbreviacao("L");
-		dom2.setValor1("Prática");
+		Domain dom2 = new Domain();
+		dom2.setDomain("TIPO_SUBJECT");
+		dom2.setAbbreviation("L");
+		dom2.setValue1("Prática");
 
-		Dominio dom3 = new Dominio();
-		dom3.setDominio("SEMESTRE");
-		dom3.setAbreviacao("S1");
-		dom3.setValor1("1º Semestre");
+		Domain dom3 = new Domain();
+		dom3.setDomain("SEMESTRE");
+		dom3.setAbbreviation("S1");
+		dom3.setValue1("1º Semester");
 
-		Dominio dom4 = new Dominio();
-		dom4.setDominio("SEMESTRE");
-		dom4.setAbreviacao("S2");
-		dom4.setValor1("2º Semestre");
+		Domain dom4 = new Domain();
+		dom4.setDomain("SEMESTRE");
+		dom4.setAbbreviation("S2");
+		dom4.setValue1("2º Semester");
 
-		Dominio dom5 = new Dominio();
-		dom5.setDominio("PERIODO");
-		dom5.setAbreviacao("1");
-		dom5.setValor1("Matutino");
+		Domain dom5 = new Domain();
+		dom5.setDomain("PERIODO");
+		dom5.setAbbreviation("1");
+		dom5.setValue1("Matutino");
 
-		Dominio dom6 = new Dominio();
-		dom6.setDominio("PERIODO");
-		dom6.setAbreviacao("2");
-		dom6.setValor1("Vespertino");
+		Domain dom6 = new Domain();
+		dom6.setDomain("PERIODO");
+		dom6.setAbbreviation("2");
+		dom6.setValue1("Vespertino");
 
-		Dominio dom7 = new Dominio();
-		dom7.setDominio("PERIODO");
-		dom7.setAbreviacao("3");
-		dom7.setValor1("Noturno");
+		Domain dom7 = new Domain();
+		dom7.setDomain("PERIODO");
+		dom7.setAbbreviation("3");
+		dom7.setValue1("Noturno");
 
-		Dominio dom8 = new Dominio();
-		dom8.setDominio("TITULACAO");
-		dom8.setAbreviacao("");
-		dom8.setValor1("Nenhum");
+		Domain dom8 = new Domain();
+		dom8.setDomain("TITULACAO");
+		dom8.setAbbreviation("");
+		dom8.setValue1("Nenhum");
 
-		Dominio dom9 = new Dominio();
-		dom9.setDominio("TITULACAO");
-		dom9.setAbreviacao("Esp.");
-		dom9.setValor1("Especialista");
+		Domain dom9 = new Domain();
+		dom9.setDomain("TITULACAO");
+		dom9.setAbbreviation("Esp.");
+		dom9.setValue1("Especialista");
 
-		Dominio dom10 = new Dominio();
-		dom10.setDominio("TITULACAO");
-		dom10.setAbreviacao("Me.");
-		dom10.setValor1("Mestre");
+		Domain dom10 = new Domain();
+		dom10.setDomain("TITULACAO");
+		dom10.setAbbreviation("Me.");
+		dom10.setValue1("Mestre");
 
-		Dominio dom11 = new Dominio();
-		dom11.setDominio("TITULACAO");
-		dom11.setAbreviacao("Dr.");
-		dom11.setValor1("Doutor");
+		Domain dom11 = new Domain();
+		dom11.setDomain("TITULACAO");
+		dom11.setAbbreviation("Dr.");
+		dom11.setValue1("Doutor");
 
-		iDominioRepo.saveAll(Arrays.asList(dom1, dom2, dom3, dom4, dom5, dom6, dom7, dom8, dom9, dom10, dom11));
+		iDomainRepo.saveAll(Arrays.asList(dom1, dom2, dom3, dom4, dom5, dom6, dom7, dom8, dom9, dom10, dom11));
 
-		Usuario user1 = new Usuario();
-		user1.setNome("Jair Rodrigo");
+		User user1 = new User();
+		user1.setName("Jair Rodrigo");
 		user1.setEmail("rodrigoes@outlook.com");
-		user1.setTitulacao(Titulacao.MESTRE.getId());
+		user1.setTitulacao(Title.MESTRE.getId());
 		user1.setHashKey(bCryptPasswordEncoder.encode("1234"));
 		user1.addPerfil(Perfil.ADMIN);
-		user1.addPerfil(Perfil.COORDENADOR);
+		user1.addPerfil(Perfil.COORDINATOR);
 
-		Usuario user2 = new Usuario();
-		user2.setNome("Vitor Silva");
+		User user2 = new User();
+		user2.setName("Vitor Silva");
 		user2.setEmail("vitao@outlook.com");
-		user2.setTitulacao(Titulacao.DOUTOR.getId());
+		user2.setTitulacao(Title.DOUTOR.getId());
 		user2.setHashKey(bCryptPasswordEncoder.encode("hueBR"));
-		user2.addPerfil(Perfil.PROFESSOR);
+		user2.addPerfil(Perfil.TEACHER);
 
-		iUsuarioRepo.saveAll(Arrays.asList(user1, user2));
+		iUserRepo.saveAll(Arrays.asList(user1, user2));
 
-		Disciplina disp1 = new Disciplina();
-		disp1.setNome("Processamento de Sinais");
-		disp1.setResponsavel(user2);
-		disp1.setTipo(TipoDisciplina.TEORIA);
+		Subject disp1 = new Subject();
+		disp1.setName("Processamento de Sinais");
+		disp1.setResponsible(user2);
+		disp1.setType(SubjectType.TEORIA);
 
-		Disciplina disp2 = new Disciplina();
-		disp2.setNome("Processamento de Sinais");
-		disp2.setResponsavel(user2);
-		disp2.setTipo(TipoDisciplina.LABORATORIO);
+		Subject disp2 = new Subject();
+		disp2.setName("Processamento de Sinais");
+		disp2.setResponsible(user2);
+		disp2.setType(SubjectType.LABORATORIO);
 
-		iDisciplinaRepo.saveAll(Arrays.asList(disp1, disp2));
+		iSubjectRepo.saveAll(Arrays.asList(disp1, disp2));
 
-		Turma t1 = new Turma();
-		t1.setCodigo("PS1TIN1");
-		t1.setAno(2019);
-		t1.setDisciplina(disp1);
-		t1.setPeriodo(Periodo.MATUTINO.getId());
-		t1.setSemestre(Semestre.SEMESTRE_1.getId());
-		t1.setProfessor(user2);
+		Class t1 = new Class();
+		t1.setCode("PS1TIN1");
+		t1.setYear(2019);
+		t1.setSubject(disp1);
+		t1.setPeriod(Period.MATUTINO.getId());
+		t1.setSemester(Semester.SEMESTRE_1.getId());
+		t1.setTeacher(user2);
 
-		Turma t2 = new Turma();
-		t2.setCodigo("LS1PIN1");
-		t2.setAno(2019);
-		t2.setDisciplina(disp2);
-		t2.setPeriodo(Periodo.MATUTINO.getId());
-		t2.setSemestre(Semestre.SEMESTRE_1.getId());
-		t2.setProfessor(user2);
+		Class t2 = new Class();
+		t2.setCode("LS1PIN1");
+		t2.setYear(2019);
+		t2.setSubject(disp2);
+		t2.setPeriod(Period.MATUTINO.getId());
+		t2.setSemester(Semester.SEMESTRE_1.getId());
+		t2.setTeacher(user2);
 
-		iTurmaRepo.saveAll(Arrays.asList(t1, t2));
+		iClasseRepo.saveAll(Arrays.asList(t1, t2));
 	}
 }

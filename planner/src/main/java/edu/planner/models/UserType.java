@@ -11,22 +11,20 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Entity
-public class TipoUsuario implements Serializable {
+public class UserType implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// O id deve seguir os valores de EnumTipoUsuario
 	@Id
 	private Integer id;
 
-	private String nome;
+	private String name;
 
-	// TODO Mapear item que não possue referencia dos dois lados
 	@ManyToMany
-	@JoinTable(name = "PRIVILEGIO_TIPO_USUARIO",
+	@JoinTable(name = "PRIVILEGIO_USER_TYPE",
 		joinColumns = @JoinColumn(name = "privilegio"),
 		inverseJoinColumns = @JoinColumn(name = "id")
 	)
@@ -41,12 +39,12 @@ public class TipoUsuario implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public List<Privilegio> getPrivilegios() {

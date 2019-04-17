@@ -3,23 +3,23 @@ package edu.planner.enums;
 public enum Perfil {
 
 	ADMIN(1, "ROLE_ADMIN"),
-	COORDENADOR(2, "ROLE_COORDENADOR"),
-	PROFESSOR(3, "ROLE_PROFESSOR");
+	COORDINATOR(2, "ROLE_COORDINATOR"),
+	TEACHER(3, "ROLE_TEACHER");
 
 	private int id;
-	private String descricao;
+	private String description;
 
-	private Perfil(int id, String descricao) {
+	private Perfil(int id, String description) {
 		this.id = id;
-		this.descricao = descricao;
+		this.description = description;
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	public String getDescricao () {
-		return descricao;
+	public String getDescription () {
+		return description;
 	}
 
 	public static Perfil toEnum(Integer id) {
@@ -34,7 +34,7 @@ public enum Perfil {
 			}
 		}
 
-		throw new IllegalArgumentException("Id inválido: " + id);
+		throw new IllegalArgumentException("Invalid ID: " + id);
 	}
 
 }

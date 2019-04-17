@@ -18,11 +18,11 @@ import javax.validation.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.planner.enums.Perfil;
-import edu.planner.enums.Titulacao;
+import edu.planner.enums.Title;
 import edu.planner.interfaces.IModel;
 
 @Entity
-public class Usuario implements Serializable, IModel {
+public class User implements Serializable, IModel {
 
 	/**
 	 * 
@@ -33,17 +33,17 @@ public class Usuario implements Serializable, IModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotEmpty(message = "Preenchimento obrigatório")
-	private String nome;
+	@NotEmpty(message = "is required")
+	private String name;
 
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "is required")
 	private String titulacao;
 
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "is required")
 	private String email;
 
 	@JsonIgnore
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "is required")
 	private String hashKey;
 
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -55,10 +55,10 @@ public class Usuario implements Serializable, IModel {
 	private Boolean isAdmin;
 
 	@Transient
-	private Boolean isCoordenador;
+	private Boolean isCoordinator;
 
 	@Transient
-	private Boolean isProfessor;
+	private Boolean isTeacher;
 
 	public Integer getId() {
 		return id;
@@ -68,20 +68,20 @@ public class Usuario implements Serializable, IModel {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getTitulacao() {
-		return Titulacao.toEnum(titulacao).getId();
+		return Title.toEnum(titulacao).getId();
 	}
 
 	public void setTitulacao(String titulacao) {
-		this.titulacao = Titulacao.toEnum(titulacao).getId();
+		this.titulacao = Title.toEnum(titulacao).getId();
 	}
 
 	public String getEmail() {
@@ -116,19 +116,19 @@ public class Usuario implements Serializable, IModel {
 		return isAdmin;
 	}
 
-	public Boolean getIsCoordenador() {
-		if (isCoordenador == null) {
-			isCoordenador = perfis.stream().anyMatch(perfil -> perfil == Perfil.COORDENADOR.getId());
+	public Boolean getIsCoordinator() {
+		if (isCoordinator == null) {
+			isCoordinator = perfis.stream().anyMatch(perfil -> perfil == Perfil.COORDINATOR.getId());
 		}
 
-		return isCoordenador;
+		return isCoordinator;
 	}
 
-	public Boolean getIsProfessor() {
-		if (isProfessor == null) {
-			isProfessor = perfis.stream().anyMatch(perfil -> perfil == Perfil.PROFESSOR.getId());
+	public Boolean getIsTeacher() {
+		if (isTeacher == null) {
+			isTeacher = perfis.stream().anyMatch(perfil -> perfil == Perfil.TEACHER.getId());
 		}
 
-		return isProfessor;
+		return isTeacher;
 	}
 }

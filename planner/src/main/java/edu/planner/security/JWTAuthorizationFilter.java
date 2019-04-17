@@ -32,7 +32,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			throws IOException, ServletException {
 
 		String header = request.getHeader("Authorization");
-		String inicio = "MeuVizinhoComeChurros|=wO'M*ZDH5+46/_YEwxCom12AnosAzuis";
+		String inicio = "MeuVizinhoComeChurros|=wO'M*ZDH5+46/_YEwxCom12YearsAzuis";
 		if (header != null && header.startsWith(inicio)) {
 			UsernamePasswordAuthenticationToken auth = getAuthentication(header.substring(inicio.length()));
 			if (auth != null) {

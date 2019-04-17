@@ -16,7 +16,7 @@ import javax.persistence.ManyToMany;
 import edu.planner.interfaces.IModel;
 
 @Entity
-public class Curso implements Serializable, IModel {
+public class Course implements Serializable, IModel {
 
 	/**
 	 * 
@@ -28,21 +28,21 @@ public class Curso implements Serializable, IModel {
 	private Integer id;
 
 	@Column
-	private String nome;
+	private String name;
 	
 	@ManyToMany
-	@JoinTable(name = "COORD_CURSO",
-		joinColumns = @JoinColumn(name = "coordenador"),
+	@JoinTable(name = "COORD_COURSE",
+		joinColumns = @JoinColumn(name = "coordinator"),
 		inverseJoinColumns = @JoinColumn(name = "id")
 	)
-	private List<Usuario> coordenadores = new ArrayList<Usuario>();
+	private List<User> coordinators = new ArrayList<User>();
 
 	@ManyToMany
-	@JoinTable(name = "CURSO_DISCIPLINA",
-		joinColumns = @JoinColumn(name = "disciplina"),
+	@JoinTable(name = "COURSE_SUBJECT",
+		joinColumns = @JoinColumn(name = "subject"),
 		inverseJoinColumns = @JoinColumn(name = "id")
 	)
-	private List<Disciplina> disciplinas = new ArrayList<Disciplina>();
+	private List<Subject> subjects = new ArrayList<Subject>();
 
 	
 	public Integer getId() {
@@ -53,27 +53,27 @@ public class Curso implements Serializable, IModel {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public List<Usuario> getCoordenadores() {
-		return coordenadores;
+	public List<User> getCoordinators() {
+		return coordinators;
 	}
 
-	public void setCoordenadores(List<Usuario> coordenadores) {
-		this.coordenadores = coordenadores;
+	public void setCoordinators(List<User> coordinators) {
+		this.coordinators = coordinators;
 	}
 
-	public List<Disciplina> getDisciplinas() {
-		return disciplinas;
+	public List<Subject> getSubjects() {
+		return subjects;
 	}
 
-	public void setDisciplinas(List<Disciplina> disciplinas) {
-		this.disciplinas = disciplinas;
+	public void setSubjects(List<Subject> subjects) {
+		this.subjects = subjects;
 	}
 }

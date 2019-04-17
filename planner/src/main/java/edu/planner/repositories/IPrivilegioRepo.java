@@ -8,5 +8,5 @@ import edu.planner.models.Privilegio;
 
 public interface IPrivilegioRepo extends PagingAndSortingRepository<Privilegio, Integer> {
 
-	public Page<Privilegio> findByNomeContaining(Pageable page, String descricao);
+	public Page<Privilegio> findByNameContaining(Pageable page, String description);
 }

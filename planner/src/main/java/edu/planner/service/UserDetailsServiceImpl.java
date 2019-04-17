@@ -6,19 +6,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import edu.planner.models.Usuario;
-import edu.planner.repositories.IUsuarioRepo;
+import edu.planner.models.User;
+import edu.planner.repositories.IUserRepo;
 import edu.planner.security.UserSS;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private IUsuarioRepo iUsuarioRepo;
+	private IUserRepo iUserRepo;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Usuario cli = iUsuarioRepo.findByEmail(email);
+		User cli = iUserRepo.findByEmail(email);
 		if (cli == null) {
 			throw new UsernameNotFoundException(email);
 		}

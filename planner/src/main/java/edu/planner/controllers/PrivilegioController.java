@@ -47,10 +47,10 @@ public class PrivilegioController implements IController<Privilegio> {
 		return retorno ? ResponseEntity.ok(retorno) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
-	@GetMapping("/intervalo/{page}/{count}/{descricao}")
+	@GetMapping("/intervalo/{page}/{count}/{description}")
 	public ResponseEntity<Page<Privilegio>> findPageableAndFiltered(@PathVariable("page") int page,
-			@PathVariable("count") int count, @PathVariable("descricao") String descricao) {
-		Page<Privilegio> privilegio = privilegioService.findPageableAndFiltered(page, count, descricao);
+			@PathVariable("count") int count, @PathVariable("description") String description) {
+		Page<Privilegio> privilegio = privilegioService.findPageableAndFiltered(page, count, description);
 		return privilegio != null ? ResponseEntity.ok(privilegio) : ResponseEntity.noContent().build();
 	}
 

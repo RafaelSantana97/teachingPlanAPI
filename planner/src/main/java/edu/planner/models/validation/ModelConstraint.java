@@ -14,7 +14,7 @@ import javax.validation.Payload;
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ModelConstraint {
-	String message() default "Preenchimento obrigatório";
+	String message() default "is required";
 
 	Class<?>[] groups() default {};
 
