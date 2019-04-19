@@ -36,7 +36,7 @@ public class Subject implements Serializable, IModel {
 	private Integer id;
 
 	@NotEmpty(message = "is required")
-	@Size(min = 5, max = 80, message = "Necessário ter entre 5 e 80 caracteres")
+	@Size(min = 5, max = 80, message = "Must be between 5 and 80 characters")
 	private String name;
 
 	@Column

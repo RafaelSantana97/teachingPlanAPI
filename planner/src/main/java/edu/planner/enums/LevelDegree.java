@@ -1,6 +1,6 @@
 package edu.planner.enums;
 
-public enum Title {
+public enum LevelDegree {
 
 	NENHUM("", "Nenhum"),
 	ESPECIALISTA("Esp.", "Especialista"),
@@ -10,7 +10,7 @@ public enum Title {
 	private String id;
 	private String description;
 
-	private Title(String id, String description) {
+	private LevelDegree(String id, String description) {
 		this.id = id;
 		this.description = description;
 	}
@@ -23,12 +23,12 @@ public enum Title {
 		return description;
 	}
 
-	public static Title toEnum(String id) {
+	public static LevelDegree toEnum(String id) {
 		if (id == null) {
 			return null;
 		}
 
-		for (Title x : Title.values()) {
+		for (LevelDegree x : LevelDegree.values()) {
 			if (id.equals(x.getId())) {
 				return x;
 			}

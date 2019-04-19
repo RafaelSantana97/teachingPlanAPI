@@ -24,7 +24,7 @@ public class DomainController {
 		try {
 			domain = iDomainRepo.findAll();
 		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.DOMINIO_SEARCH, e);
+			throw new BusinessException(ErrorCode.DOMAIN_SEARCH, e);
 		}
 
 

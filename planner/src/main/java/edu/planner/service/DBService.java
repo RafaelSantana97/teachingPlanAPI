@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import edu.planner.enums.Perfil;
+import edu.planner.enums.Profile;
 import edu.planner.enums.Period;
 import edu.planner.enums.Semester;
 import edu.planner.enums.SubjectType;
-import edu.planner.enums.Title;
+import edu.planner.enums.LevelDegree;
 import edu.planner.models.Subject;
 import edu.planner.models.Domain;
 import edu.planner.models.Class;
@@ -101,17 +101,17 @@ public class DBService {
 		User user1 = new User();
 		user1.setName("Jair Rodrigo");
 		user1.setEmail("rodrigoes@outlook.com");
-		user1.setTitulacao(Title.MESTRE.getId());
+		user1.setLevelDegree(LevelDegree.MESTRE.getId());
 		user1.setHashKey(bCryptPasswordEncoder.encode("1234"));
-		user1.addPerfil(Perfil.ADMIN);
-		user1.addPerfil(Perfil.COORDINATOR);
+		user1.addProfile(Profile.ADMIN);
+		user1.addProfile(Profile.COORDINATOR);
 
 		User user2 = new User();
 		user2.setName("Vitor Silva");
 		user2.setEmail("vitao@outlook.com");
-		user2.setTitulacao(Title.DOUTOR.getId());
+		user2.setLevelDegree(LevelDegree.DOUTOR.getId());
 		user2.setHashKey(bCryptPasswordEncoder.encode("hueBR"));
-		user2.addPerfil(Perfil.TEACHER);
+		user2.addProfile(Profile.TEACHER);
 
 		iUserRepo.saveAll(Arrays.asList(user1, user2));
 

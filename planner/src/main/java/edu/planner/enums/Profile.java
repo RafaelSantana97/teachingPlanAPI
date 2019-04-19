@@ -1,6 +1,6 @@
 package edu.planner.enums;
 
-public enum Perfil {
+public enum Profile {
 
 	ADMIN(1, "ROLE_ADMIN"),
 	COORDINATOR(2, "ROLE_COORDINATOR"),
@@ -9,7 +9,7 @@ public enum Perfil {
 	private int id;
 	private String description;
 
-	private Perfil(int id, String description) {
+	private Profile(int id, String description) {
 		this.id = id;
 		this.description = description;
 	}
@@ -22,13 +22,13 @@ public enum Perfil {
 		return description;
 	}
 
-	public static Perfil toEnum(Integer id) {
+	public static Profile toEnum(Integer id) {
 
 		if (id == null) {
 			return null;
 		}
 
-		for (Perfil x : Perfil.values()) {
+		for (Profile x : Profile.values()) {
 			if (id.equals(x.getId())) {
 				return x;
 			}

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import edu.planner.interfaces.IModel;
 
@@ -27,7 +28,8 @@ public class Course implements Serializable, IModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column
+	@NotEmpty(message = "is required")
+	@Size(min = 5, max = 40, message = "Must be between 5 and 40 characters")
 	private String name;
 	
 	@ManyToMany

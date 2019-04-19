@@ -38,7 +38,7 @@ public class Class implements Serializable, IModel {
 
 	private String semester;
 
-	@Digits(fraction = 0, integer = 4, message = "Value inválido")
+	@Digits(fraction = 0, integer = 4, message = "Invalid value")
 	private Integer year;
 
 	@ManyToOne

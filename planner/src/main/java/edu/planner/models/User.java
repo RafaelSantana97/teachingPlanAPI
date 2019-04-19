@@ -17,8 +17,8 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import edu.planner.enums.Perfil;
-import edu.planner.enums.Title;
+import edu.planner.enums.Profile;
+import edu.planner.enums.LevelDegree;
 import edu.planner.interfaces.IModel;
 
 @Entity
@@ -37,7 +37,7 @@ public class User implements Serializable, IModel {
 	private String name;
 
 	@NotEmpty(message = "is required")
-	private String titulacao;
+	private String levelDegree;
 
 	@NotEmpty(message = "is required")
 	private String email;
@@ -47,9 +47,9 @@ public class User implements Serializable, IModel {
 	private String hashKey;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "PERFIS")
+	@CollectionTable(name = "PROFILES")
 	@JsonIgnore
-	private Set<Integer> perfis = new HashSet<>();
+	private Set<Integer> profiles = new HashSet<>();
 
 	@Transient
 	private Boolean isAdmin;
@@ -76,12 +76,12 @@ public class User implements Serializable, IModel {
 		this.name = name;
 	}
 
-	public String getTitulacao() {
-		return Title.toEnum(titulacao).getId();
+	public String getLevelDegree() {
+		return LevelDegree.toEnum(levelDegree).getId();
 	}
 
-	public void setTitulacao(String titulacao) {
-		this.titulacao = Title.toEnum(titulacao).getId();
+	public void setLevelDegree(String levelDegree) {
+		this.levelDegree = LevelDegree.toEnum(levelDegree).getId();
 	}
 
 	public String getEmail() {
@@ -100,17 +100,17 @@ public class User implements Serializable, IModel {
 		this.hashKey = hashKey;
 	}
 
-	public Set<Perfil> getPerfis() {
-		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	public Set<Profile> getProfiles() {
+		return profiles.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
 	}
 
-	public void addPerfil(Perfil perfil) {
-		perfis.add(perfil.getId());
+	public void addProfile(Profile profile) {
+		profiles.add(profile.getId());
 	}
 
 	public Boolean getIsAdmin() {
 		if (isAdmin == null) {
-			isAdmin = perfis.stream().anyMatch(perfil -> perfil == Perfil.ADMIN.getId());
+			isAdmin = profiles.stream().anyMatch(profile -> profile == Profile.ADMIN.getId());
 		}
 
 		return isAdmin;
@@ -118,7 +118,7 @@ public class User implements Serializable, IModel {
 
 	public Boolean getIsCoordinator() {
 		if (isCoordinator == null) {
-			isCoordinator = perfis.stream().anyMatch(perfil -> perfil == Perfil.COORDINATOR.getId());
+			isCoordinator = profiles.stream().anyMatch(profile -> profile == Profile.COORDINATOR.getId());
 		}
 
 		return isCoordinator;
@@ -126,7 +126,7 @@ public class User implements Serializable, IModel {
 
 	public Boolean getIsTeacher() {
 		if (isTeacher == null) {
-			isTeacher = perfis.stream().anyMatch(perfil -> perfil == Perfil.TEACHER.getId());
+			isTeacher = profiles.stream().anyMatch(profile -> profile == Profile.TEACHER.getId());
 		}
 
 		return isTeacher;
