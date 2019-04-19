@@ -51,14 +51,14 @@ public class CourseController implements IController<Course> {
 		return retorno ? ResponseEntity.ok(retorno) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
-	@GetMapping("/intervalo/{page}/{count}/{description}")
+	@GetMapping("/interval/{page}/{count}/{description}")
 	public ResponseEntity<Page<Course>> findPageableAndFiltered(@PathVariable("page") int page,
 			@PathVariable("count") int count, @PathVariable("description") String description) {
 		Page<Course> course = courseService.findPageableAndFiltered(page, count, description);
 		return course != null ? ResponseEntity.ok(course) : ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/intervalo/{page}/{count}")
+	@GetMapping("/interval/{page}/{count}")
 	public ResponseEntity<Page<Course>> findPageable(@PathVariable("page") int page, @PathVariable("count") int count) {
 		Page<Course> course = courseService.findPageable(page, count);
 		return course != null ? ResponseEntity.ok(course) : ResponseEntity.noContent().build();

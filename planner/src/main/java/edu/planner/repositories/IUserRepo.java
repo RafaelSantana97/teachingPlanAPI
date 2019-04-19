@@ -10,7 +10,11 @@ import edu.planner.models.User;
 public interface IUserRepo extends PagingAndSortingRepository<User, Integer> {
 
 	public Page<User> findByNameContaining(Pageable page, String description);
+
+	public Page<User> findByProfilesInAndNameContaining(Pageable page, Integer profile, String description);
 	
+	public Page<User> findByProfilesIs(Pageable page, Integer profile);
+
 	@Transactional(readOnly=true)
 	public User findByEmail(String email);
 }

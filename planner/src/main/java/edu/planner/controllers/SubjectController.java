@@ -52,14 +52,14 @@ public class SubjectController implements IController<Subject> {
 		return retorno ? ResponseEntity.ok(retorno) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
-	@GetMapping("/intervalo/{page}/{count}/{description}")
+	@GetMapping("/interval/{page}/{count}/{description}")
 	public ResponseEntity<Page<Subject>> findPageableAndFiltered(@PathVariable("page") int page,
 			@PathVariable("count") int count, @PathVariable("description") String description) {
 		Page<Subject> subject = subjectService.findPageableAndFiltered(page, count, description);
 		return subject != null ? ResponseEntity.ok(subject) : ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/intervalo/{page}/{count}")
+	@GetMapping("/interval/{page}/{count}")
 	public ResponseEntity<Page<Subject>> findPageable(@PathVariable("page") int page,
 			@PathVariable("count") int count) {
 		Page<Subject> subject = subjectService.findPageable(page, count);

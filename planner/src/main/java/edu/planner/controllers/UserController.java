@@ -52,18 +52,33 @@ public class UserController implements IController<User> {
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@GetMapping("/intervalo/{page}/{count}/{description}")
-	public ResponseEntity<Page<User>> findPageableAndFiltered(@PathVariable("page") int page, @PathVariable("count") int count,
-			@PathVariable("description") String description) {
+	@GetMapping("/interval/{page}/{count}/{description}")
+	public ResponseEntity<Page<User>> findPageableAndFiltered(@PathVariable("page") int page,
+			@PathVariable("count") int count, @PathVariable("description") String description) {
 		Page<User> user = userService.findPageableAndFiltered(page, count, description);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@GetMapping("/intervalo/{page}/{count}")
-	public ResponseEntity<Page<User>> findPageable(@PathVariable("page") int page,
-			@PathVariable("count") int count) {
+	@GetMapping("/interval/{page}/{count}")
+	public ResponseEntity<Page<User>> findPageable(@PathVariable("page") int page, @PathVariable("count") int count) {
 		Page<User> user = userService.findPageable(page, count);
+		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@GetMapping("/interval/{page}/{count}/teacher/{description}")
+	public ResponseEntity<Page<User>> findPageableAndFilteredTeacher(@PathVariable("page") int page,
+			@PathVariable("count") int count, @PathVariable("description") String description) {
+		Page<User> user = userService.findPageableAndFilteredTeacher(page, count, description);
+		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@GetMapping("/interval/{page}/{count}/teacher")
+	public ResponseEntity<Page<User>> findPageableByTeacher(@PathVariable("page") int page,
+			@PathVariable("count") int count) {
+		Page<User> user = userService.findPageableByTeacher(page, count);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
 

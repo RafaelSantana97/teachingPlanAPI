@@ -42,12 +42,12 @@ public class DBService {
 	public void instantiateTestDatabase() throws ParseException {
 
 		Domain dom1 = new Domain();
-		dom1.setDomain("TIPO_SUBJECT");
+		dom1.setDomain("TIPO_DISCIPLINA");
 		dom1.setAbbreviation("T");
 		dom1.setValue1("Teórica");
 
 		Domain dom2 = new Domain();
-		dom2.setDomain("TIPO_SUBJECT");
+		dom2.setDomain("TIPO_DISCIPLINA");
 		dom2.setAbbreviation("L");
 		dom2.setValue1("Prática");
 

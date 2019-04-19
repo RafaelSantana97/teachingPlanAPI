@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import edu.planner.enums.Profile;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.interfaces.IService;
@@ -77,6 +78,30 @@ public class UserService implements IService<User> {
 		Page<User> user = null;
 		try {
 			user = iUserRepo.findAll(PageRequest.of(page, count));
+		} catch (Exception e) {
+			throw new BusinessException(ErrorCode.USER_SEARCH, e);
+		}
+
+		return user;
+	}
+
+	public Page<User> findPageableAndFilteredTeacher(int page, int count, String description) {
+		Page<User> user = null;
+		try {
+			user = iUserRepo.findByProfilesInAndNameContaining(PageRequest.of(page, count), Profile.TEACHER.getId(),
+					description);
+		} catch (Exception e) {
+			throw new BusinessException(ErrorCode.USER_SEARCH, e);
+		}
+
+		return user;
+	}
+
+	public Page<User> findPageableByTeacher(int page, int count) {
+		Page<User> user = null;
+		try {
+			
+			user = iUserRepo.findByProfilesIs(PageRequest.of(page, count), Profile.TEACHER.getId());
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.USER_SEARCH, e);
 		}
