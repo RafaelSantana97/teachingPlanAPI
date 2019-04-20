@@ -16,7 +16,7 @@ import edu.planner.models.Class;
 import edu.planner.repositories.IClassRepo;
 
 @Service
-public class ClassService implements IService<Class> {
+public class ClassService implements IService<Class, Class> {
 
 	@Autowired
 	IClassRepo iClasseRepo;
@@ -29,7 +29,7 @@ public class ClassService implements IService<Class> {
 
 	@Override
 	public Class insert(Class _class) {
-		Class _classeIncluida = null;
+		Class _classeIncluded = null;
 		try {
 			_class.setTeacher(userService.findOne(_class.getTeacher().getId()));
 
@@ -39,18 +39,18 @@ public class ClassService implements IService<Class> {
 
 			_class.setSubject(subjectService.findOne(_class.getSubject().getId()));
 
-			_classeIncluida = iClasseRepo.save(_class);
+			_classeIncluded = iClasseRepo.save(_class);
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.CLASS_SAVE, e);
 		}
-		return _classeIncluida;
+		return _classeIncluded;
 	}
 
 	@Override
 	public Class update(Class _class) {
-		Class _classeAlterada = null;
+		Class _classeAltered = null;
 		try {
 			_class.setTeacher(userService.findOne(_class.getTeacher().getId()));
 
@@ -58,28 +58,28 @@ public class ClassService implements IService<Class> {
 				throw new BusinessException(ErrorCode.CLASS_NEED_A_TEACHER);
 			}
 
-			_classeAlterada = iClasseRepo.save(_class);
+			_classeAltered = iClasseRepo.save(_class);
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.CLASS_UPDATE, e);
 		}
-		return _classeAlterada;
+		return _classeAltered;
 	}
 
 	@Override
 	public Boolean delete(int id) {
-		Boolean retorno = false;
+		Boolean result = false;
 
 		try {
 			iClasseRepo.deleteById(id);
-			retorno = true;
+			result = true;
 		} catch (ConstraintViolationException e) {
 			throw new BusinessException(ErrorCode.CLASS_DELETE_VIOLATION, e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.CLASS_DELETE, e);
 		}
-		return retorno;
+		return result;
 	}
 
 	public Page<Class> findPageableAndFiltered(int page, int count, String description) {

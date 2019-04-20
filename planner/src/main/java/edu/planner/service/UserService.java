@@ -17,7 +17,7 @@ import edu.planner.models.User;
 import edu.planner.repositories.IUserRepo;
 
 @Service
-public class UserService implements IService<User> {
+public class UserService implements IService<User, User> {
 
 	@Autowired
 	IUserRepo iUserRepo;
@@ -27,40 +27,40 @@ public class UserService implements IService<User> {
 
 	@Override
 	public User insert(User user) {
-		User userIncluido = null;
+		User userIncluded = null;
 		try {
 			user.setHashKey(bCryptPasswordEncoder.encode(user.getHashKey()));
-			userIncluido = iUserRepo.save(user);
+			userIncluded = iUserRepo.save(user);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.USER_SAVE, e);
 		}
-		return userIncluido;
+		return userIncluded;
 	}
 
 	@Override
 	public User update(User user) {
-		User userAlterado = null;
+		User userAltered = null;
 		try {
-			userAlterado = iUserRepo.save(user);
+			userAltered = iUserRepo.save(user);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.USER_UPDATE, e);
 		}
-		return userAlterado;
+		return userAltered;
 	}
 
 	@Override
 	public Boolean delete(int id) {
-		Boolean retorno = false;
+		Boolean result = false;
 
 		try {
 			iUserRepo.deleteById(id);
-			retorno = true;
+			result = true;
 		} catch (ConstraintViolationException e) {
 			throw new BusinessException(ErrorCode.USER_DELETE_VIOLATION, e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.USER_DELETE, e);
 		}
-		return retorno;
+		return result;
 	}
 
 	public Page<User> findPageableAndFiltered(int page, int count, String description) {
@@ -100,7 +100,6 @@ public class UserService implements IService<User> {
 	public Page<User> findPageableByTeacher(int page, int count) {
 		Page<User> user = null;
 		try {
-			
 			user = iUserRepo.findByProfilesIs(PageRequest.of(page, count), Profile.TEACHER.getId());
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.USER_SEARCH, e);

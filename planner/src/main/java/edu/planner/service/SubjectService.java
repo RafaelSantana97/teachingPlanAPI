@@ -1,5 +1,7 @@
 package edu.planner.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import edu.planner.dto.SubjectDTO;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.exception.ObjectNotFoundException;
@@ -16,7 +19,7 @@ import edu.planner.models.Subject;
 import edu.planner.repositories.ISubjectRepo;
 
 @Service
-public class SubjectService implements IService<Subject> {
+public class SubjectService implements IService<Subject, Subject> {
 
 	@Autowired
 	ISubjectRepo iSubjectRepo;
@@ -26,7 +29,7 @@ public class SubjectService implements IService<Subject> {
 
 	@Override
 	public Subject insert(Subject subject) {
-		Subject subjectIncluida = null;
+		Subject subjectIncluded = null;
 		try {
 			subject.setResponsible(userService.findOne(subject.getResponsible().getId()));
 
@@ -34,18 +37,18 @@ public class SubjectService implements IService<Subject> {
 				throw new BusinessException(ErrorCode.SUBJECT_NEED_A_TEACHER);
 			}
 
-			subjectIncluida = iSubjectRepo.save(subject);
+			subjectIncluded = iSubjectRepo.save(subject);
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.SUBJECT_SAVE, e);
 		}
-		return subjectIncluida;
+		return subjectIncluded;
 	}
 
 	@Override
 	public Subject update(Subject subject) {
-		Subject subjectAlterada = null;
+		Subject subjectAltered = null;
 		try {
 			subject.setResponsible(userService.findOne(subject.getResponsible().getId()));
 
@@ -53,28 +56,28 @@ public class SubjectService implements IService<Subject> {
 				throw new BusinessException(ErrorCode.SUBJECT_NEED_A_TEACHER);
 			}
 
-			subjectAlterada = iSubjectRepo.save(subject);
+			subjectAltered = iSubjectRepo.save(subject);
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.SUBJECT_UPDATE, e);
 		}
-		return subjectAlterada;
+		return subjectAltered;
 	}
 
 	@Override
 	public Boolean delete(int id) {
-		Boolean retorno = false;
+		Boolean result = false;
 
 		try {
 			iSubjectRepo.delete(findOne(id));
-			retorno = true;
+			result = true;
 		} catch (ConstraintViolationException e) {
 			throw new BusinessException(ErrorCode.SUBJECT_DELETE_VIOLATION, e);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.SUBJECT_DELETE, e);
 		}
-		return retorno;
+		return result;
 	}
 
 	public Page<Subject> findPageableAndFiltered(int page, int count, String description) {
@@ -109,6 +112,30 @@ public class SubjectService implements IService<Subject> {
 		}
 
 		return subject;
+	}
+
+	public Iterable<SubjectDTO> findByCourse(Integer courseId) {
+		List<Subject> subjects = null;
+		List<Subject> subjectsChecked = new ArrayList<Subject>();
+		List<SubjectDTO> subjectsDTO = new ArrayList<SubjectDTO>();
+
+		try {
+			subjects = (ArrayList<Subject>) iSubjectRepo.findAll();
+
+			if (courseId != null) {
+				subjectsChecked = (ArrayList<Subject>) iSubjectRepo.findByCoursesIdIs(courseId);
+			}
+
+			for (Subject sub : subjects) {
+				SubjectDTO subDTO = SubjectDTO.toDTO(sub, subjectsChecked.contains(sub));
+				subjectsDTO.add(subDTO);
+			}
+
+		} catch (Exception e) {
+			throw new BusinessException(ErrorCode.SUBJECT_SEARCH, e);
+		}
+
+		return subjectsDTO;
 	}
 
 	public Subject findOne(int id) {

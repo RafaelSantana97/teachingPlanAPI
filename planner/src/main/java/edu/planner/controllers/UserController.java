@@ -1,6 +1,7 @@
 package edu.planner.controllers;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ import edu.planner.service.UserService;
 
 @RestController
 @RequestMapping("api/user")
-public class UserController implements IController<User> {
+public class UserController implements IController<User, User> {
 
 	@Autowired
 	UserService userService;
@@ -30,7 +31,7 @@ public class UserController implements IController<User> {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@PostMapping
-	public ResponseEntity<User> insert(@RequestBody User user) {
+	public ResponseEntity<User> insert(@Valid @RequestBody User user) {
 		user = userService.insert(user);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
@@ -38,7 +39,7 @@ public class UserController implements IController<User> {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@PutMapping
-	public ResponseEntity<User> update(@RequestBody User user) {
+	public ResponseEntity<User> update(@Valid @RequestBody User user) {
 		user = userService.update(user);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
@@ -47,8 +48,8 @@ public class UserController implements IController<User> {
 	@Transactional
 	@DeleteMapping("{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable int id) {
-		Boolean retorno = userService.delete(id);
-		return retorno ? ResponseEntity.ok(retorno) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		Boolean result = userService.delete(id);
+		return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")

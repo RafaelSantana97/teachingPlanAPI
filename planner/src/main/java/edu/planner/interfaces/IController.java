@@ -2,11 +2,11 @@ package edu.planner.interfaces;
 
 import org.springframework.http.ResponseEntity;
 
-public interface IController<T> {
+public interface IController<T, D> {
 
-	public ResponseEntity<T> insert(T t);
+	public ResponseEntity<T> insert(D d);
 
-	public ResponseEntity<T> update(T t);
+	public ResponseEntity<T> update(D d);
 
 	public ResponseEntity<Boolean> delete(int id);
 }

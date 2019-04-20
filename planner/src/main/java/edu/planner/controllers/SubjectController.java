@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.planner.dto.SubjectDTO;
 import edu.planner.interfaces.IController;
 import edu.planner.models.Subject;
 import edu.planner.service.SubjectService;
 
 @RestController
 @RequestMapping("api/subject")
-public class SubjectController implements IController<Subject> {
+public class SubjectController implements IController<Subject, Subject> {
 
 	@Autowired
 	SubjectService subjectService;
@@ -48,8 +49,8 @@ public class SubjectController implements IController<Subject> {
 	@Transactional
 	@DeleteMapping("{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable int id) {
-		Boolean retorno = subjectService.delete(id);
-		return retorno ? ResponseEntity.ok(retorno) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		Boolean result = subjectService.delete(id);
+		return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	@GetMapping("/interval/{page}/{count}/{description}")
@@ -69,6 +70,12 @@ public class SubjectController implements IController<Subject> {
 	@GetMapping("/all")
 	public ResponseEntity<Iterable<Subject>> findAll() {
 		Iterable<Subject> subject = subjectService.findAll();
+		return subject != null ? ResponseEntity.ok(subject) : ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/byCourse/{courseId}")
+	public ResponseEntity<Iterable<SubjectDTO>> findAllSubjects(@PathVariable("courseId") Integer courseId) {
+		Iterable<SubjectDTO> subject = subjectService.findByCourse(courseId);
 		return subject != null ? ResponseEntity.ok(subject) : ResponseEntity.noContent().build();
 	}
 

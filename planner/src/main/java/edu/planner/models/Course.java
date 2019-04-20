@@ -11,25 +11,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 import edu.planner.interfaces.IModel;
 
 @Entity
 public class Course implements Serializable, IModel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotEmpty(message = "is required")
-	@Size(min = 5, max = 40, message = "Must be between 5 and 40 characters")
 	private String name;
 	
 	@ManyToMany
@@ -46,6 +39,13 @@ public class Course implements Serializable, IModel {
 	)
 	private List<Subject> subjects = new ArrayList<Subject>();
 
+	public Course() {
+	}
+
+	public Course(Integer id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 	
 	public Integer getId() {
 		return id;

@@ -18,7 +18,7 @@ public class DomainController {
 	@Autowired
 	IDomainRepo iDomainRepo;
 
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<Iterable<Domain>> findAll() {
 		Iterable<Domain> domain = null;
 		try {

@@ -9,4 +9,6 @@ import edu.planner.models.Subject;
 public interface ISubjectRepo extends PagingAndSortingRepository<Subject, Integer> {
 
 	public Page<Subject> findByNameContaining(Pageable page, String description);
+
+	public Iterable<Subject> findByCoursesIdIs(Integer coursesId);
 }

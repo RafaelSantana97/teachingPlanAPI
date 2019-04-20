@@ -23,7 +23,7 @@ import edu.planner.service.ClassService;
 
 @RestController
 @RequestMapping("api/class")
-public class ClassController implements IController<Class> {
+public class ClassController implements IController<Class, Class> {
 
 	@Autowired
 	ClassService classService;
@@ -48,8 +48,8 @@ public class ClassController implements IController<Class> {
 	@Transactional
 	@DeleteMapping("{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable int id) {
-		Boolean retorno = classService.delete(id);
-		return retorno ? ResponseEntity.ok(retorno) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		Boolean result = classService.delete(id);
+		return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	@GetMapping("/interval/{page}/{count}/{descriptionSubject}")

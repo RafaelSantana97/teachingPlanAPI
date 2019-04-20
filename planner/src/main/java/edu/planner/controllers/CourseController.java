@@ -1,6 +1,7 @@
 package edu.planner.controllers;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.planner.dto.CourseDTO;
 import edu.planner.interfaces.IController;
 import edu.planner.models.Course;
 import edu.planner.service.CourseService;
 
 @RestController
 @RequestMapping("api/course")
-public class CourseController implements IController<Course> {
+public class CourseController implements IController<Course, CourseDTO> {
 
 	@Autowired
 	CourseService courseService;
@@ -30,25 +32,27 @@ public class CourseController implements IController<Course> {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@PostMapping
-	public ResponseEntity<Course> insert(@RequestBody Course course) {
-		course = courseService.insert(course);
-		return course != null ? ResponseEntity.ok(course) : ResponseEntity.noContent().build();
+	public ResponseEntity<Course> insert(@Valid @RequestBody CourseDTO course) {
+		Course courseIncluded = null;
+		courseIncluded = courseService.insert(course);
+		return courseIncluded != null ? ResponseEntity.ok(courseIncluded) : ResponseEntity.noContent().build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@PutMapping
-	public ResponseEntity<Course> update(@RequestBody Course course) {
-		course = courseService.update(course);
-		return course != null ? ResponseEntity.ok(course) : ResponseEntity.noContent().build();
+	public ResponseEntity<Course> update(@Valid @RequestBody CourseDTO course) {
+		Course courseAltered = null;
+		courseAltered = courseService.update(course);
+		return courseAltered != null ? ResponseEntity.ok(courseAltered) : ResponseEntity.noContent().build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@DeleteMapping("{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable int id) {
-		Boolean retorno = courseService.delete(id);
-		return retorno ? ResponseEntity.ok(retorno) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		Boolean result = courseService.delete(id);
+		return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	@GetMapping("/interval/{page}/{count}/{description}")
@@ -71,8 +75,8 @@ public class CourseController implements IController<Course> {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Course> findOne(@PathVariable("id") int id) {
-		Course course = courseService.findOne(id);
+	public ResponseEntity<CourseDTO> findOne(@PathVariable("id") int id) {
+		CourseDTO course = courseService.findOne(id);
 		return course != null ? ResponseEntity.ok(course) : ResponseEntity.noContent().build();
 	}
 }
