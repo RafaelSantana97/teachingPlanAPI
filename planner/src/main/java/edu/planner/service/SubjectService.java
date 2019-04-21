@@ -27,7 +27,6 @@ public class SubjectService implements IService<Subject, Subject> {
 	@Autowired
 	UserService userService;
 
-	@Override
 	public Subject insert(Subject subject) {
 		Subject subjectIncluded = null;
 		try {
@@ -46,7 +45,6 @@ public class SubjectService implements IService<Subject, Subject> {
 		return subjectIncluded;
 	}
 
-	@Override
 	public Subject update(Subject subject) {
 		Subject subjectAltered = null;
 		try {
@@ -65,7 +63,6 @@ public class SubjectService implements IService<Subject, Subject> {
 		return subjectAltered;
 	}
 
-	@Override
 	public Boolean delete(int id) {
 		Boolean result = false;
 
@@ -122,15 +119,16 @@ public class SubjectService implements IService<Subject, Subject> {
 		try {
 			subjects = (ArrayList<Subject>) iSubjectRepo.findAll();
 
-			if (courseId != null) {
+			if (courseId != null && courseId > 0) {
 				subjectsChecked = (ArrayList<Subject>) iSubjectRepo.findByCoursesIdIs(courseId);
+				
+				subjectsChecked.forEach(sub -> subjectsDTO.add(SubjectDTO.toDTO(sub, true)));
+				
+				subjects.removeAll(subjectsChecked);
 			}
 
-			for (Subject sub : subjects) {
-				SubjectDTO subDTO = SubjectDTO.toDTO(sub, subjectsChecked.contains(sub));
-				subjectsDTO.add(subDTO);
-			}
-
+			subjects.forEach(sub -> subjectsDTO.add(SubjectDTO.toDTO(sub, false)));
+			
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.SUBJECT_SEARCH, e);
 		}
