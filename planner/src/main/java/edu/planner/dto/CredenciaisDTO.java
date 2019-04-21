@@ -2,13 +2,18 @@ package edu.planner.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+
 public class CredenciaisDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Email
 	private String email;
+	
 	private String senha;
 
 	public CredenciaisDTO() {
+
 	}
 
 	public String getEmail() {

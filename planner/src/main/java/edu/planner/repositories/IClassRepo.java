@@ -4,9 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import edu.planner.models.Turma;
+import edu.planner.models.Class;
 
-public interface ITurmaRepo extends PagingAndSortingRepository<Turma, Integer> {
+public interface IClassRepo extends PagingAndSortingRepository<Class, Long> {
 
-	public Page<Turma> findByDisciplinaNomeContaining(Pageable page, String descricao);
+	public Page<Class> findBySubjectNameContaining(Pageable page, String description);
 }
