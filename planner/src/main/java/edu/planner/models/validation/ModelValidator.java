@@ -9,11 +9,11 @@ public class ModelValidator implements ConstraintValidator<ModelConstraint, IMod
 
 	@Override
 	public void initialize(ModelConstraint constraintAnnotation) {
+
 	}
 
 	@Override
 	public boolean isValid(IModel value, ConstraintValidatorContext context) {
-
 		return value != null && value.getId() != null && value.getId() > 0;
 	}
 }
