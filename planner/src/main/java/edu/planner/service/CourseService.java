@@ -64,7 +64,7 @@ public class CourseService implements IService<Course, CourseDTO> {
 		return courseAltered;
 	}
 
-	public Boolean delete(int id) {
+	public Boolean delete(Long id) {
 		Boolean result = false;
 
 		try {
@@ -111,15 +111,17 @@ public class CourseService implements IService<Course, CourseDTO> {
 		return course;
 	}
 
-	public CourseDTO findOne(int id) {
+	public CourseDTO findOne(Long id) {
 		Optional<Course> course = null;
 		CourseDTO courseDTO = null;
 		try {
 			course = iCourseRepo.findById(id);
-			courseDTO = CourseDTO.toDTO(course.orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND)));
-			
-			courseDTO.setSubjects((ArrayList<SubjectDTO>) subjectService.findByCourse(id));
-			
+
+			Course courseToDTO = course.orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
+			ArrayList<SubjectDTO> subjects = (ArrayList<SubjectDTO>) subjectService.findByCourse(id);
+
+			courseDTO = CourseDTO.toDTO(courseToDTO, subjects);
+
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage());
 		} catch (Exception e) {

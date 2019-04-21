@@ -2,7 +2,9 @@ package edu.planner.models;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,70 +16,51 @@ import edu.planner.enums.Period;
 import edu.planner.enums.Semester;
 import edu.planner.interfaces.IModel;
 import edu.planner.models.validation.ModelConstraint;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Class implements Serializable, IModel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
+	@Column(nullable = false, length = 10)
 	private String code;
 
-	private Integer period;
+	@Column(nullable = false)
+	private Short period;
+
+	@Column(nullable = false, length = 2)
+	private String semester;
+
+	@Column(nullable = false)
+	@Digits(fraction = 0, integer = 4, message = "Invalid value")
+	private Short year;
 
 	@ManyToOne
-	@JoinColumn(name = "subject", nullable = false)
+	@JoinColumn(name = "subject", nullable = false, foreignKey = @ForeignKey(name="FK_SUBJECT"))
 	@ModelConstraint
 	private Subject subject;
 
-	private String semester;
-
-	@Digits(fraction = 0, integer = 4, message = "Invalid value")
-	private Integer year;
-
 	@ManyToOne
-	@JoinColumn(name = "teacher", nullable = false)
+	@JoinColumn(name = "teacher", nullable = false, foreignKey = @ForeignKey(name="FK_USER"))
 	@ModelConstraint
 	private User teacher;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public Integer getPeriod() {
+	public Short getPeriod() {
 		return this.period;
 	}
 
-	public void setPeriod(Integer period) {
+	public void setPeriod(Short period) {
 		if (period == null)
 			return;
 		this.period = Period.toEnum(period).getId();
-	}
-
-	public Subject getSubject() {
-		return subject;
-	}
-
-	public void setSubject(Subject subject) {
-		this.subject = subject;
 	}
 
 	public String getSemester() {
@@ -88,21 +71,5 @@ public class Class implements Serializable, IModel {
 		if (semester == null)
 			return;
 		this.semester = Semester.toEnum(semester).getId();
-	}
-
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
-
-	public User getTeacher() {
-		return teacher;
-	}
-
-	public void setTeacher(User teacher) {
-		this.teacher = teacher;
 	}
 }

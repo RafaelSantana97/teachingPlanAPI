@@ -9,6 +9,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,18 +21,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.planner.enums.Profile;
 import edu.planner.enums.LevelDegree;
 import edu.planner.interfaces.IModel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class User implements Serializable, IModel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@NotEmpty(message = "is required")
 	private String name;
@@ -47,9 +51,9 @@ public class User implements Serializable, IModel {
 	private String hashKey;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "PROFILES")
+	@CollectionTable(name = "PROFILES", foreignKey = @ForeignKey(name = "FK_USER"))
 	@JsonIgnore
-	private Set<Integer> profiles = new HashSet<>();
+	private Set<Short> profiles = new HashSet<>();
 
 	@Transient
 	private Boolean isAdmin;
@@ -60,20 +64,10 @@ public class User implements Serializable, IModel {
 	@Transient
 	private Boolean isTeacher;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
+	public User(Long id, String name, String levelDegree) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
 		this.name = name;
+		this.levelDegree = levelDegree;
 	}
 
 	public String getLevelDegree() {
@@ -82,22 +76,6 @@ public class User implements Serializable, IModel {
 
 	public void setLevelDegree(String levelDegree) {
 		this.levelDegree = LevelDegree.toEnum(levelDegree).getId();
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getHashKey() {
-		return hashKey;
-	}
-
-	public void setHashKey(String hashKey) {
-		this.hashKey = hashKey;
 	}
 
 	public Set<Profile> getProfiles() {

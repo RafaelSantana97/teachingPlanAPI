@@ -48,7 +48,7 @@ public class UserController implements IController<User, User> {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@DeleteMapping("{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable int id) {
+	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 		Boolean result = userService.delete(id);
 		return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
@@ -108,7 +108,7 @@ public class UserController implements IController<User, User> {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<User> findOne(@PathVariable("id") Long id) {
 		User user = userService.findOne(id);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}

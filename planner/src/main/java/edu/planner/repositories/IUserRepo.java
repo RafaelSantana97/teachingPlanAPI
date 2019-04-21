@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.planner.models.User;
 
-public interface IUserRepo extends PagingAndSortingRepository<User, Integer> {
+public interface IUserRepo extends PagingAndSortingRepository<User, Long> {
 
 	public Page<User> findByNameContaining(Pageable page, String description);
 

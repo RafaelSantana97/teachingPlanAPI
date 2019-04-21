@@ -47,7 +47,7 @@ public class ClassController implements IController<Class, Class> {
 	@PreAuthorize("hasAnyRole('COORDINATOR')")
 	@Transactional
 	@DeleteMapping("{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable int id) {
+	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 		Boolean result = classService.delete(id);
 		return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
@@ -72,7 +72,7 @@ public class ClassController implements IController<Class, Class> {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Class> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<Class> findOne(@PathVariable("id") Long id) {
 		Class _class = classService.findOne(id);
 		return _class != null ? ResponseEntity.ok(_class) : ResponseEntity.noContent().build();
 	}

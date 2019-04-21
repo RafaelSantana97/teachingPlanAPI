@@ -48,7 +48,7 @@ public class UserService implements IService<User, User> {
 	}
 
 	@Override
-	public Boolean delete(int id) {
+	public Boolean delete(Long id) {
 		Boolean result = false;
 
 		try {
@@ -117,7 +117,7 @@ public class UserService implements IService<User, User> {
 		return user;
 	}
 
-	public User findOne(int id) {
+	public User findOne(Long id) {
 		Optional<User> user = null;
 		try {
 			user = iUserRepo.findById(id);

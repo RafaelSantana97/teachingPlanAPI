@@ -13,7 +13,7 @@ import edu.planner.enums.Profile;
 public class UserSS implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
+	private Long id;
 	private String email;
 	private String senha;
 	private Collection<? extends GrantedAuthority> authorities;
@@ -21,7 +21,7 @@ public class UserSS implements UserDetails {
 	public UserSS() {
 	}
 
-	public UserSS(Integer id, String email, String senha, Set<Profile> profiles) {
+	public UserSS(Long id, String email, String senha, Set<Profile> profiles) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -30,7 +30,7 @@ public class UserSS implements UserDetails {
 				.collect(Collectors.toList());
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 

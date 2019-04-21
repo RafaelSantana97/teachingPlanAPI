@@ -129,7 +129,7 @@ public class DBService {
 
 		Class t1 = new Class();
 		t1.setCode("PS1TIN1");
-		t1.setYear(2019);
+		t1.setYear((short)2019);
 		t1.setSubject(disp1);
 		t1.setPeriod(Period.MATUTINO.getId());
 		t1.setSemester(Semester.SEMESTRE_1.getId());
@@ -137,7 +137,7 @@ public class DBService {
 
 		Class t2 = new Class();
 		t2.setCode("LS1PIN1");
-		t2.setYear(2019);
+		t2.setYear((short)2019);
 		t2.setSubject(disp2);
 		t2.setPeriod(Period.MATUTINO.getId());
 		t2.setSemester(Semester.SEMESTRE_1.getId());

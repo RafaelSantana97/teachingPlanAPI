@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,22 +20,30 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.planner.enums.SubjectType;
 import edu.planner.interfaces.IModel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Subject implements Serializable, IModel {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
+	@Column(nullable = false, length = 80)
 	private String name;
 
+	@Column(nullable = false, length = 1)
 	private String type;
 
 	@ManyToOne
-	@JoinColumn(name = "responsible", nullable = false)
+	@JoinColumn(name = "responsible", nullable = false, foreignKey = @ForeignKey(name = "FK_USER"))
 	private User responsible;
 
 	@OneToMany(mappedBy = "subject")
@@ -44,31 +54,11 @@ public class Subject implements Serializable, IModel {
 	@JsonIgnore
 	private List<Course> courses = new ArrayList<Course>();
 
-	public Subject() {
-
-	}
-
-	public Subject(Integer id, String name, String type, User responsible) {
+	public Subject(Long id, String name, String type, User responsible) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.responsible = responsible;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getType() {
@@ -83,29 +73,5 @@ public class Subject implements Serializable, IModel {
 		if (type == null || type.isEmpty())
 			return;
 		this.type = SubjectType.toEnum(type).getId();
-	}
-
-	public User getResponsible() {
-		return responsible;
-	}
-
-	public void setResponsible(User responsible) {
-		this.responsible = responsible;
-	}
-
-	public List<Class> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(List<Class> classes) {
-		this.classes = classes;
-	}
-
-	public List<Course> getCourses() {
-		return courses;
-	}
-
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
 	}
 }

@@ -68,7 +68,7 @@ public class ClassService implements IService<Class, Class> {
 	}
 
 	@Override
-	public Boolean delete(int id) {
+	public Boolean delete(Long id) {
 		Boolean result = false;
 
 		try {
@@ -115,7 +115,7 @@ public class ClassService implements IService<Class, Class> {
 		return _class;
 	}
 
-	public Class findOne(int id) {
+	public Class findOne(Long id) {
 		Optional<Class> _class = null;
 		try {
 			_class = iClasseRepo.findById(id);

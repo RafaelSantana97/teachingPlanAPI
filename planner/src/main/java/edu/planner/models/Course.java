@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,69 +15,41 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import edu.planner.interfaces.IModel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Course implements Serializable, IModel {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
+	@Column(nullable = false, length = 40)
 	private String name;
-	
+
 	@ManyToMany
-	@JoinTable(name = "COORD_COURSE",
-		joinColumns = @JoinColumn(name = "coordinator"),
-		inverseJoinColumns = @JoinColumn(name = "id")
-	)
+	@JoinTable(
+			name = "COORD_COURSE",
+			joinColumns = @JoinColumn(name = "coordinator_id", foreignKey = @ForeignKey(name="FK_USER")),
+			inverseJoinColumns = @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name="FK_COURSE")))
 	private List<User> coordinators = new ArrayList<User>();
 
 	@ManyToMany
-	@JoinTable(name = "COURSE_SUBJECT",
-		joinColumns = @JoinColumn(name = "subject"),
-		inverseJoinColumns = @JoinColumn(name = "id")
-	)
+	@JoinTable(
+			name = "COURSE_SUBJECT",
+			joinColumns = @JoinColumn(name = "subject_id", foreignKey = @ForeignKey(name="FK_SUBJECT")),
+			inverseJoinColumns = @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name="FK_COURSE")))
 	private List<Subject> subjects = new ArrayList<Subject>();
 
-	public Course() {
-	}
-
-	public Course(Integer id, String name) {
+	public Course(Long id, String name) {
 		this.id = id;
 		this.name = name;
-	}
-	
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public List<User> getCoordinators() {
-		return coordinators;
-	}
-
-	public void setCoordinators(List<User> coordinators) {
-		this.coordinators = coordinators;
-	}
-
-	public List<Subject> getSubjects() {
-		return subjects;
-	}
-
-	public void setSubjects(List<Subject> subjects) {
-		this.subjects = subjects;
 	}
 }

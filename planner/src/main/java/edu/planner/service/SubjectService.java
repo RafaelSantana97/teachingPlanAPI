@@ -63,7 +63,7 @@ public class SubjectService implements IService<Subject, Subject> {
 		return subjectAltered;
 	}
 
-	public Boolean delete(int id) {
+	public Boolean delete(Long id) {
 		Boolean result = false;
 
 		try {
@@ -111,7 +111,7 @@ public class SubjectService implements IService<Subject, Subject> {
 		return subject;
 	}
 
-	public Iterable<SubjectDTO> findByCourse(Integer courseId) {
+	public Iterable<SubjectDTO> findByCourse(Long courseId) {
 		List<Subject> subjects = null;
 		List<Subject> subjectsChecked = new ArrayList<Subject>();
 		List<SubjectDTO> subjectsDTO = new ArrayList<SubjectDTO>();
@@ -136,7 +136,7 @@ public class SubjectService implements IService<Subject, Subject> {
 		return subjectsDTO;
 	}
 
-	public Subject findOne(int id) {
+	public Subject findOne(Long id) {
 		Optional<Subject> subject = null;
 		try {
 			subject = iSubjectRepo.findById(id);

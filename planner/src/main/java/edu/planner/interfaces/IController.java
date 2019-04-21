@@ -8,5 +8,5 @@ public interface IController<T, D> {
 
 	public ResponseEntity<T> update(D d);
 
-	public ResponseEntity<Boolean> delete(int id);
+	public ResponseEntity<Boolean> delete(Long id);
 }

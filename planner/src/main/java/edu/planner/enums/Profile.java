@@ -2,19 +2,19 @@ package edu.planner.enums;
 
 public enum Profile {
 
-	ADMIN(1, "ROLE_ADMIN"),
-	COORDINATOR(2, "ROLE_COORDINATOR"),
-	TEACHER(3, "ROLE_TEACHER");
+	ADMIN((short) 1, "ROLE_ADMIN"),
+	COORDINATOR((short) 2, "ROLE_COORDINATOR"),
+	TEACHER((short) 3, "ROLE_TEACHER");
 
-	private int id;
+	private Short id;
 	private String description;
 
-	private Profile(int id, String description) {
+	private Profile(Short id, String description) {
 		this.id = id;
 		this.description = description;
 	}
 
-	public int getId() {
+	public Short getId() {
 		return id;
 	}
 
@@ -22,7 +22,7 @@ public enum Profile {
 		return description;
 	}
 
-	public static Profile toEnum(Integer id) {
+	public static Profile toEnum(Short id) {
 
 		if (id == null) {
 			return null;

@@ -2,19 +2,19 @@ package edu.planner.enums;
 
 public enum Period {
 
-	MATUTINO(1, "Matutino"),
-	VERSPERTINO(2, "Vespertino"),
-	NOTURNO(3,"Noturno");
+	MATUTINO((short) 1, "Matutino"),
+	VERSPERTINO((short) 2, "Vespertino"),
+	NOTURNO((short) 3,"Noturno");
 	
-	private int id;
+	private Short id;
 	private String description;
 
-	private Period(int id, String description) {
+	private Period(Short id, String description) {
 		this.id = id;
 		this.description = description;
 	}
 
-	public int getId() {
+	public Short getId() {
 		return id;
 	}
 
@@ -22,7 +22,7 @@ public enum Period {
 		return description;
 	}
 
-	public static Period toEnum(Integer id) {
+	public static Period toEnum(Short id) {
 		if (id == null) {
 			return null;
 		}

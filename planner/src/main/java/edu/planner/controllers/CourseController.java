@@ -50,7 +50,7 @@ public class CourseController implements IController<Course, CourseDTO> {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@DeleteMapping("{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable int id) {
+	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 		Boolean result = courseService.delete(id);
 		return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
@@ -75,7 +75,7 @@ public class CourseController implements IController<Course, CourseDTO> {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CourseDTO> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<CourseDTO> findOne(@PathVariable("id") Long id) {
 		CourseDTO course = courseService.findOne(id);
 		return course != null ? ResponseEntity.ok(course) : ResponseEntity.noContent().build();
 	}

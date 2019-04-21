@@ -48,7 +48,7 @@ public class SubjectController implements IController<Subject, Subject> {
 	@PreAuthorize("hasAnyRole('COORDINATOR')")
 	@Transactional
 	@DeleteMapping("{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable int id) {
+	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 		Boolean result = subjectService.delete(id);
 		return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
@@ -74,13 +74,13 @@ public class SubjectController implements IController<Subject, Subject> {
 	}
 
 	@GetMapping("/byCourse/{courseId}")
-	public ResponseEntity<Iterable<SubjectDTO>> findAllSubjects(@PathVariable("courseId") Integer courseId) {
+	public ResponseEntity<Iterable<SubjectDTO>> findAllSubjects(@PathVariable("courseId") Long courseId) {
 		Iterable<SubjectDTO> subject = subjectService.findByCourse(courseId);
 		return subject != null ? ResponseEntity.ok(subject) : ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Subject> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<Subject> findOne(@PathVariable("id") Long id) {
 		Subject subject = subjectService.findOne(id);
 		return subject != null ? ResponseEntity.ok(subject) : ResponseEntity.noContent().build();
 	}
