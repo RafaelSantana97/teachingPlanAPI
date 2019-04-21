@@ -22,7 +22,7 @@ public class CourseDTO {
 	private Long id;
 
 	@NotEmpty(message = "is required")
-	@Size(min = 5, max = 40, message = "Must be between 5 and 40 characters")
+	@Size(min = 5, max = 80, message = "Must be between 5 and 80 characters")
 	private String name;
 
 	private List<User> coordinators = new ArrayList<User>();

@@ -84,7 +84,7 @@ public class UserService implements IService<User, User> {
 		return user;
 	}
 
-	public Page<User> findPageableAndFilteredProfile(int page, int count, int profile, String description) {
+	public Page<User> findPageableAndFilteredProfile(int page, int count, Short profile, String description) {
 		Page<User> user = null;
 		try {
 			user = iUserRepo.findByProfilesInAndNameContaining(PageRequest.of(page, count), profile, description);
@@ -95,7 +95,7 @@ public class UserService implements IService<User, User> {
 		return user;
 	}
 
-	public Page<User> findPageableByProfile(int page, int count, int profile) {
+	public Page<User> findPageableByProfile(int page, int count, Short profile) {
 		Page<User> user = null;
 		try {
 			user = iUserRepo.findByProfilesIs(PageRequest.of(page, count), profile);
