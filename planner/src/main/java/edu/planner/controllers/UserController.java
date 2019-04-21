@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.planner.enums.Profile;
 import edu.planner.interfaces.IController;
 import edu.planner.models.User;
 import edu.planner.service.UserService;
@@ -71,7 +72,7 @@ public class UserController implements IController<User, User> {
 	@GetMapping("/interval/{page}/{count}/teacher/{description}")
 	public ResponseEntity<Page<User>> findPageableAndFilteredTeacher(@PathVariable("page") int page,
 			@PathVariable("count") int count, @PathVariable("description") String description) {
-		Page<User> user = userService.findPageableAndFilteredTeacher(page, count, description);
+		Page<User> user = userService.findPageableAndFilteredProfile(page, count, Profile.TEACHER.getId(), description);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
 
@@ -79,7 +80,23 @@ public class UserController implements IController<User, User> {
 	@GetMapping("/interval/{page}/{count}/teacher")
 	public ResponseEntity<Page<User>> findPageableByTeacher(@PathVariable("page") int page,
 			@PathVariable("count") int count) {
-		Page<User> user = userService.findPageableByTeacher(page, count);
+		Page<User> user = userService.findPageableByProfile(page, count, Profile.TEACHER.getId());
+		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@GetMapping("/interval/{page}/{count}/coordinator/{description}")
+	public ResponseEntity<Page<User>> findPageableAndFilteredCoord(@PathVariable("page") int page,
+			@PathVariable("count") int count, @PathVariable("description") String description) {
+		Page<User> user = userService.findPageableAndFilteredProfile(page, count, Profile.COORDINATOR.getId(), description);
+		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@GetMapping("/interval/{page}/{count}/coordinator")
+	public ResponseEntity<Page<User>> findPageableByCoord(@PathVariable("page") int page,
+			@PathVariable("count") int count) {
+		Page<User> user = userService.findPageableByProfile(page, count, Profile.COORDINATOR.getId());
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
 
