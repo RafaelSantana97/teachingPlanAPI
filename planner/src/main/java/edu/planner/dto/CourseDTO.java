@@ -6,8 +6,11 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import edu.planner.enums.Profile;
 import edu.planner.models.Course;
+import edu.planner.models.Subject;
 import edu.planner.models.User;
+import edu.planner.models.validation.ProfilesConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,15 +28,29 @@ public class CourseDTO {
 	@Size(min = 5, max = 80, message = "Must be between 5 and 80 characters")
 	private String name;
 
-	private List<User> coordinators = new ArrayList<User>();
+	@ProfilesConstraint(only = Profile.COORDINATOR)
+	private List<UserSimpleDTO> coordinators = new ArrayList<UserSimpleDTO>();
 
 	private List<SubjectDTO> subjects = new ArrayList<SubjectDTO>();
 
 	public static CourseDTO toDTO(Course course, List<SubjectDTO> subjects) {
-		return new CourseDTO(course.getId(), course.getName(), course.getCoordinators(), subjects);
+		List<UserSimpleDTO> coordinators = new ArrayList<UserSimpleDTO>();
+		course.getCoordinators().forEach(coord -> coordinators.add(UserSimpleDTO.toDTO(coord)));
+
+		return new CourseDTO(course.getId(), course.getName(), coordinators, subjects);
 	}
 
-	public static Course fromDTO(CourseDTO subject) {
-		return new Course(subject.getId(), subject.getName());
+	public static Course fromDTO(CourseDTO course) {
+		List<User> coordinators = new ArrayList<User>();
+		course.getCoordinators().forEach(coord -> coordinators.add(UserSimpleDTO.fromDTO(coord)));
+
+		List<Subject> subjects = new ArrayList<Subject>();
+		course.getSubjects().forEach(sub -> {
+			if (sub.isChecked()) {
+				subjects.add(SubjectDTO.fromDTO(sub));
+			}
+		});
+
+		return new Course(course.getId(), course.getName(), coordinators, subjects);
 	}
 }

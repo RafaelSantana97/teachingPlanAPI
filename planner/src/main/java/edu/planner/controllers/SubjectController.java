@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.planner.dto.SubjectDTO;
+import edu.planner.dto.SubjectInsertDTO;
 import edu.planner.interfaces.IController;
 import edu.planner.models.Subject;
 import edu.planner.service.SubjectService;
 
 @RestController
 @RequestMapping("api/subject")
-public class SubjectController implements IController<Subject, Subject> {
+public class SubjectController implements IController<Subject, SubjectInsertDTO> {
 
 	@Autowired
 	SubjectService subjectService;
@@ -32,17 +33,17 @@ public class SubjectController implements IController<Subject, Subject> {
 	@PreAuthorize("hasAnyRole('COORDINATOR')")
 	@Transactional
 	@PostMapping
-	public ResponseEntity<Subject> insert(@Valid @RequestBody Subject subject) {
-		subject = subjectService.insert(subject);
-		return subject != null ? ResponseEntity.ok(subject) : ResponseEntity.noContent().build();
+	public ResponseEntity<Subject> insert(@Valid @RequestBody SubjectInsertDTO subject) {
+		Subject subjectIncluded = subjectService.insert(subject);
+		return subjectIncluded != null ? ResponseEntity.ok(subjectIncluded) : ResponseEntity.noContent().build();
 	}
 
 	@PreAuthorize("hasAnyRole('COORDINATOR')")
 	@Transactional
 	@PutMapping
-	public ResponseEntity<Subject> update(@Valid @RequestBody Subject subject) {
-		subject = subjectService.update(subject);
-		return subject != null ? ResponseEntity.ok(subject) : ResponseEntity.noContent().build();
+	public ResponseEntity<Subject> update(@Valid @RequestBody SubjectInsertDTO subject) {
+		Subject subjectAltered = subjectService.update(subject);
+		return subjectAltered != null ? ResponseEntity.ok(subjectAltered) : ResponseEntity.noContent().build();
 	}
 
 	@PreAuthorize("hasAnyRole('COORDINATOR')")

@@ -31,14 +31,6 @@ public class ClassService implements IService<Class, Class> {
 	public Class insert(Class _class) {
 		Class _classeIncluded = null;
 		try {
-			_class.setTeacher(userService.findOne(_class.getTeacher().getId()));
-
-			if (!_class.getTeacher().getIsTeacher()) {
-				throw new BusinessException(ErrorCode.CLASS_NEED_A_TEACHER);
-			}
-
-			_class.setSubject(subjectService.findOne(_class.getSubject().getId()));
-
 			_classeIncluded = iClasseRepo.save(_class);
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -52,12 +44,6 @@ public class ClassService implements IService<Class, Class> {
 	public Class update(Class _class) {
 		Class _classeAltered = null;
 		try {
-			_class.setTeacher(userService.findOne(_class.getTeacher().getId()));
-
-			if (!_class.getTeacher().getIsTeacher()) {
-				throw new BusinessException(ErrorCode.CLASS_NEED_A_TEACHER);
-			}
-
 			_classeAltered = iClasseRepo.save(_class);
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e);
