@@ -4,6 +4,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import edu.planner.enums.Profile;
+import edu.planner.enums.SubjectType;
+import edu.planner.interfaces.IModel;
 import edu.planner.models.Subject;
 import edu.planner.models.validation.ProfileConstraint;
 import lombok.AllArgsConstructor;
@@ -15,7 +17,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubjectDTO {
+public class SubjectInsertDTO implements IModel {
 
 	private Long id;
 
@@ -24,20 +26,33 @@ public class SubjectDTO {
 	private String name;
 
 	@NotEmpty(message = "is required")
+	@Size(max = 1)
 	private String type;
 
 	@ProfileConstraint(only = Profile.TEACHER)
 	private UserSimpleDTO responsible;
 
-	private boolean checked = false;
-
-	public static SubjectDTO toDTO(Subject subject, boolean checked) {
-		return new SubjectDTO(subject.getId(), subject.getName(), subject.getType(),
-				UserSimpleDTO.toDTO(subject.getResponsible()), checked);
+	public static SubjectInsertDTO toDTO(Subject subject) {
+		return new SubjectInsertDTO(subject.getId(), subject.getName(), subject.getType(),
+				UserSimpleDTO.toDTO(subject.getResponsible()));
 	}
 
-	public static Subject fromDTO(SubjectDTO subject) {
+	public static Subject fromDTO(SubjectInsertDTO subject) {
 		return new Subject(subject.getId(), subject.getName(), subject.getType(),
 				UserSimpleDTO.fromDTO(subject.getResponsible()));
+	}
+
+	public String getType() {
+		return SubjectType.toEnum(type).getId();
+	}
+
+	public void setType(SubjectType type) {
+		this.type = type.getId();
+	}
+
+	public void setType(String type) {
+		if (type == null || type.isEmpty())
+			return;
+		this.type = SubjectType.toEnum(type).getId();
 	}
 }
