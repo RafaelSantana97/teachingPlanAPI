@@ -15,7 +15,6 @@ public enum ErrorCode {
 	SUBJECT_DELETE_VIOLATION(1023, "Unable to remove a subject in use"),
 	SUBJECT_SEARCH(1024, "Error while querying a subject"),
 	SUBJECT_NOT_FOUND(1025, "Subject not found"),
-	SUBJECT_NEED_A_TEACHER(1026, "Only a teacher can be responsible for a subject"),
 
 	CLASS_SAVE(1040, "Error while saving a class"),
 	CLASS_UPDATE(1041, "Error while updating a class"),
@@ -23,7 +22,6 @@ public enum ErrorCode {
 	CLASS_DELETE_VIOLATION(1043, "Unable to remove a class in use"),
 	CLASS_SEARCH(1044, "Error while querying a class"),
 	CLASS_NOT_FOUND(1045, "Class not found"),
-	CLASS_NEED_A_TEACHER(1046, "The informed user is not a teacher"),
 
 	USER_SAVE(1060, "Error while saving an user"),
 	USER_UPDATE(1061, "Error while updating an user"),

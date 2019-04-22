@@ -13,13 +13,13 @@ import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import edu.planner.enums.Profile;
 import edu.planner.enums.LevelDegree;
+import edu.planner.enums.Profile;
 import edu.planner.interfaces.IModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,6 +44,7 @@ public class User implements Serializable, IModel {
 	private String levelDegree;
 
 	@NotEmpty(message = "is required")
+	@Email
 	private String email;
 
 	@JsonIgnore
@@ -53,16 +54,7 @@ public class User implements Serializable, IModel {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PROFILES", foreignKey = @ForeignKey(name = "FK_USER"))
 	@JsonIgnore
-	private Set<Short> profiles = new HashSet<>();
-
-	@Transient
-	private Boolean isAdmin;
-
-	@Transient
-	private Boolean isCoordinator;
-
-	@Transient
-	private Boolean isTeacher;
+	private Set<Short> profiles = new HashSet<Short>();
 
 	public User(Long id, String name, String levelDegree) {
 		this.id = id;
@@ -84,29 +76,5 @@ public class User implements Serializable, IModel {
 
 	public void addProfile(Profile profile) {
 		profiles.add(profile.getId());
-	}
-
-	public Boolean getIsAdmin() {
-		if (isAdmin == null) {
-			isAdmin = profiles.stream().anyMatch(profile -> profile == Profile.ADMIN.getId());
-		}
-
-		return isAdmin;
-	}
-
-	public Boolean getIsCoordinator() {
-		if (isCoordinator == null) {
-			isCoordinator = profiles.stream().anyMatch(profile -> profile == Profile.COORDINATOR.getId());
-		}
-
-		return isCoordinator;
-	}
-
-	public Boolean getIsTeacher() {
-		if (isTeacher == null) {
-			isTeacher = profiles.stream().anyMatch(profile -> profile == Profile.TEACHER.getId());
-		}
-
-		return isTeacher;
 	}
 }

@@ -29,15 +29,7 @@ public class CourseService implements IService<Course, CourseDTO> {
 	public Course insert(CourseDTO course) {
 		Course courseIncluded = null;
 		try {
-			courseIncluded = new Course(course.getId(), course.getName());
-			courseIncluded.setCoordinators(course.getCoordinators());
-
-			for (SubjectDTO sub : course.getSubjects()) {
-				if (sub.isChecked()) {
-					courseIncluded.getSubjects().add(SubjectDTO.fromDTO(sub));
-				}
-			}
-
+			courseIncluded = CourseDTO.fromDTO(course);
 			courseIncluded = iCourseRepo.save(courseIncluded);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.COURSE_SAVE, e);
@@ -48,15 +40,7 @@ public class CourseService implements IService<Course, CourseDTO> {
 	public Course update(CourseDTO course) {
 		Course courseAltered = null;
 		try {
-			courseAltered = new Course(course.getId(), course.getName());
-			courseAltered.setCoordinators(course.getCoordinators());
-
-			for (SubjectDTO sub : course.getSubjects()) {
-				if (sub.isChecked()) {
-					courseAltered.getSubjects().add(SubjectDTO.fromDTO(sub));
-				}
-			}
-
+			courseAltered = CourseDTO.fromDTO(course);
 			courseAltered = iCourseRepo.save(courseAltered);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.COURSE_UPDATE, e);

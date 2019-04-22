@@ -44,13 +44,12 @@ public class Class implements Serializable, IModel {
 	private Short year;
 
 	@ManyToOne
-	@JoinColumn(name = "subject", nullable = false, foreignKey = @ForeignKey(name="FK_SUBJECT"))
+	@JoinColumn(name = "subject", nullable = false, foreignKey = @ForeignKey(name = "FK_SUBJECT"))
 	@ModelConstraint
 	private Subject subject;
 
 	@ManyToOne
-	@JoinColumn(name = "teacher", nullable = false, foreignKey = @ForeignKey(name="FK_USER"))
-	@ModelConstraint
+	@JoinColumn(name = "teacher", nullable = false, foreignKey = @ForeignKey(name = "FK_USER"))
 	private User teacher;
 
 	public Short getPeriod() {

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import edu.planner.dto.SubjectDTO;
+import edu.planner.dto.SubjectInsertDTO;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.exception.ObjectNotFoundException;
@@ -19,7 +20,7 @@ import edu.planner.models.Subject;
 import edu.planner.repositories.ISubjectRepo;
 
 @Service
-public class SubjectService implements IService<Subject, Subject> {
+public class SubjectService implements IService<Subject, SubjectInsertDTO> {
 
 	@Autowired
 	ISubjectRepo iSubjectRepo;
@@ -27,16 +28,10 @@ public class SubjectService implements IService<Subject, Subject> {
 	@Autowired
 	UserService userService;
 
-	public Subject insert(Subject subject) {
+	public Subject insert(SubjectInsertDTO subject) {
 		Subject subjectIncluded = null;
 		try {
-			subject.setResponsible(userService.findOne(subject.getResponsible().getId()));
-
-			if (!subject.getResponsible().getIsTeacher()) {
-				throw new BusinessException(ErrorCode.SUBJECT_NEED_A_TEACHER);
-			}
-
-			subjectIncluded = iSubjectRepo.save(subject);
+			subjectIncluded = iSubjectRepo.save(SubjectInsertDTO.fromDTO(subject));
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
@@ -45,16 +40,10 @@ public class SubjectService implements IService<Subject, Subject> {
 		return subjectIncluded;
 	}
 
-	public Subject update(Subject subject) {
+	public Subject update(SubjectInsertDTO subject) {
 		Subject subjectAltered = null;
 		try {
-			subject.setResponsible(userService.findOne(subject.getResponsible().getId()));
-
-			if (!subject.getResponsible().getIsTeacher()) {
-				throw new BusinessException(ErrorCode.SUBJECT_NEED_A_TEACHER);
-			}
-
-			subjectAltered = iSubjectRepo.save(subject);
+			subjectAltered = iSubjectRepo.save(SubjectInsertDTO.fromDTO(subject));
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage(), e);
 		} catch (Exception e) {
@@ -121,14 +110,14 @@ public class SubjectService implements IService<Subject, Subject> {
 
 			if (courseId != null && courseId > 0) {
 				subjectsChecked = (ArrayList<Subject>) iSubjectRepo.findByCoursesIdIs(courseId);
-				
+
 				subjectsChecked.forEach(sub -> subjectsDTO.add(SubjectDTO.toDTO(sub, true)));
-				
+
 				subjects.removeAll(subjectsChecked);
 			}
 
 			subjects.forEach(sub -> subjectsDTO.add(SubjectDTO.toDTO(sub, false)));
-			
+
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.SUBJECT_SEARCH, e);
 		}
