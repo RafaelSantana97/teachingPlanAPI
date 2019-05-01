@@ -113,7 +113,30 @@ public class DBService {
 		user2.setHashKey(bCryptPasswordEncoder.encode("hueBR"));
 		user2.addProfile(Profile.TEACHER);
 
-		iUserRepo.saveAll(Arrays.asList(user1, user2));
+		User user3 = new User();
+		user3.setName("André Breda");
+		user3.setEmail("breda@facens.com");
+		user3.setLevelDegree(LevelDegree.MESTRE.getId());
+		user3.setHashKey(bCryptPasswordEncoder.encode("bredinha123"));
+		user3.addProfile(Profile.TEACHER);
+
+		User user4 = new User();
+		user4.setName("Andrea");
+		user4.setEmail("andrea@facens.com");
+		user4.setLevelDegree(LevelDegree.DOUTOR.getId());
+		user4.setHashKey(bCryptPasswordEncoder.encode("andreazita"));
+		user4.addProfile(Profile.ADMIN);
+		user4.addProfile(Profile.COORDINATOR);
+		user4.addProfile(Profile.TEACHER);
+
+		User user5 = new User();
+		user5.setName("Marcos Vinícius");
+		user5.setEmail("marcosvinicius@facens.com");
+		user5.setLevelDegree(LevelDegree.DOUTOR.getId());
+		user5.setHashKey(bCryptPasswordEncoder.encode("relampago_marquinhos"));
+		user5.addProfile(Profile.TEACHER);
+
+		iUserRepo.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
 
 		Subject disp1 = new Subject();
 		disp1.setName("Processamento de Sinais");
@@ -125,7 +148,57 @@ public class DBService {
 		disp2.setResponsible(user2);
 		disp2.setType(SubjectType.LABORATORIO);
 
-		iSubjectRepo.saveAll(Arrays.asList(disp1, disp2));
+		Subject disp3 = new Subject();
+		disp3.setName("Física Experimental");
+		disp3.setResponsible(user2);
+		disp3.setType(SubjectType.LABORATORIO);
+
+		Subject disp4 = new Subject();
+		disp4.setName("Química Experimental");
+		disp4.setResponsible(user2);
+		disp4.setType(SubjectType.LABORATORIO);
+
+		Subject disp5 = new Subject();
+		disp5.setName("Mecânica de Fluídos");
+		disp5.setResponsible(user2);
+		disp5.setType(SubjectType.LABORATORIO);
+
+		Subject disp6 = new Subject();
+		disp6.setName("Ensaio de Materiais");
+		disp6.setResponsible(user2);
+		disp6.setType(SubjectType.LABORATORIO);
+
+		Subject disp7 = new Subject();
+		disp7.setName("Cálculo I");
+		disp7.setResponsible(user2);
+		disp7.setType(SubjectType.TEORIA);
+
+		Subject disp8 = new Subject();
+		disp8.setName("Cálculo II");
+		disp8.setResponsible(user2);
+		disp8.setType(SubjectType.TEORIA);
+
+		Subject disp9 = new Subject();
+		disp9.setName("Cálculo III");
+		disp9.setResponsible(user2);
+		disp9.setType(SubjectType.TEORIA);
+
+		Subject disp10 = new Subject();
+		disp10.setName("Cálculo IV");
+		disp10.setResponsible(user2);
+		disp10.setType(SubjectType.TEORIA);
+
+		Subject disp11 = new Subject();
+		disp11.setName("Processamento de Sinais");
+		disp11.setResponsible(user2);
+		disp11.setType(SubjectType.LABORATORIO);
+
+		Subject disp12 = new Subject();
+		disp12.setName("Desenvolvimento de Aplicações Web I");
+		disp12.setResponsible(user2);
+		disp12.setType(SubjectType.LABORATORIO);
+
+		iSubjectRepo.saveAll(Arrays.asList(disp1, disp2, disp3, disp4, disp5, disp6, disp7, disp8, disp9, disp10, disp11, disp12));
 
 		Class t1 = new Class();
 		t1.setCode("PS1TIN1");
