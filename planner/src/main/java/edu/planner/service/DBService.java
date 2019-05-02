@@ -15,10 +15,12 @@ import edu.planner.enums.LevelDegree;
 import edu.planner.models.Subject;
 import edu.planner.models.Domain;
 import edu.planner.models.Class;
+import edu.planner.models.Course;
 import edu.planner.models.User;
 import edu.planner.repositories.ISubjectRepo;
 import edu.planner.repositories.IDomainRepo;
 import edu.planner.repositories.IClassRepo;
+import edu.planner.repositories.ICourseRepo;
 import edu.planner.repositories.IUserRepo;
 
 @Service
@@ -35,6 +37,9 @@ public class DBService {
 
 	@Autowired
 	IClassRepo iClasseRepo;
+	
+	@Autowired
+	ICourseRepo iCourseRepo;
 
 	@Autowired
 	private IUserRepo iUserRepo;
@@ -170,22 +175,22 @@ public class DBService {
 
 		Subject disp7 = new Subject();
 		disp7.setName("Cálculo I");
-		disp7.setResponsible(user2);
+		disp7.setResponsible(user5);
 		disp7.setType(SubjectType.TEORIA);
 
 		Subject disp8 = new Subject();
 		disp8.setName("Cálculo II");
-		disp8.setResponsible(user2);
+		disp8.setResponsible(user5);
 		disp8.setType(SubjectType.TEORIA);
 
 		Subject disp9 = new Subject();
 		disp9.setName("Cálculo III");
-		disp9.setResponsible(user2);
+		disp9.setResponsible(user5);
 		disp9.setType(SubjectType.TEORIA);
 
 		Subject disp10 = new Subject();
 		disp10.setName("Cálculo IV");
-		disp10.setResponsible(user2);
+		disp10.setResponsible(user5);
 		disp10.setType(SubjectType.TEORIA);
 
 		Subject disp11 = new Subject();
@@ -195,7 +200,7 @@ public class DBService {
 
 		Subject disp12 = new Subject();
 		disp12.setName("Desenvolvimento de Aplicações Web I");
-		disp12.setResponsible(user2);
+		disp12.setResponsible(user3);
 		disp12.setType(SubjectType.LABORATORIO);
 
 		iSubjectRepo.saveAll(Arrays.asList(disp1, disp2, disp3, disp4, disp5, disp6, disp7, disp8, disp9, disp10, disp11, disp12));
@@ -217,5 +222,12 @@ public class DBService {
 		t2.setTeacher(user2);
 
 		iClasseRepo.saveAll(Arrays.asList(t1, t2));
+		
+		Course co1 = new Course();
+		co1.setCoordinators(Arrays.asList(user4));
+		co1.setName("Fundamentos do Cálculo");
+		co1.setSubjects(Arrays.asList(disp7, disp8, disp9, disp10));
+		
+		iCourseRepo.saveAll(Arrays.asList(co1));
 	}
 }
