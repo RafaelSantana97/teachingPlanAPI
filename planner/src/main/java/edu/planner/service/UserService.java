@@ -6,14 +6,18 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import edu.planner.enums.Profile;
+import edu.planner.exception.AuthorizationException;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.interfaces.IService;
 import edu.planner.models.User;
 import edu.planner.repositories.IUserRepo;
+import edu.planner.security.UserSS;
 
 @Service
 public class UserService implements IService<User, User> {
@@ -117,7 +121,22 @@ public class UserService implements IService<User, User> {
 		return user;
 	}
 
+	public static UserSS authenticated() {
+		try {
+		return(UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		}
+		catch(Exception e) {
+			return null;
+			}
+		}
+	
 	public User findOne(Long id) {
+		
+		UserSS userSS = UserService.authenticated(); 
+		if(userSS == null || userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId())) {
+			throw new AuthorizationException("Access denied");
+		}
+		
 		Optional<User> user = null;
 		try {
 			user = iUserRepo.findById(id);
