@@ -123,20 +123,18 @@ public class UserService implements IService<User, User> {
 
 	public static UserSS authenticated() {
 		try {
-		return(UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		}
-		catch(Exception e) {
+			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		} catch (Exception e) {
 			return null;
-			}
 		}
-	
+	}
+
 	public User findOne(Long id) {
-		
-		UserSS userSS = UserService.authenticated(); 
-		if(userSS == null || userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId())) {
+		UserSS userSS = UserService.authenticated();
+		if (userSS == null || userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId())) {
 			throw new AuthorizationException("Access denied");
 		}
-		
+
 		Optional<User> user = null;
 		try {
 			user = iUserRepo.findById(id);

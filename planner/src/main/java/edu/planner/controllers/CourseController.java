@@ -29,7 +29,7 @@ public class CourseController implements IController<Course, CourseDTO> {
 	@Autowired
 	CourseService courseService;
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('COORDINATOR')")
 	@Transactional
 	@PostMapping
 	public ResponseEntity<Course> insert(@Valid @RequestBody CourseDTO course) {
@@ -38,7 +38,7 @@ public class CourseController implements IController<Course, CourseDTO> {
 		return courseIncluded != null ? ResponseEntity.ok(courseIncluded) : ResponseEntity.noContent().build();
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('COORDINATOR')")
 	@Transactional
 	@PutMapping
 	public ResponseEntity<Course> update(@Valid @RequestBody CourseDTO course) {
