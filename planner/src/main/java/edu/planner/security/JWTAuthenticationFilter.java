@@ -19,6 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.planner.dto.CredenciaisDTO;
+import edu.planner.enums.Profile;
+import edu.planner.exception.ErrorCode;
+import edu.planner.exception.NoPermissionsException;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -43,7 +46,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 					creds.getPassword(), new ArrayList<>());
 
 			Authentication auth = authenticationManager.authenticate(authToken);
-			return auth;
+
+			UserSS userSS = (UserSS) auth.getPrincipal();
+			if (userSS.hasRole(Profile.ADMIN) || userSS.hasRole(Profile.COORDINATOR)
+					|| userSS.hasRole(Profile.TEACHER)) {
+				return auth;
+			} else {
+				throw new NoPermissionsException(ErrorCode.USER_WAIT_FOR_APPROVAL);
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -64,15 +74,22 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		@Override
 		public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 				AuthenticationException exception) throws IOException, ServletException {
-			response.setStatus(401);
+
 			response.setContentType("application/json");
-			response.getWriter().append(json());
+			if (exception instanceof NoPermissionsException) {
+				response.setStatus(403);
+				response.getWriter().append(json(exception.getMessage()));
+
+			} else {
+				response.setStatus(401);
+				response.getWriter().append(json("Email or password is invalid"));
+			}
 		}
 
-		private String json() {
+		private String json(String message) {
 			long date = new Date().getTime();
-			return "{\"timestamp\": " + date + ", " + "\"status\": 401, " + "\"error\": \"Não autorizado\", "
-					+ "\"message\": \"Email ou password inválidos\", " + "\"path\": \"/login\"}";
+			return "{\"timestamp\": " + date + ", " + "\"status\": 401, " + "\"error\": \"Not authorized\", "
+					+ "\"message\": \"" + message + "\", " + "\"path\": \"/login\"}";
 		}
 	}
 }

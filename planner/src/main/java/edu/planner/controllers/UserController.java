@@ -17,32 +17,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.planner.dto.UserInsertDTO;
+import edu.planner.dto.UserSimpleDTO;
 import edu.planner.enums.Profile;
+import edu.planner.exception.AuthorizationException;
 import edu.planner.interfaces.IController;
 import edu.planner.models.User;
+import edu.planner.security.UserSS;
 import edu.planner.service.UserService;
 
 @RestController
 @RequestMapping("api/user")
-public class UserController implements IController<User, User> {
+public class UserController implements IController<User, UserInsertDTO> {
 
 	@Autowired
 	UserService userService;
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@PostMapping
-	public ResponseEntity<User> insert(@Valid @RequestBody User user) {
-		user = userService.insert(user);
-		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	public ResponseEntity<User> insert(@Valid @RequestBody UserInsertDTO user) {
+		User userIncluded = userService.insert(user);
+		return userIncluded != null ? ResponseEntity.ok(userIncluded) : ResponseEntity.noContent().build();
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")  
 	@Transactional
 	@PutMapping
-	public ResponseEntity<User> update(@Valid @RequestBody User user) {
-		user = userService.update(user);
-		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	public ResponseEntity<User> update(@Valid @RequestBody UserInsertDTO user) {
+		User userAltered = userService.update(user);
+		return userAltered != null ? ResponseEntity.ok(userAltered) : ResponseEntity.noContent().build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
@@ -88,7 +91,8 @@ public class UserController implements IController<User, User> {
 	@GetMapping("/interval/{page}/{count}/coordinator/{description}")
 	public ResponseEntity<Page<User>> findPageableAndFilteredCoord(@PathVariable("page") int page,
 			@PathVariable("count") int count, @PathVariable("description") String description) {
-		Page<User> user = userService.findPageableAndFilteredProfile(page, count, Profile.COORDINATOR.getId(), description);
+		Page<User> user = userService.findPageableAndFilteredProfile(page, count, Profile.COORDINATOR.getId(),
+				description);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
 
@@ -109,7 +113,23 @@ public class UserController implements IController<User, User> {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<User> findOne(@PathVariable("id") Long id) {
+		UserSS userSS = UserService.authenticated();
+		if (userSS == null || (!userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId()))) {
+			throw new AuthorizationException("Access denied");
+		}
+
 		User user = userService.findOne(id);
+		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("getSimpleUser")
+	public ResponseEntity<UserSimpleDTO> getName() {
+		UserSS userSS = UserService.authenticated();
+		if (userSS == null) {
+			throw new AuthorizationException("Access denied");
+		}
+
+		UserSimpleDTO user = UserSimpleDTO.toDTO(userService.findOne(userSS.getId()));
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
 	}
 }

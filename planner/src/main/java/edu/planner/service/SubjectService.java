@@ -70,7 +70,6 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
 		Page<Subject> subject = null;
 		try {
 			subject = iSubjectRepo.findByNameContaining(PageRequest.of(page, count), description);
-
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.SUBJECT_SEARCH, e);
 		}

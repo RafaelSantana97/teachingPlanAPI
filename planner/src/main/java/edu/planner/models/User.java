@@ -15,12 +15,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.planner.enums.LevelDegree;
 import edu.planner.enums.Profile;
 import edu.planner.interfaces.IModel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +31,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable, IModel {
 
 	private static final long serialVersionUID = 1L;
@@ -40,7 +43,7 @@ public class User implements Serializable, IModel {
 	@NotEmpty(message = "is required")
 	private String name;
 
-	@NotEmpty(message = "is required")
+	@NotNull(message = "is required")
 	private String levelDegree;
 
 	@NotEmpty(message = "is required")
@@ -55,6 +58,11 @@ public class User implements Serializable, IModel {
 	@CollectionTable(name = "PROFILES", foreignKey = @ForeignKey(name = "FK_USER"))
 	@JsonIgnore
 	private Set<Short> profiles = new HashSet<Short>();
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "REQUIRED_PROFILES", foreignKey = @ForeignKey(name = "FK_USER"))
+	@JsonIgnore
+	private Set<Short> requiredProfiles = new HashSet<Short>();
 
 	public User(Long id, String name, String levelDegree) {
 		this.id = id;
@@ -73,8 +81,15 @@ public class User implements Serializable, IModel {
 	public Set<Profile> getProfiles() {
 		return profiles.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
 	}
-
+	
 	public void addProfile(Profile profile) {
 		profiles.add(profile.getId());
+	}
+
+	public Set<Profile> getRequiredProfiles() {
+		return requiredProfiles.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
+	}
+	public Set<Short> getRequiredProfilesShort() {
+		return requiredProfiles;
 	}
 }

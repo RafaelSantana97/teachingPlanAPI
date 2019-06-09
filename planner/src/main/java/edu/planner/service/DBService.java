@@ -126,7 +126,7 @@ public class DBService {
 		user3.addProfile(Profile.TEACHER);
 
 		User user4 = new User();
-		user4.setName("Andrea");
+		user4.setName("Andréa Braga");
 		user4.setEmail("andrea@facens.com");
 		user4.setLevelDegree(LevelDegree.DOUTOR.getId());
 		user4.setHashKey(bCryptPasswordEncoder.encode("andreazita"));

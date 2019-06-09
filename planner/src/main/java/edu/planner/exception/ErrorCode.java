@@ -29,6 +29,7 @@ public enum ErrorCode {
 	USER_DELETE_VIOLATION(1063, "Unable to remove an user in use"),
 	USER_SEARCH(1064, "Error while querying an user"),
 	USER_NOT_FOUND(1065, "User not found"),
+	USER_WAIT_FOR_APPROVAL(1066, "Please, wait for approval"),
 	
 	DOMAIN_SAVE(1080, "Error while saving a domain"),
 	DOMAIN_UPDATE(1081, "Error while updating a domain"),

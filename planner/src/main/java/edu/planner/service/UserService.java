@@ -1,5 +1,6 @@
 package edu.planner.service;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -10,8 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import edu.planner.enums.Profile;
-import edu.planner.exception.AuthorizationException;
+import edu.planner.dto.UserInsertDTO;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.interfaces.IService;
@@ -20,7 +20,7 @@ import edu.planner.repositories.IUserRepo;
 import edu.planner.security.UserSS;
 
 @Service
-public class UserService implements IService<User, User> {
+public class UserService implements IService<User, UserInsertDTO> {
 
 	@Autowired
 	IUserRepo iUserRepo;
@@ -29,11 +29,18 @@ public class UserService implements IService<User, User> {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
-	public User insert(User user) {
+	public User insert(UserInsertDTO user) {
 		User userIncluded = null;
 		try {
-			user.setHashKey(bCryptPasswordEncoder.encode(user.getHashKey()));
-			userIncluded = iUserRepo.save(user);
+			userIncluded = UserInsertDTO.fromDTO(user);
+			userIncluded.setHashKey(bCryptPasswordEncoder.encode(userIncluded.getHashKey()));
+			
+			if(user.getRequireAdminRole() && !iUserRepo.existsSomeAdminUser()) {
+				userIncluded.setProfiles(userIncluded.getRequiredProfilesShort());
+				userIncluded.setRequiredProfiles(new HashSet<Short>());
+			}
+			
+			userIncluded = iUserRepo.save(userIncluded);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.USER_SAVE, e);
 		}
@@ -41,10 +48,10 @@ public class UserService implements IService<User, User> {
 	}
 
 	@Override
-	public User update(User user) {
+	public User update(UserInsertDTO user) {
 		User userAltered = null;
 		try {
-			userAltered = iUserRepo.save(user);
+			userAltered = iUserRepo.save(UserInsertDTO.fromDTO(user));
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.USER_UPDATE, e);
 		}
@@ -130,11 +137,6 @@ public class UserService implements IService<User, User> {
 	}
 
 	public User findOne(Long id) {
-		UserSS userSS = UserService.authenticated();
-		if (userSS == null || userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId())) {
-			throw new AuthorizationException("Access denied");
-		}
-
 		Optional<User> user = null;
 		try {
 			user = iUserRepo.findById(id);
