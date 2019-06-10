@@ -25,4 +25,6 @@ public interface IUserRepo extends PagingAndSortingRepository<User, Long> {
 	public default Boolean existsSomeAdminUser() {
 		return existsByProfilesIn(Profile.ADMIN.getId());
 	}
+	
+	public Page<User> findDistinctByRequiredProfilesNotNull(Pageable page);
 }

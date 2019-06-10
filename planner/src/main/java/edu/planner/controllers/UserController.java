@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.planner.dto.UserInsertDTO;
+import edu.planner.dto.UserPermissionsDTO;
 import edu.planner.dto.UserSimpleDTO;
 import edu.planner.enums.Profile;
 import edu.planner.exception.AuthorizationException;
@@ -40,7 +41,7 @@ public class UserController implements IController<User, UserInsertDTO> {
 		return userIncluded != null ? ResponseEntity.ok(userIncluded) : ResponseEntity.noContent().build();
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")  
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@Transactional
 	@PutMapping
 	public ResponseEntity<User> update(@Valid @RequestBody UserInsertDTO user) {
@@ -131,5 +132,20 @@ public class UserController implements IController<User, UserInsertDTO> {
 
 		UserSimpleDTO user = UserSimpleDTO.toDTO(userService.findOne(userSS.getId()));
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@GetMapping("/interval/{page}/{count}/requiredPermissionsUsers")
+	public ResponseEntity<Page<UserPermissionsDTO>> findAllRequiredPermissionsUsers(@PathVariable("page") int page,
+			@PathVariable("count") int count) {
+		Page<UserPermissionsDTO> user = userService.findAllRequiredPermissionsUsers(page, count);
+		return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PostMapping("/grantAllRequiredPermissions")
+	public ResponseEntity<UserPermissionsDTO> grantPermissionTo(@RequestBody UserPermissionsDTO user) {
+		UserPermissionsDTO userGranted = userService.grantPermissionTo(user);
+		return userGranted != null ? ResponseEntity.ok(userGranted) : ResponseEntity.noContent().build();
 	}
 }

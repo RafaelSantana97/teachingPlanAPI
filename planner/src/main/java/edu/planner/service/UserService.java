@@ -2,16 +2,20 @@ package edu.planner.service;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.planner.dto.UserInsertDTO;
+import edu.planner.dto.UserPermissionsDTO;
+import edu.planner.enums.Profile;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.interfaces.IService;
@@ -34,12 +38,12 @@ public class UserService implements IService<User, UserInsertDTO> {
 		try {
 			userIncluded = UserInsertDTO.fromDTO(user);
 			userIncluded.setHashKey(bCryptPasswordEncoder.encode(userIncluded.getHashKey()));
-			
-			if(user.getRequireAdminRole() && !iUserRepo.existsSomeAdminUser()) {
+
+			if (user.getRequireAdminRole() && !iUserRepo.existsSomeAdminUser()) {
 				userIncluded.setProfiles(userIncluded.getRequiredProfilesShort());
 				userIncluded.setRequiredProfiles(new HashSet<Short>());
 			}
-			
+
 			userIncluded = iUserRepo.save(userIncluded);
 		} catch (Exception e) {
 			throw new BusinessException(ErrorCode.USER_SAVE, e);
@@ -145,5 +149,46 @@ public class UserService implements IService<User, UserInsertDTO> {
 		}
 
 		return user.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+	}
+
+	public Page<UserPermissionsDTO> findAllRequiredPermissionsUsers(int page, int count) {
+		Page<User> users = null;
+		PageImpl<UserPermissionsDTO> usersDTO = null;
+		try {
+			users = iUserRepo.findDistinctByRequiredProfilesNotNull(PageRequest.of(page, count));
+
+			int totalElements = (int) users.getTotalElements();
+			usersDTO = new PageImpl<UserPermissionsDTO>(
+					users.stream().map(user -> UserPermissionsDTO.toDTO(user)).collect(Collectors.toList()),
+					PageRequest.of(page, count), totalElements);
+
+		} catch (Exception e) {
+			throw new BusinessException(ErrorCode.USER_SEARCH, e);
+		}
+
+		return usersDTO;
+	}
+
+	public UserPermissionsDTO grantPermissionTo(UserPermissionsDTO user) {
+		UserPermissionsDTO userGranted = null;
+		try {
+			User userFromDB = findOne(user.getId());
+
+			if (user.getRequiredAdminRole())
+				userFromDB.addProfile(Profile.ADMIN);
+
+			if (user.getRequiredCoordinatorRole())
+				userFromDB.addProfile(Profile.COORDINATOR);
+
+			if (user.getRequiredTeacherRole())
+				userFromDB.addProfile(Profile.TEACHER);
+
+			userFromDB = iUserRepo.save(userFromDB);
+
+			userGranted = UserPermissionsDTO.toDTO(userFromDB);
+		} catch (Exception e) {
+			throw new BusinessException(ErrorCode.USER_SAVE, e);
+		}
+		return userGranted;
 	}
 }
