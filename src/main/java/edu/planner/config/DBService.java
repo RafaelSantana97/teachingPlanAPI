@@ -1,4 +1,4 @@
-package edu.planner.service;
+package edu.planner.config;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -7,21 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import edu.planner.enums.Profile;
+import edu.planner.enums.LevelDegree;
 import edu.planner.enums.Period;
+import edu.planner.enums.Profile;
 import edu.planner.enums.Semester;
 import edu.planner.enums.SubjectType;
-import edu.planner.enums.LevelDegree;
-import edu.planner.models.Subject;
-import edu.planner.models.Domain;
 import edu.planner.models.Class;
 import edu.planner.models.Course;
+import edu.planner.models.Domain;
+import edu.planner.models.Subject;
 import edu.planner.models.User;
-import edu.planner.repositories.ISubjectRepo;
-import edu.planner.repositories.IDomainRepo;
 import edu.planner.repositories.IClassRepo;
 import edu.planner.repositories.ICourseRepo;
+import edu.planner.repositories.IDomainRepo;
+import edu.planner.repositories.ISubjectRepo;
 import edu.planner.repositories.IUserRepo;
+import edu.planner.security.permission.IPermissionBaseRepo;
+import edu.planner.security.permission.IPermissionRepo;
+import edu.planner.security.permission.Permission;
+import edu.planner.security.permission.PermissionBase;
+import edu.planner.security.permission.PermissionType;
+import edu.planner.security.permission.Resource;
 
 @Service
 public class DBService {
@@ -37,12 +43,18 @@ public class DBService {
 
 	@Autowired
 	IClassRepo iClasseRepo;
-	
+
 	@Autowired
 	ICourseRepo iCourseRepo;
 
 	@Autowired
 	private IUserRepo iUserRepo;
+
+	@Autowired
+	private IPermissionRepo iPermissionRepo;
+
+	@Autowired
+	private IPermissionBaseRepo iPermissionBaseRepo;
 
 	public void instantiateTestDatabase() throws ParseException {
 
@@ -203,11 +215,12 @@ public class DBService {
 		disp12.setResponsible(user3);
 		disp12.setType(SubjectType.LABORATORIO);
 
-		iSubjectRepo.saveAll(Arrays.asList(disp1, disp2, disp3, disp4, disp5, disp6, disp7, disp8, disp9, disp10, disp11, disp12));
+		iSubjectRepo.saveAll(
+				Arrays.asList(disp1, disp2, disp3, disp4, disp5, disp6, disp7, disp8, disp9, disp10, disp11, disp12));
 
 		Class t1 = new Class();
 		t1.setCode("PS1TIN1");
-		t1.setYear((short)2019);
+		t1.setYear((short) 2019);
 		t1.setSubject(disp1);
 		t1.setPeriod(Period.MATUTINO.getId());
 		t1.setSemester(Semester.SEMESTRE_1.getId());
@@ -215,19 +228,91 @@ public class DBService {
 
 		Class t2 = new Class();
 		t2.setCode("LS1PIN1");
-		t2.setYear((short)2019);
+		t2.setYear((short) 2019);
 		t2.setSubject(disp2);
 		t2.setPeriod(Period.MATUTINO.getId());
 		t2.setSemester(Semester.SEMESTRE_1.getId());
 		t2.setTeacher(user2);
 
 		iClasseRepo.saveAll(Arrays.asList(t1, t2));
-		
+
 		Course co1 = new Course();
 		co1.setCoordinators(Arrays.asList(user4));
 		co1.setName("Fundamentos do Cálculo");
 		co1.setSubjects(Arrays.asList(disp7, disp8, disp9, disp10));
-		
+
 		iCourseRepo.saveAll(Arrays.asList(co1));
+
+		Permission p1 = new Permission();
+		p1.setResource(Resource.CLASS.getId());
+		p1.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.READ));
+
+		Permission p2 = new Permission();
+		p2.setResource(Resource.COURSE.getId());
+		p2.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.READ));
+
+		Permission p3 = new Permission();
+		p3.setResource(Resource.SUBJECT.getId());
+		p3.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.READ));
+
+		Permission p4 = new Permission();
+		p4.setResource(Resource.USER.getId());
+		p4.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.READ));
+
+		iPermissionRepo.saveAll(Arrays.asList(p1, p2, p3, p4));
+
+		PermissionBase admin = new PermissionBase();
+		admin.setProfile(Profile.ADMIN.getId());
+		admin.getPermissions().addAll(Arrays.asList(p1, p2, p3, p4));
+
+		Permission p10 = new Permission();
+		p10.setResource(Resource.CLASS.getId());
+		p10.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.READ, PermissionType.CREATE,
+				PermissionType.UPDATE, PermissionType.DELETE));
+
+		Permission p11 = new Permission();
+		p11.setResource(Resource.COURSE.getId());
+		p11.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.READ, PermissionType.CREATE,
+				PermissionType.UPDATE, PermissionType.DELETE));
+
+		Permission p12 = new Permission();
+		p12.setResource(Resource.SUBJECT.getId());
+		p12.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.READ, PermissionType.CREATE,
+				PermissionType.UPDATE, PermissionType.DELETE));
+
+		Permission p13 = new Permission();
+		p13.setResource(Resource.USER.getId());
+		p13.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.READ, PermissionType.CREATE,
+				PermissionType.UPDATE, PermissionType.DELETE));
+
+		iPermissionRepo.saveAll(Arrays.asList(p10, p11, p12, p13));
+
+		PermissionBase coordinator = new PermissionBase();
+		coordinator.setProfile(Profile.COORDINATOR.getId());
+		coordinator.getPermissions().addAll(Arrays.asList(p10, p11, p12, p13));
+
+		Permission p20 = new Permission();
+		p20.setResource(Resource.CLASS.getId());
+		p20.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.CREATE));
+
+		Permission p21 = new Permission();
+		p21.setResource(Resource.COURSE.getId());
+		p21.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.CREATE));
+
+		Permission p22 = new Permission();
+		p22.setResource(Resource.SUBJECT.getId());
+		p22.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.CREATE));
+
+		Permission p23 = new Permission();
+		p23.setResource(Resource.USER.getId());
+		p23.getPermissionTypes().addAll(Arrays.asList(PermissionType.LIST, PermissionType.CREATE));
+
+		iPermissionRepo.saveAll(Arrays.asList(p20, p21, p22, p23));
+
+		PermissionBase teacher = new PermissionBase();
+		teacher.setProfile(Profile.TEACHER.getId());
+		teacher.getPermissions().addAll(Arrays.asList(p20, p21, p22, p23));
+
+		iPermissionBaseRepo.saveAll(Arrays.asList(admin, coordinator, teacher));
 	}
 }
