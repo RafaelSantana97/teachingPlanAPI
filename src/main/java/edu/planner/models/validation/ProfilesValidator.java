@@ -14,7 +14,6 @@ import edu.planner.service.UserService;
 public class ProfilesValidator implements ConstraintValidator<ProfilesConstraint, List<UserSimpleDTO>> {
 
     private final UserService userService;
-
     private Profile requiredProfile;
 
     @Override
@@ -24,27 +23,23 @@ public class ProfilesValidator implements ConstraintValidator<ProfilesConstraint
 
     @Override
     public boolean isValid(List<UserSimpleDTO> users, ConstraintValidatorContext context) {
+        return this.hasUsers(users) && users.stream().allMatch(this::isUserValid);
+    }
 
-        if (users == null || users.isEmpty()) {
-            return false;
-        }
+    private boolean hasUsers(List<UserSimpleDTO> users) {
+        return users != null && !users.isEmpty();
+    }
 
-        for (UserSimpleDTO user : users) {
-            User object = userService.findOne(user.getId());
+    private boolean isUserValid(UserSimpleDTO user) {
+        User checkedUser = userService.findOne(user.getId());
+        return checkedUser != null && hasUserRequiredProfile(checkedUser);
+    }
 
-            if (object == null) {
-                return false;
-            }
+    private boolean hasUserRequiredProfile(User user) {
+        return noRequiredProfile() || user.getProfiles().stream().anyMatch(requiredProfile::equals);
+    }
 
-            if (requiredProfile == Profile.ALL) {
-                continue;
-            }
-
-            if (object.getProfiles().stream().noneMatch(profile -> profile == requiredProfile)) {
-                return false;
-            }
-        }
-
-        return true;
+    private boolean noRequiredProfile() {
+        return requiredProfile == Profile.ALL;
     }
 }

@@ -1,9 +1,11 @@
 package edu.planner.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -17,12 +19,8 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import edu.planner.enums.SubjectType;
 import edu.planner.interfaces.IModel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -67,11 +65,5 @@ public class Subject implements Serializable, IModel {
 
     public void setType(SubjectType type) {
         this.type = type.getId();
-    }
-
-    public void setType(String type) {
-        if (type == null || type.isEmpty())
-            return;
-        this.type = SubjectType.toEnum(type).getId();
     }
 }

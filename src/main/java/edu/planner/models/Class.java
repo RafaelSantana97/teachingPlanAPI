@@ -15,12 +15,16 @@ import edu.planner.enums.Period;
 import edu.planner.enums.Semester;
 import edu.planner.interfaces.IModel;
 import edu.planner.models.validation.ModelConstraint;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Class implements Serializable, IModel {
 
     private static final long serialVersionUID = 5814786944901023991L;

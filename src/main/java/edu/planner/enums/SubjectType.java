@@ -4,26 +4,25 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum SubjectType {
+    TEORIA("T", "Teórica"),
+    LABORATORIO("L", "Prática");
 
-	TEORIA("T", "Teórica"),
-	LABORATORIO("L", "Prática");
+    private final String id;
+    private final String description;
 
-	private final String id;
-	private final String description;
+    public static SubjectType toEnum(String id) {
+        return id == null ? null : findById(id);
+    }
 
-	public static SubjectType toEnum(String id) {
-		if (id == null) {
-			return null;
-		}
-
-		for (SubjectType x : SubjectType.values()) {
-			if (id.equals(x.getId())) {
-				return x;
-			}
-		}
-		throw new IllegalArgumentException("Invalid ID " + id);
-	}
+    private static SubjectType findById(String id) {
+        return Arrays.stream(SubjectType.values())
+                .filter(ld -> id.equals(ld.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Invalid ID %s", id)));
+    }
 }

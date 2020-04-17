@@ -2,7 +2,6 @@ package edu.planner.dto;
 
 import java.io.Serializable;
 
-import edu.planner.enums.LevelDegree;
 import edu.planner.enums.Profile;
 import edu.planner.interfaces.IModel;
 import edu.planner.models.User;
@@ -42,13 +41,4 @@ public class UserPermissionsDTO implements Serializable, IModel {
                 user.getRequiredProfiles().contains(Profile.COORDINATOR),
                 user.getRequiredProfiles().contains(Profile.TEACHER));
     }
-
-    public String getLevelDegree() {
-        return LevelDegree.toEnum(levelDegree).getId();
-    }
-
-    public void setLevelDegree(String levelDegree) {
-        this.levelDegree = LevelDegree.toEnum(levelDegree).getId();
-    }
-
 }

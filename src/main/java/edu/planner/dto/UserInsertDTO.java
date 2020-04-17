@@ -61,8 +61,4 @@ public class UserInsertDTO implements Serializable, IModel {
 	public String getLevelDegree() {
 		return LevelDegree.toEnum(levelDegree).getId();
 	}
-
-	public void setLevelDegree(String levelDegree) {
-		this.levelDegree = LevelDegree.toEnum(levelDegree).getId();
-	}
 }

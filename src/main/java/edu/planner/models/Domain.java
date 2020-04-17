@@ -23,7 +23,7 @@ public class Domain implements Serializable {
 	private Long id;
 
 	@Column(nullable = false, length = 30)
-	private String domain;
+	private String description;
 
 	@Column(nullable = false)
 	private String value1;

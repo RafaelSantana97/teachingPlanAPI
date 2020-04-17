@@ -43,57 +43,57 @@ public class DBService {
     public void instantiateTestDatabase() {
 
         Domain dom1 = new Domain();
-        dom1.setDomain("TIPO_DISCIPLINA");
+        dom1.setDescription("TIPO_DISCIPLINA");
         dom1.setAbbreviation("T");
         dom1.setValue1("Teórica");
 
         Domain dom2 = new Domain();
-        dom2.setDomain("TIPO_DISCIPLINA");
+        dom2.setDescription("TIPO_DISCIPLINA");
         dom2.setAbbreviation("L");
         dom2.setValue1("Prática");
 
         Domain dom3 = new Domain();
-        dom3.setDomain("SEMESTRE");
+        dom3.setDescription("SEMESTRE");
         dom3.setAbbreviation("S1");
         dom3.setValue1("1º Semester");
 
         Domain dom4 = new Domain();
-        dom4.setDomain("SEMESTRE");
+        dom4.setDescription("SEMESTRE");
         dom4.setAbbreviation("S2");
         dom4.setValue1("2º Semester");
 
         Domain dom5 = new Domain();
-        dom5.setDomain("PERIODO");
+        dom5.setDescription("PERIODO");
         dom5.setAbbreviation("1");
         dom5.setValue1("Matutino");
 
         Domain dom6 = new Domain();
-        dom6.setDomain("PERIODO");
+        dom6.setDescription("PERIODO");
         dom6.setAbbreviation("2");
         dom6.setValue1("Vespertino");
 
         Domain dom7 = new Domain();
-        dom7.setDomain("PERIODO");
+        dom7.setDescription("PERIODO");
         dom7.setAbbreviation("3");
         dom7.setValue1("Noturno");
 
         Domain dom8 = new Domain();
-        dom8.setDomain("TITULACAO");
+        dom8.setDescription("TITULACAO");
         dom8.setAbbreviation("");
         dom8.setValue1("Nenhum");
 
         Domain dom9 = new Domain();
-        dom9.setDomain("TITULACAO");
+        dom9.setDescription("TITULACAO");
         dom9.setAbbreviation("Esp.");
         dom9.setValue1("Especialista");
 
         Domain dom10 = new Domain();
-        dom10.setDomain("TITULACAO");
+        dom10.setDescription("TITULACAO");
         dom10.setAbbreviation("Me.");
         dom10.setValue1("Mestre");
 
         Domain dom11 = new Domain();
-        dom11.setDomain("TITULACAO");
+        dom11.setDescription("TITULACAO");
         dom11.setAbbreviation("Dr.");
         dom11.setValue1("Doutor");
 

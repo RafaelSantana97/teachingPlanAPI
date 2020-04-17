@@ -33,8 +33,4 @@ public class UserSimpleDTO implements IModel {
 	public String getLevelDegree() {
 		return LevelDegree.toEnum(levelDegree).getId();
 	}
-
-	public void setLevelDegree(String levelDegree) {
-		this.levelDegree = LevelDegree.toEnum(levelDegree).getId();
-	}
 }

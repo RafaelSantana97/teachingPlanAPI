@@ -3,6 +3,7 @@ package edu.planner.controllers;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import edu.planner.dto.ClassDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -29,16 +30,16 @@ public class ClassController {
     @PreAuthorize("hasAnyRole('COORDINATOR')")
     @Transactional
     @PostMapping
-    public ResponseEntity<Class> insert(@Valid @RequestBody Class clazz) {
-        clazz = classService.insert(clazz);
+    public ResponseEntity<Class> insert(@Valid @RequestBody ClassDTO classDTO) {
+        Class clazz = classService.insert(ClassDTO.fromDTO(classDTO));
         return clazz != null ? ResponseEntity.ok(clazz) : ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('COORDINATOR')")
     @Transactional
     @PutMapping
-    public ResponseEntity<Class> update(@Valid @RequestBody Class clazz) {
-        clazz = classService.update(clazz);
+    public ResponseEntity<Class> update(@Valid @RequestBody ClassDTO classDTO) {
+        Class clazz = classService.update(ClassDTO.fromDTO(classDTO));
         return clazz != null ? ResponseEntity.ok(clazz) : ResponseEntity.noContent().build();
     }
 

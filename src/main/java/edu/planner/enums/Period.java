@@ -4,10 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Period {
-
     MATUTINO((short) 1, "Matutino"),
     VERSPERTINO((short) 2, "Vespertino"),
     NOTURNO((short) 3, "Noturno");
@@ -16,15 +17,13 @@ public enum Period {
     private final String description;
 
     public static Period toEnum(Short id) {
-        if (id == null) {
-            return null;
-        }
+        return id == null ? null : findById(id);
+    }
 
-        for (Period x : Period.values()) {
-            if (id.equals(x.getId())) {
-                return x;
-            }
-        }
-        throw new IllegalArgumentException("Invalid ID " + id);
+    private static Period findById(Short id) {
+        return Arrays.stream(Period.values())
+                .filter(ld -> id.equals(ld.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Invalid ID %s", id)));
     }
 }

@@ -3,6 +3,7 @@ package edu.planner.exception;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -51,8 +52,8 @@ public enum ErrorCode {
 
     @Override
     public String toString() {
-        if (this.message != null && this.message.trim().length() > 0) {
-            return String.format("%s - %s", this.code, this.message);
+        if (StringUtils.hasText(this.message)) {
+            return String.format("%s - %s", this.code, this.message.trim());
         }
         return String.valueOf(this.code);
     }

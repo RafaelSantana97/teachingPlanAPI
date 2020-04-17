@@ -4,10 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Profile {
-
 	// These 2 are just for searches and constraints
 	ALL((short) -1, "ALL"),
 	NONE((short) 0, "NONE"),
@@ -20,17 +21,13 @@ public enum Profile {
 	private final String description;
 
 	public static Profile toEnum(Short id) {
-		if (id == null) {
-			return null;
-		}
-
-		for (Profile x : Profile.values()) {
-			if (id.equals(x.getId())) {
-				return x;
-			}
-		}
-
-		throw new IllegalArgumentException("Invalid ID: " + id);
+		return id == null ? null : findById(id);
 	}
 
+	private static Profile findById(Short id) {
+		return Arrays.stream(Profile.values())
+				.filter(ld -> id.equals(ld.getId()))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(String.format("Invalid ID %s", id)));
+	}
 }
