@@ -9,6 +9,8 @@ import edu.planner.enums.Profile;
 import edu.planner.models.User;
 import edu.planner.service.UserService;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 public class ProfileValidator implements ConstraintValidator<ProfileConstraint, UserSimpleDTO> {
 
@@ -23,21 +25,27 @@ public class ProfileValidator implements ConstraintValidator<ProfileConstraint, 
 
     @Override
     public boolean isValid(UserSimpleDTO user, ConstraintValidatorContext context) {
+        return hasDTOValidId(user) && isUserValid(user);
+    }
 
-        if (user == null || user.getId() == null || user.getId() <= 0) {
-            return false;
-        }
+    private boolean hasDTOValidId(UserSimpleDTO user) {
+        return user != null && isGreaterThanZero(user.getId());
+    }
 
-        User object = userService.findOne(user.getId());
+    private boolean isGreaterThanZero(Long i) {
+        return Optional.ofNullable(i).orElse(0L) > 0L;
+    }
 
-        if (object == null) {
-            return false;
-        }
+    private boolean isUserValid(UserSimpleDTO user) {
+        User checkedUser = userService.findOne(user.getId());
+        return checkedUser != null && hasUserRequiredProfile(checkedUser);
+    }
 
-        if (requiredProfile == Profile.ALL) {
-            return true;
-        }
+    private boolean hasUserRequiredProfile(User user) {
+        return noRequiredProfile() || user.getProfiles().stream().anyMatch(requiredProfile::equals);
+    }
 
-        return object.getProfiles().stream().anyMatch(profile -> profile == requiredProfile);
+    private boolean noRequiredProfile() {
+        return requiredProfile == Profile.ALL;
     }
 }

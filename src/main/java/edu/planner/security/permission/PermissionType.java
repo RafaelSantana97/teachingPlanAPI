@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum PermissionType {
@@ -18,15 +20,13 @@ public enum PermissionType {
 	private final String description;
 
 	public static PermissionType toEnum(Short id) {
-		if (id == null) {
-			return null;
-		}
-		
-		for (PermissionType x : PermissionType.values()) {
-			if (id.equals(x.getId())) {
-				return x;
-			}
-		}
-		throw new IllegalArgumentException("Invalid ID " + id);
+		return id == null ? null : findById(id);
+	}
+
+	private static PermissionType findById(Short id) {
+		return Arrays.stream(PermissionType.values())
+				.filter(ld -> id.equals(ld.getId()))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(String.format("Invalid ID %s", id)));
 	}
 }

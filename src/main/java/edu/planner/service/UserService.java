@@ -22,6 +22,8 @@ import edu.planner.models.User;
 import edu.planner.repositories.IUserRepo;
 import edu.planner.security.UserSS;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements IService<User, UserInsertDTO> {
@@ -30,6 +32,7 @@ public class UserService implements IService<User, UserInsertDTO> {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
+    @Transactional
     public User insert(UserInsertDTO user) {
         User userIncluded;
         try {
@@ -49,6 +52,7 @@ public class UserService implements IService<User, UserInsertDTO> {
     }
 
     @Override
+    @Transactional
     public User update(UserInsertDTO user) {
         User userAltered;
         try {
@@ -60,18 +64,15 @@ public class UserService implements IService<User, UserInsertDTO> {
     }
 
     @Override
-    public Boolean delete(Long id) {
-        Boolean result = false;
-
+    @Transactional
+    public void delete(Long id) {
         try {
             iUserRepo.deleteById(id);
-            result = true;
         } catch (ConstraintViolationException e) {
             throw new BusinessException(ErrorCode.USER_DELETE_VIOLATION, e);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.USER_DELETE, e);
         }
-        return result;
     }
 
     public Page<User> findPageableAndFiltered(int page, int count, String description) {

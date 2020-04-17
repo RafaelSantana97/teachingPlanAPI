@@ -1,22 +1,13 @@
 package edu.planner.controllers;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import edu.planner.dto.ClassDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import edu.planner.models.Class;
 import edu.planner.service.ClassService;
 
@@ -28,7 +19,6 @@ public class ClassController {
     private final ClassService classService;
 
     @PreAuthorize("hasAnyRole('COORDINATOR')")
-    @Transactional
     @PostMapping
     public ResponseEntity<Class> insert(@Valid @RequestBody ClassDTO classDTO) {
         Class clazz = classService.insert(ClassDTO.fromDTO(classDTO));
@@ -36,7 +26,6 @@ public class ClassController {
     }
 
     @PreAuthorize("hasAnyRole('COORDINATOR')")
-    @Transactional
     @PutMapping
     public ResponseEntity<Class> update(@Valid @RequestBody ClassDTO classDTO) {
         Class clazz = classService.update(ClassDTO.fromDTO(classDTO));
@@ -44,11 +33,10 @@ public class ClassController {
     }
 
     @PreAuthorize("hasAnyRole('COORDINATOR')")
-    @Transactional
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
-        Boolean result = classService.delete(id);
-        return result ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        classService.delete(id);
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/interval/{page}/{count}/{descriptionSubject}")

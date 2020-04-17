@@ -6,5 +6,5 @@ public interface IService<T, D> {
 
     T update(D d);
 
-    Boolean delete(Long id);
+    void delete(Long id);
 }

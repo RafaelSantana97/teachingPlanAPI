@@ -19,12 +19,16 @@ import edu.planner.interfaces.IService;
 import edu.planner.models.Subject;
 import edu.planner.repositories.ISubjectRepo;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class SubjectService implements IService<Subject, SubjectInsertDTO> {
 
     private final ISubjectRepo iSubjectRepo;
 
+    @Override
+    @Transactional
     public Subject insert(SubjectInsertDTO subject) {
         Subject subjectIncluded;
         try {
@@ -37,6 +41,8 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
         return subjectIncluded;
     }
 
+    @Override
+    @Transactional
     public Subject update(SubjectInsertDTO subject) {
         Subject subjectAltered;
         try {
@@ -49,18 +55,16 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
         return subjectAltered;
     }
 
-    public Boolean delete(Long id) {
-        Boolean result = false;
-
+    @Override
+    @Transactional
+    public void delete(Long id) {
         try {
             iSubjectRepo.delete(findOne(id));
-            result = true;
         } catch (ConstraintViolationException e) {
             throw new BusinessException(ErrorCode.SUBJECT_DELETE_VIOLATION, e);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SUBJECT_DELETE, e);
         }
-        return result;
     }
 
     public Page<Subject> findPageableAndFiltered(int page, int count, String description) {

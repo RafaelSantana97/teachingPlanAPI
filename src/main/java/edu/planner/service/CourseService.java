@@ -16,6 +16,8 @@ import edu.planner.interfaces.IService;
 import edu.planner.models.Course;
 import edu.planner.repositories.ICourseRepo;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class CourseService implements IService<Course, CourseDTO> {
@@ -23,6 +25,8 @@ public class CourseService implements IService<Course, CourseDTO> {
     private final ICourseRepo iCourseRepo;
     private final SubjectService subjectService;
 
+    @Override
+    @Transactional
     public Course insert(CourseDTO course) {
         Course courseIncluded;
         try {
@@ -34,6 +38,8 @@ public class CourseService implements IService<Course, CourseDTO> {
         return courseIncluded;
     }
 
+    @Override
+    @Transactional
     public Course update(CourseDTO course) {
         Course courseAltered;
         try {
@@ -45,18 +51,16 @@ public class CourseService implements IService<Course, CourseDTO> {
         return courseAltered;
     }
 
-    public Boolean delete(Long id) {
-        Boolean result = false;
-
+    @Override
+    @Transactional
+    public void delete(Long id) {
         try {
             iCourseRepo.deleteById(id);
-            result = true;
         } catch (ConstraintViolationException e) {
             throw new BusinessException(ErrorCode.COURSE_DELETE_VIOLATION, e);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_DELETE, e);
         }
-        return result;
     }
 
     public Page<Course> findPageableAndFiltered(int page, int count, String description) {

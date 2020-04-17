@@ -14,6 +14,8 @@ import edu.planner.interfaces.IService;
 import edu.planner.models.Class;
 import edu.planner.repositories.IClassRepo;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class ClassService implements IService<Class, Class> {
@@ -21,6 +23,7 @@ public class ClassService implements IService<Class, Class> {
     private final IClassRepo iClassRepo;
 
     @Override
+    @Transactional
     public Class insert(Class clazz) {
         Class classIncluded;
         try {
@@ -34,6 +37,7 @@ public class ClassService implements IService<Class, Class> {
     }
 
     @Override
+    @Transactional
     public Class update(Class clazz) {
         Class classAltered;
         try {
@@ -47,18 +51,15 @@ public class ClassService implements IService<Class, Class> {
     }
 
     @Override
-    public Boolean delete(Long id) {
-        Boolean result = false;
-
+    @Transactional
+    public void delete(Long id) {
         try {
             iClassRepo.deleteById(id);
-            result = true;
         } catch (ConstraintViolationException e) {
             throw new BusinessException(ErrorCode.CLASS_DELETE_VIOLATION, e);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.CLASS_DELETE, e);
         }
-        return result;
     }
 
     public Page<Class> findPageableAndFiltered(int page, int count, String description) {
