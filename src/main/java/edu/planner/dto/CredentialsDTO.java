@@ -9,8 +9,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CredenciaisDTO implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class CredentialsDTO implements Serializable {
+	private static final long serialVersionUID = 6894136634221083489L;
 
 	@Email
 	private String email;

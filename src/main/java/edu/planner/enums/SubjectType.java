@@ -1,25 +1,18 @@
 package edu.planner.enums;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum SubjectType {
 
 	TEORIA("T", "Teórica"),
 	LABORATORIO("L", "Prática");
 
-	private String id;
-	private String description;
-
-	private SubjectType(String id, String description) {
-		this.id = id;
-		this.description = description;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
+	private final String id;
+	private final String description;
 
 	public static SubjectType toEnum(String id) {
 		if (id == null) {

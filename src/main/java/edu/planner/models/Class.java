@@ -1,7 +1,6 @@
 package edu.planner.models;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -24,51 +23,43 @@ import lombok.Setter;
 @Setter
 public class Class implements Serializable, IModel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5814786944901023991L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(nullable = false, length = 10)
-	private String code;
+    @Column(nullable = false, length = 10)
+    private String code;
 
-	@Column(nullable = false)
-	private Short period;
+    @Column(nullable = false)
+    private Short period;
 
-	@Column(nullable = false, length = 2)
-	private String semester;
+    @Column(nullable = false, length = 2)
+    private String semester;
 
-	@Column(nullable = false)
-	@Digits(fraction = 0, integer = 4, message = "Invalid value")
-	private Short year;
+    @Column(nullable = false)
+    @Digits(fraction = 0, integer = 4, message = "Invalid value")
+    private Short year;
 
-	@ManyToOne
-	@JoinColumn(name = "subject", nullable = false, foreignKey = @ForeignKey(name = "FK_SUBJECT"))
-	@ModelConstraint
-	private Subject subject;
+    @ManyToOne
+    @JoinColumn(name = "subject", nullable = false, foreignKey = @ForeignKey(name = "FK_SUBJECT"))
+    @ModelConstraint
+    private Subject subject;
 
-	@ManyToOne
-	@JoinColumn(name = "teacher", nullable = false, foreignKey = @ForeignKey(name = "FK_USER"))
-	private User teacher;
+    @ManyToOne
+    @JoinColumn(name = "teacher", nullable = false, foreignKey = @ForeignKey(name = "FK_USER"))
+    private User teacher;
 
-	public Short getPeriod() {
-		return this.period;
-	}
+    public void setPeriod(Short period) {
+        if (period == null)
+            return;
+        this.period = Period.toEnum(period).getId();
+    }
 
-	public void setPeriod(Short period) {
-		if (period == null)
-			return;
-		this.period = Period.toEnum(period).getId();
-	}
-
-	public String getSemester() {
-		return this.semester;
-	}
-
-	public void setSemester(String semester) {
-		if (semester == null)
-			return;
-		this.semester = Semester.toEnum(semester).getId();
-	}
+    public void setSemester(String semester) {
+        if (semester == null)
+            return;
+        this.semester = Semester.toEnum(semester).getId();
+    }
 }

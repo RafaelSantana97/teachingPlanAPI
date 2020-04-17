@@ -23,7 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserInsertDTO implements Serializable, IModel {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7534934355364959330L;
 
 	private Long id;
 
@@ -45,7 +45,7 @@ public class UserInsertDTO implements Serializable, IModel {
 	private Boolean requireCoordinatorRole;
 
 	public static User fromDTO(UserInsertDTO user) {
-		Set<Short> requiredProfiles = new HashSet<Short>();
+		Set<Short> requiredProfiles = new HashSet<>();
 
 		if (user.getRequireAdminRole())
 			requiredProfiles.add(Profile.ADMIN.getId());
@@ -55,7 +55,7 @@ public class UserInsertDTO implements Serializable, IModel {
 			requiredProfiles.add(Profile.COORDINATOR.getId());
 
 		return new User(user.getId(), user.getName(), user.getLevelDegree(), user.getEmail(), user.getPassword(),
-				new HashSet<Short>(), requiredProfiles);
+				new HashSet<>(), requiredProfiles);
 	}
 
 	public String getLevelDegree() {

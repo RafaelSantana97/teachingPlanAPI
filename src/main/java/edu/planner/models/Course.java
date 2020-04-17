@@ -27,7 +27,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Course implements Serializable, IModel {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1526163791912460726L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,12 +41,12 @@ public class Course implements Serializable, IModel {
 			name = "COORD_COURSE",
 			joinColumns = @JoinColumn(name = "coordinator_id", foreignKey = @ForeignKey(name="FK_USER")),
 			inverseJoinColumns = @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name="FK_COURSE")))
-	private List<User> coordinators = new ArrayList<User>();
+	private List<User> coordinators = new ArrayList<>();
 
 	@ManyToMany
 	@JoinTable(
 			name = "COURSE_SUBJECT",
 			joinColumns = @JoinColumn(name = "subject_id", foreignKey = @ForeignKey(name="FK_SUBJECT")),
 			inverseJoinColumns = @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name="FK_COURSE")))
-	private List<Subject> subjects = new ArrayList<Subject>();
+	private List<Subject> subjects = new ArrayList<>();
 }

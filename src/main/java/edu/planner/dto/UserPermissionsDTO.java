@@ -17,38 +17,38 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserPermissionsDTO implements Serializable, IModel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1803107882712740450L;
 
-	private Long id;
+    private Long id;
 
-	private String name;
+    private String name;
 
-	private String levelDegree;
+    private String levelDegree;
 
-	private String email;
+    private String email;
 
-	private Boolean currentAdminRole;
-	private Boolean currentCoordinatorRole;
-	private Boolean currentTeacherRole;
+    private Boolean currentAdminRole;
+    private Boolean currentCoordinatorRole;
+    private Boolean currentTeacherRole;
 
-	private Boolean requiredAdminRole;
-	private Boolean requiredCoordinatorRole;
-	private Boolean requiredTeacherRole;
+    private Boolean requiredAdminRole;
+    private Boolean requiredCoordinatorRole;
+    private Boolean requiredTeacherRole;
 
-	public static UserPermissionsDTO toDTO(User user) {
-		return new UserPermissionsDTO(user.getId(), user.getName(), user.getLevelDegree(), user.getEmail(),
-				user.getProfiles().contains(Profile.ADMIN), user.getProfiles().contains(Profile.COORDINATOR),
-				user.getProfiles().contains(Profile.TEACHER), user.getRequiredProfiles().contains(Profile.ADMIN),
-				user.getRequiredProfiles().contains(Profile.COORDINATOR),
-				user.getRequiredProfiles().contains(Profile.TEACHER));
-	}
+    public static UserPermissionsDTO toDTO(User user) {
+        return new UserPermissionsDTO(user.getId(), user.getName(), user.getLevelDegree(), user.getEmail(),
+                user.getProfiles().contains(Profile.ADMIN), user.getProfiles().contains(Profile.COORDINATOR),
+                user.getProfiles().contains(Profile.TEACHER), user.getRequiredProfiles().contains(Profile.ADMIN),
+                user.getRequiredProfiles().contains(Profile.COORDINATOR),
+                user.getRequiredProfiles().contains(Profile.TEACHER));
+    }
 
-	public String getLevelDegree() {
-		return LevelDegree.toEnum(levelDegree).getId();
-	}
+    public String getLevelDegree() {
+        return LevelDegree.toEnum(levelDegree).getId();
+    }
 
-	public void setLevelDegree(String levelDegree) {
-		this.levelDegree = LevelDegree.toEnum(levelDegree).getId();
-	}
+    public void setLevelDegree(String levelDegree) {
+        this.levelDegree = LevelDegree.toEnum(levelDegree).getId();
+    }
 
 }

@@ -40,13 +40,13 @@ public class Permission implements Serializable, IModel {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERMISSION_TYPES", foreignKey = @ForeignKey(name = "FK_PERMISSION"))
 	@JsonIgnore
-	private Set<Short> permissionTypes = new HashSet<Short>();
+	private Set<Short> permissionTypes = new HashSet<>();
 
 	public Resource getResource() {
 		return Resource.toEnum(resource);
 	}
 	
 	public Set<PermissionType> getPermissionTypes() {
-		return permissionTypes.stream().map(x -> PermissionType.toEnum(x)).collect(Collectors.toSet());
+		return permissionTypes.stream().map(PermissionType::toEnum).collect(Collectors.toSet());
 	}
 }

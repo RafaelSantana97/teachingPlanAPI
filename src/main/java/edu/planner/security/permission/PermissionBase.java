@@ -36,7 +36,7 @@ public class PermissionBase implements Serializable, IModel {
 
 	@OneToMany
 	@JoinColumn(name = "permission_permissions", foreignKey = @ForeignKey(name = "FK_PERMISSION_BASE"))
-	private List<Permission> permissions = new ArrayList<Permission>();
+	private List<Permission> permissions = new ArrayList<>();
 
 	public Profile getProfile() {
 		return Profile.toEnum(profile);

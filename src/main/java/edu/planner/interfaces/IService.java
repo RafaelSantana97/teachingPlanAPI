@@ -2,9 +2,9 @@ package edu.planner.interfaces;
 
 public interface IService<T, D> {
 
-	public T insert(D d);
+    T insert(D d);
 
-	public T update(D d);
+    T update(D d);
 
-	public Boolean delete(Long id);
+    Boolean delete(Long id);
 }

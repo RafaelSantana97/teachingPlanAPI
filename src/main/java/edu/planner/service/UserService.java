@@ -4,15 +4,14 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import edu.planner.dto.UserInsertDTO;
 import edu.planner.dto.UserPermissionsDTO;
 import edu.planner.enums.Profile;
@@ -24,171 +23,169 @@ import edu.planner.repositories.IUserRepo;
 import edu.planner.security.UserSS;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements IService<User, UserInsertDTO> {
 
-	@Autowired
-	IUserRepo iUserRepo;
+    private final IUserRepo iUserRepo;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Override
+    public User insert(UserInsertDTO user) {
+        User userIncluded;
+        try {
+            userIncluded = UserInsertDTO.fromDTO(user);
+            userIncluded.setHashKey(bCryptPasswordEncoder.encode(userIncluded.getHashKey()));
 
-	@Override
-	public User insert(UserInsertDTO user) {
-		User userIncluded = null;
-		try {
-			userIncluded = UserInsertDTO.fromDTO(user);
-			userIncluded.setHashKey(bCryptPasswordEncoder.encode(userIncluded.getHashKey()));
+            if (user.getRequireAdminRole() && !iUserRepo.existsSomeAdminUser()) {
+                userIncluded.setProfiles(userIncluded.getRequiredProfilesShort());
+                userIncluded.setRequiredProfiles(new HashSet<>());
+            }
 
-			if (user.getRequireAdminRole() && !iUserRepo.existsSomeAdminUser()) {
-				userIncluded.setProfiles(userIncluded.getRequiredProfilesShort());
-				userIncluded.setRequiredProfiles(new HashSet<Short>());
-			}
+            userIncluded = iUserRepo.save(userIncluded);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SAVE, e);
+        }
+        return userIncluded;
+    }
 
-			userIncluded = iUserRepo.save(userIncluded);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SAVE, e);
-		}
-		return userIncluded;
-	}
+    @Override
+    public User update(UserInsertDTO user) {
+        User userAltered;
+        try {
+            userAltered = iUserRepo.save(UserInsertDTO.fromDTO(user));
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_UPDATE, e);
+        }
+        return userAltered;
+    }
 
-	@Override
-	public User update(UserInsertDTO user) {
-		User userAltered = null;
-		try {
-			userAltered = iUserRepo.save(UserInsertDTO.fromDTO(user));
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_UPDATE, e);
-		}
-		return userAltered;
-	}
+    @Override
+    public Boolean delete(Long id) {
+        Boolean result = false;
 
-	@Override
-	public Boolean delete(Long id) {
-		Boolean result = false;
+        try {
+            iUserRepo.deleteById(id);
+            result = true;
+        } catch (ConstraintViolationException e) {
+            throw new BusinessException(ErrorCode.USER_DELETE_VIOLATION, e);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_DELETE, e);
+        }
+        return result;
+    }
 
-		try {
-			iUserRepo.deleteById(id);
-			result = true;
-		} catch (ConstraintViolationException e) {
-			throw new BusinessException(ErrorCode.USER_DELETE_VIOLATION, e);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_DELETE, e);
-		}
-		return result;
-	}
+    public Page<User> findPageableAndFiltered(int page, int count, String description) {
+        Page<User> user;
+        try {
+            user = iUserRepo.findByNameContaining(PageRequest.of(page, count), description);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SEARCH, e);
+        }
 
-	public Page<User> findPageableAndFiltered(int page, int count, String description) {
-		Page<User> user = null;
-		try {
-			user = iUserRepo.findByNameContaining(PageRequest.of(page, count), description);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SEARCH, e);
-		}
+        return user;
+    }
 
-		return user;
-	}
+    public Page<User> findPageable(int page, int count) {
+        Page<User> user;
+        try {
+            user = iUserRepo.findAll(PageRequest.of(page, count));
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SEARCH, e);
+        }
 
-	public Page<User> findPageable(int page, int count) {
-		Page<User> user = null;
-		try {
-			user = iUserRepo.findAll(PageRequest.of(page, count));
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SEARCH, e);
-		}
+        return user;
+    }
 
-		return user;
-	}
+    public Page<User> findPageableAndFilteredProfile(int page, int count, Short profile, String description) {
+        Page<User> user;
+        try {
+            user = iUserRepo.findByProfilesInAndNameContaining(PageRequest.of(page, count), profile, description);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SEARCH, e);
+        }
 
-	public Page<User> findPageableAndFilteredProfile(int page, int count, Short profile, String description) {
-		Page<User> user = null;
-		try {
-			user = iUserRepo.findByProfilesInAndNameContaining(PageRequest.of(page, count), profile, description);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SEARCH, e);
-		}
+        return user;
+    }
 
-		return user;
-	}
+    public Page<User> findPageableByProfile(int page, int count, Short profile) {
+        Page<User> user;
+        try {
+            user = iUserRepo.findByProfilesIs(PageRequest.of(page, count), profile);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SEARCH, e);
+        }
 
-	public Page<User> findPageableByProfile(int page, int count, Short profile) {
-		Page<User> user = null;
-		try {
-			user = iUserRepo.findByProfilesIs(PageRequest.of(page, count), profile);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SEARCH, e);
-		}
+        return user;
+    }
 
-		return user;
-	}
+    public Iterable<User> findAll() {
+        Iterable<User> user;
+        try {
+            user = iUserRepo.findAll();
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SEARCH, e);
+        }
 
-	public Iterable<User> findAll() {
-		Iterable<User> user = null;
-		try {
-			user = iUserRepo.findAll();
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SEARCH, e);
-		}
+        return user;
+    }
 
-		return user;
-	}
+    public static UserSS authenticated() {
+        try {
+            return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
-	public static UserSS authenticated() {
-		try {
-			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		} catch (Exception e) {
-			return null;
-		}
-	}
+    public User findOne(Long id) {
+        Optional<User> user;
+        try {
+            user = iUserRepo.findById(id);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SEARCH, e);
+        }
 
-	public User findOne(Long id) {
-		Optional<User> user = null;
-		try {
-			user = iUserRepo.findById(id);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SEARCH, e);
-		}
+        return user.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
 
-		return user.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-	}
+    public Page<UserPermissionsDTO> findAllRequiredPermissionsUsers(int page, int count) {
+        Page<User> users;
+        PageImpl<UserPermissionsDTO> usersDTO;
+        try {
+            users = iUserRepo.findDistinctByRequiredProfilesNotNull(PageRequest.of(page, count));
 
-	public Page<UserPermissionsDTO> findAllRequiredPermissionsUsers(int page, int count) {
-		Page<User> users = null;
-		PageImpl<UserPermissionsDTO> usersDTO = null;
-		try {
-			users = iUserRepo.findDistinctByRequiredProfilesNotNull(PageRequest.of(page, count));
+            int totalElements = (int) users.getTotalElements();
+            usersDTO = new PageImpl<>(
+                    users.stream().map(UserPermissionsDTO::toDTO).collect(Collectors.toList()),
+                    PageRequest.of(page, count), totalElements);
 
-			int totalElements = (int) users.getTotalElements();
-			usersDTO = new PageImpl<UserPermissionsDTO>(
-					users.stream().map(user -> UserPermissionsDTO.toDTO(user)).collect(Collectors.toList()),
-					PageRequest.of(page, count), totalElements);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SEARCH, e);
+        }
 
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SEARCH, e);
-		}
+        return usersDTO;
+    }
 
-		return usersDTO;
-	}
+    public UserPermissionsDTO grantPermissionTo(UserPermissionsDTO user) {
+        UserPermissionsDTO userGranted;
+        try {
+            User userFromDB = findOne(user.getId());
 
-	public UserPermissionsDTO grantPermissionTo(UserPermissionsDTO user) {
-		UserPermissionsDTO userGranted = null;
-		try {
-			User userFromDB = findOne(user.getId());
+            if (user.getRequiredAdminRole())
+                userFromDB.addProfile(Profile.ADMIN);
 
-			if (user.getRequiredAdminRole())
-				userFromDB.addProfile(Profile.ADMIN);
+            if (user.getRequiredCoordinatorRole())
+                userFromDB.addProfile(Profile.COORDINATOR);
 
-			if (user.getRequiredCoordinatorRole())
-				userFromDB.addProfile(Profile.COORDINATOR);
+            if (user.getRequiredTeacherRole())
+                userFromDB.addProfile(Profile.TEACHER);
 
-			if (user.getRequiredTeacherRole())
-				userFromDB.addProfile(Profile.TEACHER);
+            userFromDB = iUserRepo.save(userFromDB);
 
-			userFromDB = iUserRepo.save(userFromDB);
-
-			userGranted = UserPermissionsDTO.toDTO(userFromDB);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.USER_SAVE, e);
-		}
-		return userGranted;
-	}
+            userGranted = UserPermissionsDTO.toDTO(userFromDB);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.USER_SAVE, e);
+        }
+        return userGranted;
+    }
 }

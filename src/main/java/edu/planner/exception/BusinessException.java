@@ -2,7 +2,7 @@ package edu.planner.exception;
 
 public class BusinessException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1347727953511994344L;
 
 	public BusinessException(ErrorCode code) {
 		super(code.getMessage());

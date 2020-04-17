@@ -1,5 +1,11 @@
 package edu.planner.enums;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum LevelDegree {
 
 	NENHUM("", "Nenhum"),
@@ -7,21 +13,8 @@ public enum LevelDegree {
 	MESTRE("Me.", "Mestre"),
 	DOUTOR("Dr.", "Doutor");
 
-	private String id;
-	private String description;
-
-	private LevelDegree(String id, String description) {
-		this.id = id;
-		this.description = description;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
+	private final String id;
+	private final String description;
 
 	public static LevelDegree toEnum(String id) {
 		if (id == null) {

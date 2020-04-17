@@ -1,5 +1,11 @@
 package edu.planner.security.permission;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum PermissionType {
 
 	LIST((short) 1,"LIST"),
@@ -8,21 +14,8 @@ public enum PermissionType {
 	UPDATE((short) 4,"UPDATE"),
 	DELETE((short) 5,"DELETE");
 	
-	private Short id;
-	private String description;
-
-	private PermissionType(Short id, String description) {
-		this.id = id;
-		this.description = description;
-	}
-
-	public Short getId() {
-		return id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
+	private final Short id;
+	private final String description;
 
 	public static PermissionType toEnum(Short id) {
 		if (id == null) {

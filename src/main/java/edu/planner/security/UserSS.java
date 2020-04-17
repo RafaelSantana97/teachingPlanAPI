@@ -1,75 +1,60 @@
 package edu.planner.security;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import edu.planner.enums.Profile;
 
+@Getter
 public class UserSS implements UserDetails {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -6408434735113646515L;
 
-	private Long id;
-	private String email;
-	private String password;
-	private Collection<? extends GrantedAuthority> authorities;
+    private final Long id;
+    private final String username;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
 
-	public UserSS() {
-	}
+    public UserSS(Long id, String username, String password, Set<Profile> profiles) {
+        super();
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.authorities = profiles.stream().map(x -> new SimpleGrantedAuthority(x.getDescription()))
+                .collect(Collectors.toList());
+    }
 
-	public UserSS(Long id, String email, String password, Set<Profile> profiles) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.authorities = profiles.stream().map(x -> new SimpleGrantedAuthority(x.getDescription()))
-				.collect(Collectors.toList());
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
-	@Override
-	public String getUsername() {
-		return email;
-	}
+    public boolean hasRole(Profile profile) {
+        return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-	
-	public boolean hasRole(Profile profile) {
-		return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
-	}
+    public boolean hasAnyRole(List<Profile> profiles) {
+        return profiles.stream()
+                .anyMatch(profile -> getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription())));
+    }
 }
