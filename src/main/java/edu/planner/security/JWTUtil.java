@@ -30,10 +30,14 @@ public class JWTUtil {
         if (claims != null) {
             String username = claims.getSubject();
             Date expirationDate = claims.getExpiration();
-            Date now = new Date(System.currentTimeMillis());
-            return username != null && expirationDate != null && now.before(expirationDate);
+            return username != null && unexpiredDate(expirationDate);
         }
         return false;
+    }
+
+    public boolean unexpiredDate(Date expirationDate) {
+        Date now = new Date(System.currentTimeMillis());
+        return expirationDate != null && now.before(expirationDate);
     }
 
     public String getUsername(String token) {
@@ -46,7 +50,9 @@ public class JWTUtil {
 
     private Claims getClaims(String token) {
         try {
-            return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
+            return Jwts.parser()
+                    .setSigningKey(secret.getBytes())
+                    .parseClaimsJws(token).getBody();
         } catch (Exception e) {
             return null;
         }

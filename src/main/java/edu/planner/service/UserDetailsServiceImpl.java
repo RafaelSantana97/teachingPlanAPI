@@ -9,6 +9,8 @@ import edu.planner.models.User;
 import edu.planner.repositories.IUserRepo;
 import edu.planner.security.UserSS;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -17,10 +19,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        User cli = iUserRepo.findByEmail(email);
-        if (cli == null) {
-            throw new UsernameNotFoundException(email);
-        }
+        User cli = Optional.ofNullable(iUserRepo.findByEmail(email))
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+
         return new UserSS(cli.getId(), cli.getEmail(), cli.getHashKey(), cli.getProfiles());
     }
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -29,5 +31,13 @@ public enum Profile {
 				.filter(ld -> id.equals(ld.getId()))
 				.findFirst()
 				.orElseThrow(() -> new IllegalArgumentException(String.format("Invalid ID %s", id)));
+	}
+
+	public static Set<Short> profilesToShorts(Set<Profile> profiles) {
+		return profiles.stream().map(Profile::getId).collect(Collectors.toSet());
+	}
+
+	public static Set<Profile> shortsToProfiles(Set<Short> profiles) {
+		return profiles.stream().map(Profile::toEnum).collect(Collectors.toSet());
 	}
 }

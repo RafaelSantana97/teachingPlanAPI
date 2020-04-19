@@ -3,8 +3,6 @@ package edu.planner.models;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -18,7 +16,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import edu.planner.enums.LevelDegree;
 import edu.planner.enums.Profile;
 import edu.planner.interfaces.IModel;
@@ -79,15 +76,11 @@ public class User implements Serializable, IModel {
     }
 
     public Set<Profile> getProfiles() {
-        return profiles.stream().map(Profile::toEnum).collect(Collectors.toSet());
-    }
-
-    public void addProfile(Profile profile) {
-        profiles.add(profile.getId());
+        return Profile.shortsToProfiles(profiles);
     }
 
     public Set<Profile> getRequiredProfiles() {
-        return requiredProfiles.stream().map(Profile::toEnum).collect(Collectors.toSet());
+        return Profile.shortsToProfiles(requiredProfiles);
     }
 
     public Set<Short> getRequiredProfilesShort() {

@@ -1,6 +1,7 @@
 package edu.planner.dto;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import edu.planner.enums.Profile;
 import edu.planner.interfaces.IModel;
@@ -26,19 +27,11 @@ public class UserPermissionsDTO implements Serializable, IModel {
 
     private String email;
 
-    private Boolean currentAdminRole;
-    private Boolean currentCoordinatorRole;
-    private Boolean currentTeacherRole;
-
-    private Boolean requiredAdminRole;
-    private Boolean requiredCoordinatorRole;
-    private Boolean requiredTeacherRole;
+    private Set<Profile> currentRoles;
+    private Set<Profile> requestedRoles;
 
     public static UserPermissionsDTO toDTO(User user) {
         return new UserPermissionsDTO(user.getId(), user.getName(), user.getLevelDegree(), user.getEmail(),
-                user.getProfiles().contains(Profile.ADMIN), user.getProfiles().contains(Profile.COORDINATOR),
-                user.getProfiles().contains(Profile.TEACHER), user.getRequiredProfiles().contains(Profile.ADMIN),
-                user.getRequiredProfiles().contains(Profile.COORDINATOR),
-                user.getRequiredProfiles().contains(Profile.TEACHER));
+                user.getProfiles(), user.getRequiredProfiles());
     }
 }

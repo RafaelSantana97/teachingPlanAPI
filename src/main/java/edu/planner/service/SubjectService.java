@@ -3,6 +3,7 @@ package edu.planner.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
@@ -30,34 +31,30 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
     @Override
     @Transactional
     public Subject insert(SubjectInsertDTO subject) {
-        Subject subjectIncluded;
         try {
-            subjectIncluded = iSubjectRepo.save(SubjectInsertDTO.fromDTO(subject));
+            return iSubjectRepo.save(SubjectInsertDTO.fromDTO(subject));
         } catch (BusinessException e) {
             throw new BusinessException(e.getMessage(), e);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SUBJECT_SAVE, e);
         }
-        return subjectIncluded;
     }
 
     @Override
     @Transactional
     public Subject update(SubjectInsertDTO subject) {
-        Subject subjectAltered;
         try {
-            subjectAltered = iSubjectRepo.save(SubjectInsertDTO.fromDTO(subject));
+            return iSubjectRepo.save(SubjectInsertDTO.fromDTO(subject));
         } catch (BusinessException e) {
             throw new BusinessException(e.getMessage(), e);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SUBJECT_UPDATE, e);
         }
-        return subjectAltered;
     }
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(final Long id) {
         try {
             iSubjectRepo.delete(findOne(id));
         } catch (ConstraintViolationException e) {
@@ -68,55 +65,43 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
     }
 
     public Page<Subject> findPageableAndFiltered(int page, int count, String description) {
-        Page<Subject> subject;
         try {
-            subject = iSubjectRepo.findByNameContaining(PageRequest.of(page, count), description);
+            return iSubjectRepo.findByNameContaining(PageRequest.of(page, count), description);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SUBJECT_SEARCH, e);
         }
-
-        return subject;
     }
 
     public Page<Subject> findPageable(int page, int count) {
-        Page<Subject> subject;
         try {
-            subject = iSubjectRepo.findAll(PageRequest.of(page, count));
+            return iSubjectRepo.findAll(PageRequest.of(page, count));
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SUBJECT_SEARCH, e);
         }
-
-        return subject;
     }
 
     public Iterable<Subject> findAll() {
-        Iterable<Subject> subject;
         try {
-            subject = iSubjectRepo.findAll();
+            return iSubjectRepo.findAll();
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SUBJECT_SEARCH, e);
         }
-
-        return subject;
     }
 
-    public Iterable<SubjectDTO> findByCourse(Long courseId) {
-        List<Subject> subjects;
+    public Iterable<SubjectDTO> findByCourse(final Long courseId) {
         List<SubjectDTO> subjectsDTO = new ArrayList<>();
 
         try {
-            subjects = (ArrayList<Subject>) iSubjectRepo.findAll();
+            List<Subject> subjects = (ArrayList<Subject>) iSubjectRepo.findAll();
 
-            if (courseId != null && courseId > 0) {
+            if (isCourseIdValid(courseId)) {
                 List<Subject> subjectsChecked = (ArrayList<Subject>) iSubjectRepo.findByCoursesIdIs(courseId);
-
-                subjectsChecked.forEach(sub -> subjectsDTO.add(SubjectDTO.toDTO(sub, true)));
-
                 subjects.removeAll(subjectsChecked);
+
+                subjectsDTO.addAll(getSubjectsToCheckedDTO(subjectsChecked, true));
             }
 
-            subjects.forEach(sub -> subjectsDTO.add(SubjectDTO.toDTO(sub, false)));
-
+            subjectsDTO.addAll(getSubjectsToCheckedDTO(subjects, false));
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SUBJECT_SEARCH, e);
         }
@@ -124,7 +109,17 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
         return subjectsDTO;
     }
 
-    public Subject findOne(Long id) {
+    private boolean isCourseIdValid(final Long courseId) {
+        return courseId != null && courseId > 0L;
+    }
+
+    private List<SubjectDTO> getSubjectsToCheckedDTO(final List<Subject> subjectsChecked, boolean checked) {
+        return subjectsChecked.stream()
+                .map(sub -> SubjectDTO.toDTO(sub, checked))
+                .collect(Collectors.toList());
+    }
+
+    public Subject findOne(final Long id) {
         Optional<Subject> subject;
         try {
             subject = iSubjectRepo.findById(id);

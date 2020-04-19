@@ -25,29 +25,25 @@ public class ClassService implements IService<Class, Class> {
     @Override
     @Transactional
     public Class insert(Class clazz) {
-        Class classIncluded;
         try {
-            classIncluded = iClassRepo.save(clazz);
+            return iClassRepo.save(clazz);
         } catch (BusinessException e) {
             throw new BusinessException(e.getMessage(), e);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.CLASS_SAVE, e);
         }
-        return classIncluded;
     }
 
     @Override
     @Transactional
     public Class update(Class clazz) {
-        Class classAltered;
         try {
-            classAltered = iClassRepo.save(clazz);
+            return iClassRepo.save(clazz);
         } catch (BusinessException e) {
             throw new BusinessException(e.getMessage(), e);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.CLASS_UPDATE, e);
         }
-        return classAltered;
     }
 
     @Override
@@ -63,36 +59,27 @@ public class ClassService implements IService<Class, Class> {
     }
 
     public Page<Class> findPageableAndFiltered(int page, int count, String description) {
-        Page<Class> clazz;
         try {
-            clazz = iClassRepo.findBySubjectNameContaining(PageRequest.of(page, count), description);
+            return iClassRepo.findBySubjectNameContaining(PageRequest.of(page, count), description);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.CLASS_SEARCH, e);
         }
-
-        return clazz;
     }
 
     public Page<Class> findPageable(int page, int count) {
-        Page<Class> clazz;
         try {
-            clazz = iClassRepo.findAll(PageRequest.of(page, count));
+            return iClassRepo.findAll(PageRequest.of(page, count));
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.CLASS_SEARCH, e);
         }
-
-        return clazz;
     }
 
     public Iterable<Class> findAll() {
-        Iterable<Class> clazz;
         try {
-            clazz = iClassRepo.findAll();
+            return iClassRepo.findAll();
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.CLASS_SEARCH, e);
         }
-
-        return clazz;
     }
 
     public Class findOne(Long id) {

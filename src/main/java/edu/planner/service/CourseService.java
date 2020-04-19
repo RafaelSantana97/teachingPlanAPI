@@ -28,27 +28,23 @@ public class CourseService implements IService<Course, CourseDTO> {
     @Override
     @Transactional
     public Course insert(CourseDTO course) {
-        Course courseIncluded;
         try {
-            courseIncluded = CourseDTO.fromDTO(course);
-            courseIncluded = iCourseRepo.save(courseIncluded);
+            Course courseIncluded = CourseDTO.fromDTO(course);
+            return iCourseRepo.save(courseIncluded);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_SAVE, e);
         }
-        return courseIncluded;
     }
 
     @Override
     @Transactional
     public Course update(CourseDTO course) {
-        Course courseAltered;
         try {
-            courseAltered = CourseDTO.fromDTO(course);
-            courseAltered = iCourseRepo.save(courseAltered);
+            Course courseAltered = CourseDTO.fromDTO(course);
+            return iCourseRepo.save(courseAltered);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_UPDATE, e);
         }
-        return courseAltered;
     }
 
     @Override
@@ -64,53 +60,41 @@ public class CourseService implements IService<Course, CourseDTO> {
     }
 
     public Page<Course> findPageableAndFiltered(int page, int count, String description) {
-        Page<Course> course;
         try {
-            course = iCourseRepo.findByNameContaining(PageRequest.of(page, count), description);
+            return iCourseRepo.findByNameContaining(PageRequest.of(page, count), description);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
         }
-
-        return course;
     }
 
     public Page<Course> findPageable(int page, int count) {
-        Page<Course> course;
         try {
-            course = iCourseRepo.findAll(PageRequest.of(page, count));
+            return iCourseRepo.findAll(PageRequest.of(page, count));
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
         }
-
-        return course;
     }
 
     public Iterable<Course> findAll() {
-        Iterable<Course> course;
         try {
-            course = iCourseRepo.findAll();
+            return iCourseRepo.findAll();
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
         }
-
-        return course;
     }
 
     public CourseDTO findOne(Long id) {
-        CourseDTO courseDTO;
         try {
             Optional<Course> course = iCourseRepo.findById(id);
 
             Course courseToDTO = course.orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
             ArrayList<SubjectDTO> subjects = (ArrayList<SubjectDTO>) subjectService.findByCourse(id);
 
-            courseDTO = CourseDTO.toDTO(courseToDTO, subjects);
+            return CourseDTO.toDTO(courseToDTO, subjects);
         } catch (BusinessException e) {
             throw new BusinessException(e.getMessage());
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
         }
-
-        return courseDTO;
     }
 }

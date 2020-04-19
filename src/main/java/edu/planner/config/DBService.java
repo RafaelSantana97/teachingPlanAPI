@@ -2,6 +2,8 @@ package edu.planner.config;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -104,38 +106,35 @@ public class DBService {
         user1.setEmail("rodrigoes@outlook.com");
         user1.setLevelDegree(LevelDegree.MESTRE.getId());
         user1.setHashKey(bCryptPasswordEncoder.encode("1234"));
-        user1.addProfile(Profile.ADMIN);
-        user1.addProfile(Profile.COORDINATOR);
+        user1.setProfiles(Set.of(Profile.ADMIN.getId(), Profile.COORDINATOR.getId()));
 
         User user2 = new User();
         user2.setName("Vitor Silva");
         user2.setEmail("vitao@outlook.com");
         user2.setLevelDegree(LevelDegree.DOUTOR.getId());
         user2.setHashKey(bCryptPasswordEncoder.encode("hueBR"));
-        user2.addProfile(Profile.TEACHER);
+        user2.setProfiles(Set.of(Profile.TEACHER.getId()));
 
         User user3 = new User();
         user3.setName("André Breda");
         user3.setEmail("breda@facens.com");
         user3.setLevelDegree(LevelDegree.MESTRE.getId());
         user3.setHashKey(bCryptPasswordEncoder.encode("bredinha123"));
-        user3.addProfile(Profile.TEACHER);
+        user3.setProfiles(Set.of(Profile.TEACHER.getId()));
 
         User user4 = new User();
         user4.setName("Andréa Braga");
         user4.setEmail("andrea@facens.com");
         user4.setLevelDegree(LevelDegree.DOUTOR.getId());
         user4.setHashKey(bCryptPasswordEncoder.encode("andreazita"));
-        user4.addProfile(Profile.ADMIN);
-        user4.addProfile(Profile.COORDINATOR);
-        user4.addProfile(Profile.TEACHER);
+        user4.setProfiles(Set.of(Profile.ADMIN.getId(), Profile.COORDINATOR.getId(), Profile.TEACHER.getId()));
 
         User user5 = new User();
         user5.setName("Marcos Vinícius");
         user5.setEmail("marcosvinicius@facens.com");
         user5.setLevelDegree(LevelDegree.DOUTOR.getId());
         user5.setHashKey(bCryptPasswordEncoder.encode("relampago_marquinhos"));
-        user5.addProfile(Profile.TEACHER);
+        user5.setProfiles(Set.of(Profile.TEACHER.getId()));
 
         iUserRepo.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
 

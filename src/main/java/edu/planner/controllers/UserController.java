@@ -11,9 +11,7 @@ import edu.planner.dto.UserInsertDTO;
 import edu.planner.dto.UserPermissionsDTO;
 import edu.planner.dto.UserSimpleDTO;
 import edu.planner.enums.Profile;
-import edu.planner.exception.AuthorizationException;
 import edu.planner.models.User;
-import edu.planner.security.UserSS;
 import edu.planner.service.UserService;
 
 @RestController
@@ -100,24 +98,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findOne(@PathVariable("id") Long id) {
-        UserSS userSS = UserService.authenticated();
-        if (userSS == null || (!userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId()))) {
-            throw new AuthorizationException("Access denied");
-        }
-
-        User user = userService.findOne(id);
+        User user = userService.getSpecificUser(id);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("getSimpleUser")
-    public ResponseEntity<UserSimpleDTO> getName() {
-        UserSS userSS = UserService.authenticated();
-        if (userSS == null) {
-            throw new AuthorizationException("Access denied");
-        }
-
-        UserSimpleDTO user = UserSimpleDTO.toDTO(userService.findOne(userSS.getId()));
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserSimpleDTO> getSimpleUser() {
+        return ResponseEntity.ok(userService.getSimpleUser());
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

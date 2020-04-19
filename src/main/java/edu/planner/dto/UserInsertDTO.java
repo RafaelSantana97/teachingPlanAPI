@@ -40,22 +40,11 @@ public class UserInsertDTO implements Serializable, IModel {
 	@NotEmpty(message = "is required")
 	private String password;
 
-	private Boolean requireAdminRole;
-	private Boolean requireTeacherRole;
-	private Boolean requireCoordinatorRole;
+	private Set<Profile> requestedRoles;
 
 	public static User fromDTO(UserInsertDTO user) {
-		Set<Short> requiredProfiles = new HashSet<>();
-
-		if (user.getRequireAdminRole())
-			requiredProfiles.add(Profile.ADMIN.getId());
-		if (user.getRequireTeacherRole())
-			requiredProfiles.add(Profile.TEACHER.getId());
-		if (user.getRequireCoordinatorRole())
-			requiredProfiles.add(Profile.COORDINATOR.getId());
-
 		return new User(user.getId(), user.getName(), user.getLevelDegree(), user.getEmail(), user.getPassword(),
-				new HashSet<>(), requiredProfiles);
+				new HashSet<>(), Profile.profilesToShorts(user.requestedRoles));
 	}
 
 	public String getLevelDegree() {
