@@ -1,14 +1,13 @@
 package edu.planner.models.validation;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
-import lombok.RequiredArgsConstructor;
 import edu.planner.dto.UserSimpleDTO;
 import edu.planner.enums.Profile;
 import edu.planner.models.User;
 import edu.planner.service.UserService;
+import lombok.RequiredArgsConstructor;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.util.Optional;
 
 @RequiredArgsConstructor

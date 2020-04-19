@@ -1,14 +1,14 @@
 package edu.planner.controllers;
 
+import edu.planner.exception.BusinessException;
+import edu.planner.exception.ErrorCode;
+import edu.planner.models.Domain;
+import edu.planner.repositories.IDomainRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import edu.planner.exception.BusinessException;
-import edu.planner.exception.ErrorCode;
-import edu.planner.models.Domain;
-import edu.planner.repositories.IDomainRepo;
 
 @RestController
 @RequestMapping("/api/domain")

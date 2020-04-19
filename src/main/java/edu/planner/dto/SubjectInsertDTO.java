@@ -1,8 +1,5 @@
 package edu.planner.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-
 import edu.planner.enums.Profile;
 import edu.planner.enums.SubjectType;
 import edu.planner.interfaces.IModel;
@@ -12,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter

@@ -1,10 +1,9 @@
 package edu.planner.repositories;
 
+import edu.planner.models.Course;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
-
-import edu.planner.models.Course;
 
 public interface ICourseRepo extends PagingAndSortingRepository<Course, Long> {
 

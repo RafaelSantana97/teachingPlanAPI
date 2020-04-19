@@ -1,8 +1,5 @@
 package edu.planner.dto;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import edu.planner.enums.Profile;
 import edu.planner.interfaces.IModel;
 import edu.planner.models.User;
@@ -10,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter

@@ -1,26 +1,17 @@
 package edu.planner.models;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.planner.enums.SubjectType;
 import edu.planner.interfaces.IModel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -41,7 +32,7 @@ public class Subject implements Serializable, IModel {
     private String type;
 
     @ManyToOne
-    @JoinColumn(name = "responsible", nullable = false, foreignKey = @ForeignKey(name = "FK_USER"))
+    @JoinColumn(name = "responsible", nullable = false, foreignKey = @ForeignKey(name = "RESP_FK_USER"))
     private User responsible;
 
     @OneToMany(mappedBy = "subject")

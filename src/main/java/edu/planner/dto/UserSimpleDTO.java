@@ -1,14 +1,14 @@
 package edu.planner.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import edu.planner.enums.LevelDegree;
 import edu.planner.interfaces.IModel;
 import edu.planner.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

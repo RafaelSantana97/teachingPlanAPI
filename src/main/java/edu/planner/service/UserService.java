@@ -1,12 +1,16 @@
 package edu.planner.service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
-
+import edu.planner.dto.UserInsertDTO;
+import edu.planner.dto.UserPermissionsDTO;
 import edu.planner.dto.UserSimpleDTO;
+import edu.planner.enums.Profile;
 import edu.planner.exception.AuthorizationException;
+import edu.planner.exception.BusinessException;
+import edu.planner.exception.ErrorCode;
+import edu.planner.interfaces.IService;
+import edu.planner.models.User;
+import edu.planner.repositories.IUserRepo;
+import edu.planner.security.UserSS;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.domain.Page;
@@ -15,15 +19,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import edu.planner.dto.UserInsertDTO;
-import edu.planner.dto.UserPermissionsDTO;
-import edu.planner.enums.Profile;
-import edu.planner.exception.BusinessException;
-import edu.planner.exception.ErrorCode;
-import edu.planner.interfaces.IService;
-import edu.planner.models.User;
-import edu.planner.repositories.IUserRepo;
-import edu.planner.security.UserSS;
+
+import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -94,7 +94,7 @@ public class UserService implements IService<User, UserInsertDTO> {
 
     public Page<User> findPageableAndFilteredProfile(int page, int count, Short profile, String description) {
         try {
-            return iUserRepo.findByProfilesInAndNameContaining(PageRequest.of(page, count), profile, description);
+            return iUserRepo.findByProfilesIsAndNameContaining(PageRequest.of(page, count), profile, description);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.USER_SEARCH, e);
         }

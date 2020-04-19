@@ -1,10 +1,10 @@
 package edu.planner.models.validation;
 
+import edu.planner.interfaces.IModel;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Optional;
-
-import edu.planner.interfaces.IModel;
 
 public class ModelValidator implements ConstraintValidator<ModelConstraint, IModel> {
 

@@ -1,20 +1,5 @@
 package edu.planner.models;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.planner.enums.LevelDegree;
 import edu.planner.enums.Profile;
@@ -23,6 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -52,12 +45,12 @@ public class User implements Serializable, IModel {
     private String hashKey;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "PROFILES", foreignKey = @ForeignKey(name = "FK_USER"))
+    @CollectionTable(name = "PROFILES", foreignKey = @ForeignKey(name = "PROF_FK_USER"))
     @JsonIgnore
     private Set<Short> profiles = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "REQUIRED_PROFILES", foreignKey = @ForeignKey(name = "FK_USER"))
+    @CollectionTable(name = "REQUIRED_PROFILES", foreignKey = @ForeignKey(name = "REQ_PROF_FK_USER"))
     @JsonIgnore
     private Set<Short> requiredProfiles = new HashSet<>();
 

@@ -1,13 +1,13 @@
 package edu.planner.service;
 
+import edu.planner.models.User;
+import edu.planner.repositories.IUserRepo;
+import edu.planner.security.UserSS;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import edu.planner.models.User;
-import edu.planner.repositories.IUserRepo;
-import edu.planner.security.UserSS;
 
 import java.util.Optional;
 

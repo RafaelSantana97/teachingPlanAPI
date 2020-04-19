@@ -1,11 +1,10 @@
 package edu.planner.dto;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.Email;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.Email;
+import java.io.Serializable;
 
 @Getter
 @Setter

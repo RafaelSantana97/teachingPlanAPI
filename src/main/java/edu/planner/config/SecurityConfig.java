@@ -1,7 +1,8 @@
 package edu.planner.config;
 
-import java.util.Arrays;
-
+import edu.planner.security.JWTAuthenticationFilter;
+import edu.planner.security.JWTAuthorizationFilter;
+import edu.planner.security.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -19,9 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import edu.planner.security.JWTAuthenticationFilter;
-import edu.planner.security.JWTAuthorizationFilter;
-import edu.planner.security.JWTUtil;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity

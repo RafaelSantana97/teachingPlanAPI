@@ -1,33 +1,17 @@
 package edu.planner.config;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Set;
-
+import edu.planner.enums.*;
+import edu.planner.models.Class;
+import edu.planner.models.*;
+import edu.planner.repositories.*;
+import edu.planner.security.permission.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import edu.planner.enums.LevelDegree;
-import edu.planner.enums.Period;
-import edu.planner.enums.Profile;
-import edu.planner.enums.Semester;
-import edu.planner.enums.SubjectType;
-import edu.planner.models.Class;
-import edu.planner.models.Course;
-import edu.planner.models.Domain;
-import edu.planner.models.Subject;
-import edu.planner.models.User;
-import edu.planner.repositories.IClassRepo;
-import edu.planner.repositories.ICourseRepo;
-import edu.planner.repositories.IDomainRepo;
-import edu.planner.repositories.ISubjectRepo;
-import edu.planner.repositories.IUserRepo;
-import edu.planner.security.permission.IPermissionBaseRepo;
-import edu.planner.security.permission.IPermissionRepo;
-import edu.planner.security.permission.Permission;
-import edu.planner.security.permission.PermissionBase;
-import edu.planner.security.permission.PermissionType;
-import edu.planner.security.permission.Resource;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
