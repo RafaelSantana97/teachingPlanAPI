@@ -1,4 +1,4 @@
-package edu.planner.models.validation;
+package edu.planner.validation;
 
 import edu.planner.interfaces.IModel;
 
@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Optional;
 
-public class ModelValidator implements ConstraintValidator<ModelConstraint, IModel> {
+class ModelValidator implements ConstraintValidator<ModelConstraint, IModel> {
 
     @Override
     public boolean isValid(IModel value, ConstraintValidatorContext context) {

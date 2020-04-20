@@ -4,7 +4,7 @@ import edu.planner.enums.Profile;
 import edu.planner.models.Course;
 import edu.planner.models.Subject;
 import edu.planner.models.User;
-import edu.planner.models.validation.ProfilesConstraint;
+import edu.planner.validation.ProfilesConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

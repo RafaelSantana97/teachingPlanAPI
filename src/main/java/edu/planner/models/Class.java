@@ -3,21 +3,27 @@ package edu.planner.models;
 import edu.planner.enums.Period;
 import edu.planner.enums.Semester;
 import edu.planner.interfaces.IModel;
-import edu.planner.models.validation.ModelConstraint;
+import edu.planner.validation.ModelConstraint;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
 import java.io.Serializable;
 
+@Builder
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Class implements Serializable, IModel {
 
     private static final long serialVersionUID = 5814786944901023991L;

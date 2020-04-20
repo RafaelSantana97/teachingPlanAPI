@@ -1,7 +1,7 @@
-package edu.planner.models.validation;
+package edu.planner.validation;
 
 import edu.planner.enums.Profile;
-import edu.planner.models.validation.ProfilesConstraint.List;
+import edu.planner.validation.ProfilesConstraint.List;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

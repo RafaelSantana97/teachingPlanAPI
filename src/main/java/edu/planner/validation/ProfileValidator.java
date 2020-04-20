@@ -1,4 +1,4 @@
-package edu.planner.models.validation;
+package edu.planner.validation;
 
 import edu.planner.dto.UserSimpleDTO;
 import edu.planner.enums.Profile;
@@ -8,26 +8,31 @@ import lombok.RequiredArgsConstructor;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
-public class ProfilesValidator implements ConstraintValidator<ProfilesConstraint, List<UserSimpleDTO>> {
+class ProfileValidator implements ConstraintValidator<ProfileConstraint, UserSimpleDTO> {
 
     private final UserService userService;
+
     private Profile requiredProfile;
 
     @Override
-    public void initialize(ProfilesConstraint constraintAnnotation) {
+    public void initialize(ProfileConstraint constraintAnnotation) {
         requiredProfile = constraintAnnotation.only();
     }
 
     @Override
-    public boolean isValid(List<UserSimpleDTO> users, ConstraintValidatorContext context) {
-        return this.hasUsers(users) && users.stream().allMatch(this::isUserValid);
+    public boolean isValid(UserSimpleDTO user, ConstraintValidatorContext context) {
+        return hasDTOValidId(user) && isUserValid(user);
     }
 
-    private boolean hasUsers(List<UserSimpleDTO> users) {
-        return users != null && !users.isEmpty();
+    private boolean hasDTOValidId(UserSimpleDTO user) {
+        return user != null && isGreaterThanZero(user.getId());
+    }
+
+    private boolean isGreaterThanZero(Long i) {
+        return Optional.ofNullable(i).orElse(0L) > 0L;
     }
 
     private boolean isUserValid(UserSimpleDTO user) {

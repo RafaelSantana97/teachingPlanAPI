@@ -1,4 +1,4 @@
-package edu.planner.models.validation;
+package edu.planner.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

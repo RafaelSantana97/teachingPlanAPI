@@ -3,11 +3,8 @@ package edu.planner.dto;
 import edu.planner.models.Class;
 import edu.planner.models.Subject;
 import edu.planner.models.User;
-import edu.planner.models.validation.ModelConstraint;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import edu.planner.validation.ModelConstraint;
+import lombok.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -16,6 +13,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClassDTO {
@@ -45,6 +43,15 @@ public class ClassDTO {
     private User teacher;
 
     public static Class fromDTO(ClassDTO course) {
-        return new Class(course.getId(), course.code, course.period, course.semester, course.year, course.subject, course.teacher);
+        return (course == null) ? null :
+                Class.builder()
+                        .id(course.id)
+                        .code(course.code)
+                        .period(course.period)
+                        .semester(course.semester)
+                        .year(course.year)
+                        .subject(course.subject)
+                        .teacher(course.teacher)
+                        .build();
     }
 }
