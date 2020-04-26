@@ -17,12 +17,11 @@ public class DevConfig {
     private String strategy;
 
     @Bean
-    public boolean instantiateDatabase() {
+    public void instantiateDatabase() {
 
-        if ("create".equals(strategy)) {
-            dbService.instantiateTestDatabase();
-            return true;
+        if (strategy != null && strategy.contains("create")) {
+            dbService.instantiateEssentialData();
+            dbService.instantiateTestData();
         }
-        return false;
     }
 }

@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 public class TestConfig {
 
-	private final DBService dbService;
+    private final DBService dbService;
 
-	@Bean
-	public boolean instantiateDatabase()  {
-		dbService.instantiateTestDatabase();
-		return true;
-	}
+    @Bean
+    public void instantiateDatabase() {
+        dbService.instantiateEssentialData();
+        dbService.instantiateTestData();
+    }
 }

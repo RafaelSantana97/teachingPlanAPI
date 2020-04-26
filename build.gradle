@@ -46,7 +46,6 @@ dependencies {
 
 test {
     useJUnitPlatform {
-        includeTags 'unit-test'
         excludeTags 'integration-test'
     }
 }

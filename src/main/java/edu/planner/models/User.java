@@ -45,12 +45,12 @@ public class User implements Serializable, IModel {
     private String hashKey;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "PROFILES", foreignKey = @ForeignKey(name = "PROF_FK_USER"))
+    @CollectionTable(name = "profiles", foreignKey = @ForeignKey(name = "PROF_FK_USER"))
     @JsonIgnore
     private Set<Short> profiles = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "REQUIRED_PROFILES", foreignKey = @ForeignKey(name = "REQ_PROF_FK_USER"))
+    @CollectionTable(name = "required_profiles", foreignKey = @ForeignKey(name = "REQ_PROF_FK_USER"))
     @JsonIgnore
     private Set<Short> requiredProfiles = new HashSet<>();
 

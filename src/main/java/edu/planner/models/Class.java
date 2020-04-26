@@ -51,7 +51,7 @@ public class Class implements Serializable, IModel {
     private Subject subject;
 
     @ManyToOne
-    @JoinColumn(name = "teacher", nullable = false, foreignKey = @ForeignKey(name = "FK_USER"))
+    @JoinColumn(name = "teacher", nullable = false, foreignKey = @ForeignKey(name = "FK_TEACHER"))
     private User teacher;
 
     public void setPeriod(Short period) {

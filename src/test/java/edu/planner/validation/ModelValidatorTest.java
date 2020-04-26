@@ -2,7 +2,6 @@ package edu.planner.validation;
 
 import edu.planner.interfaces.IModel;
 import edu.planner.models.Subject;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Tag("unit-test")
 class ModelValidatorTest {
 
     private final ModelValidator modelValidator = new ModelValidator();

@@ -2,10 +2,8 @@ package edu.planner.enums;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-@Tag("unit-test")
 class LevelDegreeTest {
 
     @Test

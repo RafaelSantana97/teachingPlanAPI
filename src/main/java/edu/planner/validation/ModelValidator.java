@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Optional;
 
-class ModelValidator implements ConstraintValidator<ModelConstraint, IModel> {
+public class ModelValidator implements ConstraintValidator<ModelConstraint, IModel> {
 
     @Override
     public boolean isValid(IModel value, ConstraintValidatorContext context) {

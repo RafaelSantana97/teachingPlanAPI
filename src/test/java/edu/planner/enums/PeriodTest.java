@@ -1,11 +1,9 @@
 package edu.planner.enums;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Tag("unit-test")
 class PeriodTest {
 
     @Test

@@ -29,7 +29,7 @@ public class Permission implements Serializable, IModel {
 	private Short resource;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "PERMISSION_TYPES", foreignKey = @ForeignKey(name = "FK_PERMISSION"))
+	@CollectionTable(name = "permission_types", foreignKey = @ForeignKey(name = "FK_PERMISSION"))
 	@JsonIgnore
 	private Set<Short> permissionTypes = new HashSet<>();
 
