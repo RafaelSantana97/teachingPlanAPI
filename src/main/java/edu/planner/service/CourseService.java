@@ -2,6 +2,7 @@ package edu.planner.service;
 
 import edu.planner.dto.CourseDTO;
 import edu.planner.dto.SubjectDTO;
+import edu.planner.dto.mapper.CourseMapper;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.interfaces.IService;
@@ -28,7 +29,7 @@ public class CourseService implements IService<Course, CourseDTO> {
     @Transactional
     public Course insert(CourseDTO course) {
         try {
-            Course courseIncluded = CourseDTO.fromDTO(course);
+            Course courseIncluded = CourseMapper.from(course);
             return iCourseRepo.save(courseIncluded);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_SAVE, e);
@@ -39,7 +40,7 @@ public class CourseService implements IService<Course, CourseDTO> {
     @Transactional
     public Course update(CourseDTO course) {
         try {
-            Course courseAltered = CourseDTO.fromDTO(course);
+            Course courseAltered = CourseMapper.from(course);
             return iCourseRepo.save(courseAltered);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.COURSE_UPDATE, e);
@@ -89,7 +90,7 @@ public class CourseService implements IService<Course, CourseDTO> {
             Course courseToDTO = course.orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
             ArrayList<SubjectDTO> subjects = (ArrayList<SubjectDTO>) subjectService.findByCourse(id);
 
-            return CourseDTO.toDTO(courseToDTO, subjects);
+            return CourseMapper.to(courseToDTO, subjects);
         } catch (BusinessException e) {
             throw new BusinessException(e.getMessage());
         } catch (Exception e) {

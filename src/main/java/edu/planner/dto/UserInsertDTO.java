@@ -3,7 +3,6 @@ package edu.planner.dto;
 import edu.planner.enums.LevelDegree;
 import edu.planner.enums.Profile;
 import edu.planner.interfaces.IModel;
-import edu.planner.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -40,11 +38,6 @@ public class UserInsertDTO implements Serializable, IModel {
 	private String password;
 
 	private Set<Profile> requestedRoles;
-
-	public static User fromDTO(UserInsertDTO user) {
-		return new User(user.getId(), user.getName(), user.getLevelDegree(), user.getEmail(), user.getPassword(),
-				new HashSet<>(), Profile.profilesToShorts(user.requestedRoles));
-	}
 
 	public String getLevelDegree() {
 		return LevelDegree.toEnum(levelDegree).getId();

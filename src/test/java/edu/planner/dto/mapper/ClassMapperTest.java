@@ -1,5 +1,6 @@
-package edu.planner.dto;
+package edu.planner.dto.mapper;
 
+import edu.planner.dto.ClassDTO;
 import edu.planner.enums.Period;
 import edu.planner.enums.Semester;
 import edu.planner.models.Class;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClassDTOTest {
+class ClassMapperTest {
 
     @Test
     void whenFromDTOHasValidValues() {
@@ -27,11 +28,11 @@ class ClassDTOTest {
                 .year((short) 2020)
                 .build();
 
-        assertEquals(clazz, ClassDTO.fromDTO(classDTO), "Should return converted class");
+        assertEquals(clazz, ClassMapper.fromDTO(classDTO), "Should return converted class");
     }
 
     @Test
     void whenFromDTOHasNullValues() {
-        assertNull(ClassDTO.fromDTO(null), "Should return null");
+        assertNull(ClassMapper.fromDTO(null), "Should return null");
     }
 }

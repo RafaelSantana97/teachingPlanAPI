@@ -3,7 +3,6 @@ package edu.planner.dto;
 import edu.planner.enums.Profile;
 import edu.planner.enums.SubjectType;
 import edu.planner.interfaces.IModel;
-import edu.planner.models.Subject;
 import edu.planner.validation.ProfileConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,11 +30,6 @@ public class SubjectInsertDTO implements IModel {
 
     @ProfileConstraint(only = Profile.TEACHER)
     private UserSimpleDTO responsible;
-
-    public static Subject fromDTO(SubjectInsertDTO subject) {
-        return new Subject(subject.getId(), subject.getName(), subject.getType(),
-                UserSimpleDTO.fromDTO(subject.getResponsible()));
-    }
 
     public String getType() {
         return SubjectType.toEnum(type).getId();

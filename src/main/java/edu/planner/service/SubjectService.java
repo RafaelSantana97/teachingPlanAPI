@@ -2,6 +2,7 @@ package edu.planner.service;
 
 import edu.planner.dto.SubjectDTO;
 import edu.planner.dto.SubjectInsertDTO;
+import edu.planner.dto.mapper.SubjectMapper;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.exception.ObjectNotFoundException;
@@ -30,7 +31,7 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
     @Transactional
     public Subject insert(SubjectInsertDTO subject) {
         try {
-            return iSubjectRepo.save(SubjectInsertDTO.fromDTO(subject));
+            return iSubjectRepo.save(SubjectMapper.from(subject));
         } catch (BusinessException e) {
             throw new BusinessException(e.getMessage(), e);
         } catch (Exception e) {
@@ -42,7 +43,7 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
     @Transactional
     public Subject update(SubjectInsertDTO subject) {
         try {
-            return iSubjectRepo.save(SubjectInsertDTO.fromDTO(subject));
+            return iSubjectRepo.save(SubjectMapper.from(subject));
         } catch (BusinessException e) {
             throw new BusinessException(e.getMessage(), e);
         } catch (Exception e) {
@@ -113,7 +114,7 @@ public class SubjectService implements IService<Subject, SubjectInsertDTO> {
 
     private List<SubjectDTO> getSubjectsToCheckedDTO(final List<Subject> subjectsChecked, boolean checked) {
         return subjectsChecked.stream()
-                .map(sub -> SubjectDTO.toDTO(sub, checked))
+                .map(sub -> SubjectMapper.to(sub, checked))
                 .collect(Collectors.toList());
     }
 

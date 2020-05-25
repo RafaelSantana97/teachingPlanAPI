@@ -1,6 +1,5 @@
 package edu.planner.dto;
 
-import edu.planner.models.Class;
 import edu.planner.models.Subject;
 import edu.planner.models.User;
 import edu.planner.validation.ModelConstraint;
@@ -42,16 +41,4 @@ public class ClassDTO {
     @ModelConstraint
     private User teacher;
 
-    public static Class fromDTO(ClassDTO course) {
-        return (course == null) ? null :
-                Class.builder()
-                        .id(course.id)
-                        .code(course.code)
-                        .period(course.period)
-                        .semester(course.semester)
-                        .year(course.year)
-                        .subject(course.subject)
-                        .teacher(course.teacher)
-                        .build();
-    }
 }

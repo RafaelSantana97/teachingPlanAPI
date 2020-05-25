@@ -1,7 +1,6 @@
 package edu.planner.dto;
 
 import edu.planner.enums.Profile;
-import edu.planner.models.Subject;
 import edu.planner.validation.ProfileConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,14 +29,4 @@ public class SubjectDTO {
 	private UserSimpleDTO responsible;
 
 	private boolean checked = false;
-
-	public static SubjectDTO toDTO(Subject subject, boolean checked) {
-		return new SubjectDTO(subject.getId(), subject.getName(), subject.getType(),
-				UserSimpleDTO.toDTO(subject.getResponsible()), checked);
-	}
-
-	public static Subject fromDTO(SubjectDTO subject) {
-		return new Subject(subject.getId(), subject.getName(), subject.getType(),
-				UserSimpleDTO.fromDTO(subject.getResponsible()));
-	}
 }

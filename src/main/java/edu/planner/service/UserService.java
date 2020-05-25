@@ -3,6 +3,7 @@ package edu.planner.service;
 import edu.planner.dto.UserInsertDTO;
 import edu.planner.dto.UserPermissionsDTO;
 import edu.planner.dto.UserSimpleDTO;
+import edu.planner.dto.mapper.UserMapper;
 import edu.planner.enums.Profile;
 import edu.planner.exception.AuthorizationException;
 import edu.planner.exception.BusinessException;
@@ -36,7 +37,7 @@ public class UserService implements IService<User, UserInsertDTO> {
     @Transactional
     public User insert(UserInsertDTO user) {
         try {
-            User userIncluded = UserInsertDTO.fromDTO(user);
+            User userIncluded = UserMapper.from(user);
             userIncluded.setHashKey(bCryptPasswordEncoder.encode(userIncluded.getHashKey()));
 
             if (isFirstAdminRequest(user)) {
@@ -58,7 +59,7 @@ public class UserService implements IService<User, UserInsertDTO> {
     @Transactional
     public User update(UserInsertDTO user) {
         try {
-            return iUserRepo.save(UserInsertDTO.fromDTO(user));
+            return iUserRepo.save(UserMapper.from(user));
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.USER_UPDATE, e);
         }
@@ -139,7 +140,7 @@ public class UserService implements IService<User, UserInsertDTO> {
         UserSS userSS = Optional.ofNullable(UserService.authenticated())
                 .orElseThrow(() -> new AuthorizationException("Access denied"));
 
-        return UserSimpleDTO.toDTO(this.findOne(userSS.getId()));
+        return UserMapper.toSimpleDTO(this.findOne(userSS.getId()));
     }
 
     public User getSpecificUser(Long id) {
@@ -161,7 +162,7 @@ public class UserService implements IService<User, UserInsertDTO> {
 
             int totalElements = (int) users.getTotalElements();
             return new PageImpl<>(
-                    users.stream().map(UserPermissionsDTO::toDTO).collect(Collectors.toList()),
+                    users.stream().map(UserMapper::toPermissionsDTO).collect(Collectors.toList()),
                     PageRequest.of(page, count), totalElements);
 
         } catch (Exception e) {
@@ -176,7 +177,7 @@ public class UserService implements IService<User, UserInsertDTO> {
 
             userFromDB = iUserRepo.save(userFromDB);
 
-            return UserPermissionsDTO.toDTO(userFromDB);
+            return UserMapper.toPermissionsDTO(userFromDB);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.USER_SAVE, e);
         }

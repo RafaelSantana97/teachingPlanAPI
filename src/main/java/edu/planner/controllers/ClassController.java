@@ -1,6 +1,7 @@
 package edu.planner.controllers;
 
 import edu.planner.dto.ClassDTO;
+import edu.planner.dto.mapper.ClassMapper;
 import edu.planner.models.Class;
 import edu.planner.service.ClassService;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,14 @@ public class ClassController {
     @PreAuthorize("hasAnyRole('COORDINATOR')")
     @PostMapping
     public ResponseEntity<Class> insert(@Valid @RequestBody ClassDTO classDTO) {
-        Class clazz = classService.insert(ClassDTO.fromDTO(classDTO));
+        Class clazz = classService.insert(ClassMapper.fromDTO(classDTO));
         return clazz != null ? ResponseEntity.ok(clazz) : ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('COORDINATOR')")
     @PutMapping
     public ResponseEntity<Class> update(@Valid @RequestBody ClassDTO classDTO) {
-        Class clazz = classService.update(ClassDTO.fromDTO(classDTO));
+        Class clazz = classService.update(ClassMapper.fromDTO(classDTO));
         return clazz != null ? ResponseEntity.ok(clazz) : ResponseEntity.noContent().build();
     }
 
