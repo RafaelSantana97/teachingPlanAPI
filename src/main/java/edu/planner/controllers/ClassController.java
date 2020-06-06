@@ -19,21 +19,21 @@ public class ClassController {
 
     private final ClassService classService;
 
-    @PreAuthorize("hasAnyRole('COORDINATOR')")
+    @PreAuthorize("hasRole('COORDINATOR')")
     @PostMapping
     public ResponseEntity<Class> insert(@Valid @RequestBody ClassDTO classDTO) {
         Class clazz = classService.insert(ClassMapper.fromDTO(classDTO));
         return clazz != null ? ResponseEntity.ok(clazz) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('COORDINATOR')")
+    @PreAuthorize("hasRole('COORDINATOR')")
     @PutMapping
     public ResponseEntity<Class> update(@Valid @RequestBody ClassDTO classDTO) {
         Class clazz = classService.update(ClassMapper.fromDTO(classDTO));
         return clazz != null ? ResponseEntity.ok(clazz) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('COORDINATOR')")
+    @PreAuthorize("hasRole('COORDINATOR')")
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         classService.delete(id);

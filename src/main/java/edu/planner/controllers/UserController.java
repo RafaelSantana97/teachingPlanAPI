@@ -27,21 +27,21 @@ public class UserController {
         return userIncluded != null ? ResponseEntity.ok(userIncluded) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public ResponseEntity<User> update(@Valid @RequestBody UserInsertDTO user) {
         User userAltered = userService.update(user);
         return userAltered != null ? ResponseEntity.ok(userAltered) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.ok(true);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/interval/{page}/{count}/{description}")
     public ResponseEntity<Page<User>> findPageableAndFiltered(@PathVariable("page") int page,
                                                               @PathVariable("count") int count, @PathVariable("description") String description) {
@@ -49,14 +49,14 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/interval/{page}/{count}")
     public ResponseEntity<Page<User>> findPageable(@PathVariable("page") int page, @PathVariable("count") int count) {
         Page<User> user = userService.findPageable(page, count);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/interval/{page}/{count}/teacher/{description}")
     public ResponseEntity<Page<User>> findPageableAndFilteredTeacher(@PathVariable("page") int page,
                                                                      @PathVariable("count") int count, @PathVariable("description") String description) {
@@ -64,7 +64,7 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/interval/{page}/{count}/teacher")
     public ResponseEntity<Page<User>> findPageableByTeacher(@PathVariable("page") int page,
                                                             @PathVariable("count") int count) {
@@ -72,7 +72,7 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/interval/{page}/{count}/coordinator/{description}")
     public ResponseEntity<Page<User>> findPageableAndFilteredCoord(@PathVariable("page") int page,
                                                                    @PathVariable("count") int count, @PathVariable("description") String description) {
@@ -81,7 +81,7 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/interval/{page}/{count}/coordinator")
     public ResponseEntity<Page<User>> findPageableByCoord(@PathVariable("page") int page,
                                                           @PathVariable("count") int count) {
@@ -89,7 +89,7 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<Iterable<User>> findAll() {
         Iterable<User> user = userService.findAll();
@@ -107,7 +107,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getSimpleUser());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/interval/{page}/{count}/requiredPermissionsUsers")
     public ResponseEntity<Page<UserPermissionsDTO>> findAllRequiredPermissionsUsers(@PathVariable("page") int page,
                                                                                     @PathVariable("count") int count) {
@@ -115,7 +115,7 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/grantAllRequiredPermissions")
     public ResponseEntity<UserPermissionsDTO> grantPermissionTo(@RequestBody UserPermissionsDTO user) {
         UserPermissionsDTO userGranted = userService.grantPermissionTo(user);
