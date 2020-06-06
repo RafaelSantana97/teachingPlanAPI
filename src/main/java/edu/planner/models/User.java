@@ -76,6 +76,7 @@ public class User implements Serializable, IModel {
         return Profile.shortsToProfiles(requiredProfiles);
     }
 
+    @JsonIgnore
     public Set<Short> getRequiredProfilesShort() {
         return requiredProfiles;
     }

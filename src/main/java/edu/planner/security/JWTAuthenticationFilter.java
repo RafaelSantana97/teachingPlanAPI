@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -59,7 +60,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = ((UserSS) auth.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
         res.addHeader("Authorization", "Q9OZw9PEJQe4dDfkFQ98yhNaKC99ZHD5xm#SENqxBJZgS7z0$&$vSz6E7KVmJfa4" + token);
-        res.addHeader("access-control-expose-headers", "Authorization");
+        res.addHeader("Permissions", auth.getAuthorities().stream().map(role -> role.toString()).collect(Collectors.joining(",")));
+        res.addHeader("access-control-expose-headers", "Authorization, Permissions");
     }
 
     private static class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
