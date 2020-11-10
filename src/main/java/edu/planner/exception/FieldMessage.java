@@ -1,36 +1,17 @@
 package edu.planner.exception;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class FieldMessage implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1747387976269530737L;
 
-	private String fieldName;
-	private String message;
-
-	public FieldMessage() {
-
-	}
-
-	public FieldMessage(String fieldName, String message) {
-		super();
-		this.fieldName = fieldName;
-		this.message = message;
-	}
-
-	public String getFieldName() {
-		return fieldName;
-	}
-
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
+	private final String fieldName;
+	private final String message;
 }

@@ -1,12 +1,11 @@
 package edu.planner.repositories;
 
+import edu.planner.models.Class;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import edu.planner.models.Class;
-
 public interface IClassRepo extends PagingAndSortingRepository<Class, Long> {
 
-	public Page<Class> findBySubjectNameContaining(Pageable page, String description);
+    Page<Class> findBySubjectNameContaining(Pageable page, String description);
 }

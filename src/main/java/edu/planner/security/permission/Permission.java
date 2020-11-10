@@ -1,26 +1,17 @@
 package edu.planner.security.permission;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import edu.planner.interfaces.IModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -38,15 +29,15 @@ public class Permission implements Serializable, IModel {
 	private Short resource;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "PERMISSION_TYPES", foreignKey = @ForeignKey(name = "FK_PERMISSION"))
+	@CollectionTable(name = "permission_types", foreignKey = @ForeignKey(name = "FK_PERMISSION"))
 	@JsonIgnore
-	private Set<Short> permissionTypes = new HashSet<Short>();
+	private Set<Short> permissionTypes = new HashSet<>();
 
 	public Resource getResource() {
 		return Resource.toEnum(resource);
 	}
 	
 	public Set<PermissionType> getPermissionTypes() {
-		return permissionTypes.stream().map(x -> PermissionType.toEnum(x)).collect(Collectors.toSet());
+		return permissionTypes.stream().map(PermissionType::toEnum).collect(Collectors.toSet());
 	}
 }

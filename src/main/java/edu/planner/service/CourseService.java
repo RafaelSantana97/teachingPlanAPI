@@ -1,117 +1,100 @@
 package edu.planner.service;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
 import edu.planner.dto.CourseDTO;
 import edu.planner.dto.SubjectDTO;
+import edu.planner.dto.mapper.CourseMapper;
 import edu.planner.exception.BusinessException;
 import edu.planner.exception.ErrorCode;
 import edu.planner.interfaces.IService;
 import edu.planner.models.Course;
 import edu.planner.repositories.ICourseRepo;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CourseService implements IService<Course, CourseDTO> {
 
-	@Autowired
-	ICourseRepo iCourseRepo;
+    private final ICourseRepo iCourseRepo;
+    private final SubjectService subjectService;
 
-	@Autowired
-	SubjectService subjectService;
+    @Override
+    @Transactional
+    public Course insert(CourseDTO course) {
+        try {
+            Course courseIncluded = CourseMapper.from(course);
+            return iCourseRepo.save(courseIncluded);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.COURSE_SAVE, e);
+        }
+    }
 
-	public Course insert(CourseDTO course) {
-		Course courseIncluded = null;
-		try {
-			courseIncluded = CourseDTO.fromDTO(course);
-			courseIncluded = iCourseRepo.save(courseIncluded);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.COURSE_SAVE, e);
-		}
-		return courseIncluded;
-	}
+    @Override
+    @Transactional
+    public Course update(CourseDTO course) {
+        try {
+            Course courseAltered = CourseMapper.from(course);
+            return iCourseRepo.save(courseAltered);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.COURSE_UPDATE, e);
+        }
+    }
 
-	public Course update(CourseDTO course) {
-		Course courseAltered = null;
-		try {
-			courseAltered = CourseDTO.fromDTO(course);
-			courseAltered = iCourseRepo.save(courseAltered);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.COURSE_UPDATE, e);
-		}
-		return courseAltered;
-	}
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        try {
+            iCourseRepo.deleteById(id);
+        } catch (ConstraintViolationException e) {
+            throw new BusinessException(ErrorCode.COURSE_DELETE_VIOLATION, e);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.COURSE_DELETE, e);
+        }
+    }
 
-	public Boolean delete(Long id) {
-		Boolean result = false;
+    public Page<Course> findPageableAndFiltered(int page, int count, String description) {
+        try {
+            return iCourseRepo.findByNameContaining(PageRequest.of(page, count), description);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
+        }
+    }
 
-		try {
-			iCourseRepo.deleteById(id);
-			result = true;
-		} catch (ConstraintViolationException e) {
-			throw new BusinessException(ErrorCode.COURSE_DELETE_VIOLATION, e);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.COURSE_DELETE, e);
-		}
-		return result;
-	}
+    public Page<Course> findPageable(int page, int count) {
+        try {
+            return iCourseRepo.findAll(PageRequest.of(page, count));
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
+        }
+    }
 
-	public Page<Course> findPageableAndFiltered(int page, int count, String description) {
-		Page<Course> course = null;
-		try {
-			course = iCourseRepo.findByNameContaining(PageRequest.of(page, count), description);
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
-		}
+    public Iterable<Course> findAll() {
+        try {
+            return iCourseRepo.findAll();
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
+        }
+    }
 
-		return course;
-	}
+    public CourseDTO findOne(Long id) {
+        try {
+            Optional<Course> course = iCourseRepo.findById(id);
 
-	public Page<Course> findPageable(int page, int count) {
-		Page<Course> course = null;
-		try {
-			course = iCourseRepo.findAll(PageRequest.of(page, count));
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
-		}
+            Course courseToDTO = course.orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
+            ArrayList<SubjectDTO> subjects = (ArrayList<SubjectDTO>) subjectService.findByCourse(id);
 
-		return course;
-	}
-
-	public Iterable<Course> findAll() {
-		Iterable<Course> course = null;
-		try {
-			course = iCourseRepo.findAll();
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
-		}
-
-		return course;
-	}
-
-	public CourseDTO findOne(Long id) {
-		Optional<Course> course = null;
-		CourseDTO courseDTO = null;
-		try {
-			course = iCourseRepo.findById(id);
-
-			Course courseToDTO = course.orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
-			ArrayList<SubjectDTO> subjects = (ArrayList<SubjectDTO>) subjectService.findByCourse(id);
-
-			courseDTO = CourseDTO.toDTO(courseToDTO, subjects);
-
-		} catch (BusinessException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (Exception e) {
-			throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
-		}
-
-		return courseDTO;
-	}
+            return CourseMapper.to(courseToDTO, subjects);
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getMessage());
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.COURSE_SEARCH, e);
+        }
+    }
 }

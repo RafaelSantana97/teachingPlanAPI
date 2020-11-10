@@ -1,12 +1,11 @@
 plugins {
-    id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
 }
 
-apply plugin: 'io.spring.dependency-management'
-
 group = 'edu'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.0-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
@@ -24,15 +23,31 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation('io.jsonwebtoken:jjwt:0.7.0')
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'mysql:mysql-connector-java'
+    testRuntimeOnly 'com.h2database:h2'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation('io.jsonwebtoken:jjwt:0.9.1')
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.projectlombok:lombok'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.assertj:assertj-core'
+
     testImplementation 'org.springframework.security:spring-security-test'
+}
+
+test {
+    useJUnitPlatform {
+        excludeTags 'integration-test'
+    }
 }

@@ -1,5 +1,13 @@
 package edu.planner.security.permission;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum PermissionType {
 
 	LIST((short) 1,"LIST"),
@@ -8,32 +16,17 @@ public enum PermissionType {
 	UPDATE((short) 4,"UPDATE"),
 	DELETE((short) 5,"DELETE");
 	
-	private Short id;
-	private String description;
-
-	private PermissionType(Short id, String description) {
-		this.id = id;
-		this.description = description;
-	}
-
-	public Short getId() {
-		return id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
+	private final Short id;
+	private final String description;
 
 	public static PermissionType toEnum(Short id) {
-		if (id == null) {
-			return null;
-		}
-		
-		for (PermissionType x : PermissionType.values()) {
-			if (id.equals(x.getId())) {
-				return x;
-			}
-		}
-		throw new IllegalArgumentException("Invalid ID " + id);
+		return id == null ? null : findById(id);
+	}
+
+	private static PermissionType findById(Short id) {
+		return Arrays.stream(PermissionType.values())
+				.filter(ld -> id.equals(ld.getId()))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(String.format("Invalid ID %s", id)));
 	}
 }

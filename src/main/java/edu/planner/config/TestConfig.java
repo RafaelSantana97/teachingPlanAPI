@@ -1,22 +1,20 @@
 package edu.planner.config;
 
-import java.text.ParseException;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("test")
+@RequiredArgsConstructor
 public class TestConfig {
 
-	@Autowired
-	private DBService dbService;
+    private final DBService dbService;
 
-	@Bean
-	public boolean instantiateDatabase() throws ParseException {
-		dbService.instantiateTestDatabase();
-		return true;
-	}
+    @Bean
+    public void instantiateDatabase() {
+        dbService.instantiateEssentialData();
+        dbService.instantiateTestData();
+    }
 }

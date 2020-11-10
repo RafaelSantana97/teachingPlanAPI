@@ -1,29 +1,24 @@
 package edu.planner.models;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 public class Domain implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5463553494039919064L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false, length = 30)
-	private String domain;
+	private String description;
 
 	@Column(nullable = false)
 	private String value1;

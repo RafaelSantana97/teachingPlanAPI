@@ -1,37 +1,29 @@
 package edu.planner.enums;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Period {
+    MATUTINO((short) 1, "Matutino"),
+    VERSPERTINO((short) 2, "Vespertino"),
+    NOTURNO((short) 3, "Noturno");
 
-	MATUTINO((short) 1, "Matutino"),
-	VERSPERTINO((short) 2, "Vespertino"),
-	NOTURNO((short) 3,"Noturno");
-	
-	private Short id;
-	private String description;
+    private final Short id;
+    private final String description;
 
-	private Period(Short id, String description) {
-		this.id = id;
-		this.description = description;
-	}
+    public static Period toEnum(Short id) {
+        return id == null ? null : findById(id);
+    }
 
-	public Short getId() {
-		return id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public static Period toEnum(Short id) {
-		if (id == null) {
-			return null;
-		}
-		
-		for (Period x : Period.values()) {
-			if (id.equals(x.getId())) {
-				return x;
-			}
-		}
-		throw new IllegalArgumentException("Invalid ID " + id);
-	}
+    private static Period findById(Short id) {
+        return Arrays.stream(Period.values())
+                .filter(ld -> id.equals(ld.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Invalid ID %s", id)));
+    }
 }
