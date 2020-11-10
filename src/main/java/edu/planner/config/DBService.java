@@ -6,6 +6,7 @@ import edu.planner.models.*;
 import edu.planner.repositories.*;
 import edu.planner.security.permission.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DBService {
@@ -100,39 +102,45 @@ public class DBService {
 
     private List<User> createUsers() {
         User user1 = new User();
-        user1.setName("Jair Rodrigo");
-        user1.setEmail("rodrigoes@outlook.com");
-        user1.setLevelDegree(LevelDegree.MESTRE.getId());
-        user1.setHashKey(bCryptPasswordEncoder.encode("1234"));
+        user1.setName("Andréa Braga");
+        user1.setEmail("andrea.braga@facens.br");
+        user1.setLevelDegree(LevelDegree.DOUTOR.getId());
         user1.setProfiles(Set.of(Profile.ADMIN.getId(), Profile.COORDINATOR.getId()));
 
         User user2 = new User();
-        user2.setName("Vitor Silva");
-        user2.setEmail("vitao@outlook.com");
-        user2.setLevelDegree(LevelDegree.DOUTOR.getId());
-        user2.setHashKey(bCryptPasswordEncoder.encode("hueBR"));
+        user2.setName("André Breda");
+        user2.setEmail("andre.carneiro@facens.br");
+        user2.setLevelDegree(LevelDegree.MESTRE.getId());
         user2.setProfiles(Set.of(Profile.TEACHER.getId()));
 
         User user3 = new User();
-        user3.setName("André Breda");
-        user3.setEmail("breda@facens.com");
-        user3.setLevelDegree(LevelDegree.MESTRE.getId());
-        user3.setHashKey(bCryptPasswordEncoder.encode("bredinha123"));
+        user3.setName("Glauco Todesco");l
+        user3.setLevelDegree(LevelDegree.DOUTOR.getId());
         user3.setProfiles(Set.of(Profile.TEACHER.getId()));
 
         User user4 = new User();
-        user4.setName("Andréa Braga");
-        user4.setEmail("andrea@facens.com");
-        user4.setLevelDegree(LevelDegree.DOUTOR.getId());
-        user4.setHashKey(bCryptPasswordEncoder.encode("andreazita"));
+        user4.setName("Johannes Lochter");
+        user4.setEmail("johannes.lochter@facens.br");
+        user4.setLevelDegree(LevelDegree.MESTRE.getId());
         user4.setProfiles(Set.of(Profile.ADMIN.getId(), Profile.COORDINATOR.getId(), Profile.TEACHER.getId()));
 
         User user5 = new User();
-        user5.setName("Marcos Vinícius");
-        user5.setEmail("marcosvinicius@facens.com");
-        user5.setLevelDegree(LevelDegree.DOUTOR.getId());
-        user5.setHashKey(bCryptPasswordEncoder.encode("relampago_marquinhos"));
+        user5.setName("Jones Artur");
+        user5.setEmail("jones.goncalves@facens.br");
+        user5.setLevelDegree(LevelDegree.ESPECIALISTA.getId());
         user5.setProfiles(Set.of(Profile.TEACHER.getId()));
+
+        log.info("[bCrypt] Start encoding 5 passwords with {} rounds", Math.round(Math.pow(2,12)));
+        long start = System.currentTimeMillis();
+
+        user1.setHashKey(bCryptPasswordEncoder.encode("P@s$_w04d!"));
+        user2.setHashKey(bCryptPasswordEncoder.encode("P@s$_w04d!"));
+        user3.setHashKey(bCryptPasswordEncoder.encode("12345678"));
+        user4.setHashKey(bCryptPasswordEncoder.encode("12345678"));
+        user5.setHashKey(bCryptPasswordEncoder.encode("*QGAowEdd0rQjoSt"));
+
+        long finish = System.currentTimeMillis();
+        log.info("[bCrypt] 5 passwords encoded. Avg time: {} ms", (finish - start)/5.00);
 
         return (List<User>) iUserRepo.saveAll(Set.of(user1, user2, user3, user4, user5));
     }
